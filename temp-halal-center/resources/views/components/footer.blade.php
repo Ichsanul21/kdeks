@@ -3,8 +3,7 @@
         <div class="mb-12 grid grid-cols-1 gap-10 md:grid-cols-4">
             <div class="md:col-span-1">
                 <div class="mb-4 flex items-center gap-2">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-sm font-bold text-white">K</div>
-                    <span class="font-heading text-lg font-extrabold text-slate-900">KDEKS Kaltim</span>
+                    <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-10 w-auto object-contain">
                 </div>
                 <p class="mb-4 text-xs font-medium leading-relaxed text-slate-500">
                     {{ data_get($setting, 'address', 'Pusat Pemerintahan Provinsi Kalimantan Timur') }}

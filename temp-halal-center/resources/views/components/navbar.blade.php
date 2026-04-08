@@ -1,7 +1,7 @@
 <nav id="navbar" class="fixed inset-x-0 top-0 z-40 border-b-0 bg-white/70 py-4 backdrop-blur-xl transition-all duration-300">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6">
         <a href="#hero" class="flex items-center">
-            <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-12 w-auto object-contain drop-shadow-sm sm:h-14">
+            <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-8 w-auto object-contain drop-shadow-sm sm:h-9">
         </a>
 
         <div class="hidden items-center space-x-8 lg:flex">
@@ -29,7 +29,7 @@
 <div id="mobileMenu" class="fixed inset-0 z-[60] hidden translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300">
     <div class="flex items-center justify-between border-b border-slate-100 p-6">
         <div class="flex items-center">
-            <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-10 w-auto object-contain">
+            <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-7 w-auto object-contain">
         </div>
         <button onclick="toggleMobileMenu()" class="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100">
             <i data-lucide="x" class="h-6 w-6"></i>
