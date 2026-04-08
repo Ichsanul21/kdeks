@@ -18,7 +18,7 @@
             <div class="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[0.95fr,1.05fr]">
                 <div class="hidden rounded-[2rem] border border-white/80 bg-white/55 p-8 shadow-[0_10px_50px_rgba(15,23,42,0.05)] backdrop-blur-xl lg:block">
                     <a href="/" class="flex items-center">
-                        <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-16 w-auto object-contain">
+                        <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-10 w-auto object-contain sm:h-11">
                     </a>
 
                     <div class="mt-12 max-w-lg">
@@ -49,7 +49,7 @@
                 <div class="auth-card w-full rounded-[2rem] p-6 sm:p-8 lg:p-10">
                     <div class="mb-8 text-center lg:hidden">
                         <a href="/" class="inline-flex items-center">
-                            <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-14 w-auto object-contain">
+                            <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-9 w-auto object-contain sm:h-10">
                         </a>
                     </div>
 

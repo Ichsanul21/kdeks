@@ -35,7 +35,7 @@
     <div class="flex h-screen overflow-hidden">
         <aside id="sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full transform flex-col shadow-2xl transition-transform duration-300 lg:static lg:translate-x-0 lg:shadow-none">
             <div class="flex h-20 shrink-0 items-center gap-3 border-b border-slate-100 px-6">
-                <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-12 w-auto object-contain">
+                <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-8 w-auto object-contain sm:h-9">
                 <button class="ml-auto text-slate-400 transition hover:text-slate-900 lg:hidden" onclick="toggleSidebar()">
                     <i data-lucide="x" class="h-5 w-5"></i>
                 </button>
