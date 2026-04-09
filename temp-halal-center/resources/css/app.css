@@ -299,7 +299,7 @@
         background: rgba(255, 255, 255, 0.34);
         box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
         object-fit: contain;
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 4.8));
+        opacity: var(--watermark-opacity, 0.18);
         filter: none;
     }
 
@@ -317,7 +317,7 @@
         letter-spacing: 0.24em;
         text-transform: uppercase;
         white-space: nowrap;
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 1.45));
+        opacity: var(--watermark-opacity, 0.18);
     }
 
     .watermark-tile-text-small {
@@ -355,13 +355,13 @@
         max-height: 72px;
         object-fit: contain;
         filter: none;
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 5.2));
+        opacity: var(--watermark-opacity, 0.18);
     }
 
     .watermark-center-image-hero {
         max-width: 360px;
         max-height: 360px;
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 6));
+        opacity: var(--watermark-opacity, 0.18);
     }
 
     .watermark-center-text {
@@ -371,7 +371,7 @@
         letter-spacing: 0.22em;
         text-transform: uppercase;
         white-space: nowrap;
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 2.2));
+        opacity: var(--watermark-opacity, 0.18);
     }
 
     .map-category-button.active {
