@@ -132,13 +132,16 @@
                 <div id="leafletKaltim" class="absolute inset-0 z-0" data-map-url="{{ url('/api/map') }}"></div>
 
                 <div class="pointer-events-none absolute bottom-5 left-0 right-0 z-[500] px-5">
-                    <div class="pointer-events-auto flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                        <button type="button" data-map-category="" class="map-category-button active shrink-0 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-md">Semua</button>
-                        @foreach($mapCategories as $category)
-                            <button type="button" data-map-category="{{ $category }}" class="map-category-button shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-emerald-500 hover:text-emerald-600">
-                                {{ $category }}
-                            </button>
-                        @endforeach
+                    <div class="pointer-events-auto flex justify-start">
+                        <div class="relative">
+                            <select id="mapCategoryFilter" class="cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 pr-10 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
+                                <option value="">Semua Kategori</option>
+                                @foreach($mapCategories as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
+                                @endforeach
+                            </select>
+                            <i data-lucide="chevrons-up-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -523,7 +526,7 @@
                 const typeFilter = document.getElementById('mapTypeFilter');
                 const partnerFilter = document.getElementById('mapPartnerFilter');
                 const searchInput = document.getElementById('mapSearchInput');
-                const categoryButtons = document.querySelectorAll('[data-map-category]');
+                const categoryFilter = document.getElementById('mapCategoryFilter');
                 const zoomButtons = document.querySelectorAll('[data-map-zoom]');
                 const markersLayer = L.layerGroup().addTo(map);
 
@@ -630,13 +633,9 @@
                     }, 250);
                 });
 
-                categoryButtons.forEach((button) => {
-                    button.addEventListener('click', () => {
-                        categoryButtons.forEach((item) => item.classList.remove('active'));
-                        button.classList.add('active');
-                        state.category = button.dataset.mapCategory || '';
-                        renderMap();
-                    });
+                categoryFilter?.addEventListener('change', () => {
+                    state.category = categoryFilter.value;
+                    renderMap();
                 });
 
                 zoomButtons.forEach((button) => {
