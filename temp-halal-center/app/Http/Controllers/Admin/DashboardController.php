@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ConsultationRequest;
 use App\Models\Event;
-use App\Models\HalalLocation;
-use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
 use App\Models\LphPartner;
 use App\Models\Mentor;
@@ -18,6 +16,8 @@ use App\Models\Regulation;
 use App\Models\SectorItem;
 use App\Models\SehatiRegistration;
 use App\Models\SiteSetting;
+use App\Models\Umkm;
+use App\Models\UmkmProduk;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -36,8 +36,8 @@ class DashboardController extends Controller
                 'slides' => ProgramSlide::count(),
                 'articles' => Article::count(),
                 'regions' => Region::count(),
-                'locations' => HalalLocation::count(),
-                'products' => HalalProduct::count(),
+                'locations' => Umkm::count(),
+                'products' => UmkmProduk::count(),
                 'mentors' => Mentor::count(),
                 'lph_partners' => LphPartner::count(),
                 'potential_items' => PotentialItem::count(),

@@ -7,8 +7,6 @@ use App\Models\CertificationPath;
 use App\Models\Event;
 use App\Models\FrequentlyAskedQuestion;
 use App\Models\GalleryItem;
-use App\Models\HalalLocation;
-use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
 use App\Models\LphPartner;
 use App\Models\Mentor;
@@ -20,12 +18,14 @@ use App\Models\Regulation;
 use App\Models\SectorItem;
 use App\Models\SehatiRegistration;
 use App\Models\SiteSetting;
+use App\Models\Umkm;
+use App\Models\UmkmProduk;
 
 class LandingPageService
 {
     public function getHomepageData(): array
     {
-        $mapLocations = HalalLocation::query()
+        $mapLocations = Umkm::query()
             ->with(['region', 'lphPartner'])
             ->where('status', 'published')
             ->get();
@@ -38,7 +38,7 @@ class LandingPageService
             'potentialItems' => PotentialItem::query()->where('is_active', true)->orderBy('sort_order')->get(),
             'sectorItems' => SectorItem::query()->where('is_active', true)->orderBy('sort_order')->get(),
             'featuredArticles' => Article::query()->where('status', 'published')->latest('published_at')->limit(4)->get(),
-            'featuredProducts' => HalalProduct::query()->with('region')->where('status', 'published')->latest()->limit(6)->get(),
+            'featuredProducts' => UmkmProduk::query()->with('umkm')->latest()->limit(6)->get(),
             'mentors' => Mentor::query()->with('region')->where('is_active', true)->limit(6)->get(),
             'paths' => CertificationPath::query()->orderBy('sort_order')->get(),
             'members' => OrganizationMember::query()->orderBy('sort_order')->get(),
@@ -49,7 +49,7 @@ class LandingPageService
             'faqs' => FrequentlyAskedQuestion::query()->orderBy('sort_order')->limit(8)->get(),
             'featuredLocations' => $mapLocations->take(24),
             'mapCities' => $mapLocations
-                ->map(fn (HalalLocation $location) => $location->city_name ?: $location->region?->name)
+                ->map(fn (Umkm $location) => $location->kab_kota ?: $location->region?->name)
                 ->filter()
                 ->unique()
                 ->sort()
@@ -66,9 +66,9 @@ class LandingPageService
                 'Lembaga Keuangan',
             ],
             'statistics' => [
-                'certificates_total' => HalalLocation::whereNotNull('certificate_number')->count(),
-                'products_total' => HalalProduct::where('status', 'published')->count(),
-                'assistants_total' => Mentor::where('is_active', true)->count(),
+                'certificates_total' => Umkm::count(),
+                'products_total' => UmkmProduk::count(),
+                'assistants_total' => LphPartner::where('is_active', true)->count(),
             ],
             'latestSehatiRegistrations' => SehatiRegistration::query()->latest()->limit(5)->get(),
         ];

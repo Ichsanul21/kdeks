@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\HalalLocationResource;
 use App\Http\Resources\LphPartnerResource;
 use App\Http\Resources\RegionResource;
-use App\Models\HalalLocation;
 use App\Models\LphPartner;
 use App\Models\Region;
+use App\Models\Umkm;
 use App\Support\ApiResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -20,17 +19,16 @@ class MapController extends Controller
         $regions = Region::query()->orderBy('sort_order')->get();
         $partners = LphPartner::query()->where('is_active', true)->orderBy('sort_order')->get();
 
-        $locations = HalalLocation::query()
+        $locations = Umkm::query()
             ->with(['region', 'lphPartner'])
-            ->when($request->filled('category'), fn ($query) => $query->where('category', $request->string('category')->toString()))
-            ->when($request->filled('location_type'), fn ($query) => $query->where('location_type', $request->string('location_type')->toString()))
+            ->when($request->filled('category'), fn ($query) => $query->where('kategori', $request->string('category')->toString()))
             ->when($request->filled('region_id'), fn ($query) => $query->where('region_id', $request->integer('region_id')))
             ->when($request->filled('city'), function ($query) use ($request): void {
                 $city = $request->string('city')->toString();
 
                 $query->where(function ($builder) use ($city): void {
                     $builder
-                        ->where('city_name', $city)
+                        ->where('kab_kota', $city)
                         ->orWhereHas('region', fn ($regionQuery) => $regionQuery->where('name', $city));
                 });
             })
@@ -40,17 +38,16 @@ class MapController extends Controller
 
                 $query->where(function ($builder) use ($keyword): void {
                     $builder
-                        ->where('name', 'like', "%{$keyword}%")
-                        ->orWhere('brand_name', 'like', "%{$keyword}%")
-                        ->orWhere('product_name', 'like', "%{$keyword}%")
-                        ->orWhere('city_name', 'like', "%{$keyword}%")
-                        ->orWhere('category', 'like', "%{$keyword}%");
+                        ->where('nama_umkm', 'like', "%{$keyword}%")
+                        ->orWhere('nama_pemilik', 'like', "%{$keyword}%")
+                        ->orWhere('kab_kota', 'like', "%{$keyword}%")
+                        ->orWhere('kategori', 'like', "%{$keyword}%");
                 });
             })
             ->where('status', 'published')
             ->get();
 
-        $resolvedLocations = $locations->filter(function (HalalLocation $location): bool {
+        $resolvedLocations = $locations->filter(function (Umkm $location): bool {
             return filled($location->latitude) && filled($location->longitude)
                 || ($location->relationLoaded('region') && $location->region && filled($location->region->latitude) && filled($location->region->longitude));
         });
@@ -62,7 +59,25 @@ class MapController extends Controller
         return ApiResponse::success([
             'regions' => RegionResource::collection($regions)->resolve(),
             'lph_partners' => LphPartnerResource::collection($partners)->resolve(),
-            'locations' => HalalLocationResource::collection($resolvedLocations)->resolve(),
+            'locations' => $resolvedLocations->map(fn (Umkm $location) => [
+                'id' => $location->id,
+                'name' => $location->nama_umkm,
+                'slug' => $location->slug,
+                'category' => $location->kategori,
+                'city_name' => $location->kab_kota ?: $location->region?->name,
+                'address' => $location->alamat,
+                'latitude' => (float) ($location->latitude ?: $location->region?->latitude),
+                'longitude' => (float) ($location->longitude ?: $location->region?->longitude),
+                'certificate_number' => null,
+                'region' => [
+                    'id' => $location->region?->id,
+                    'name' => $location->region?->name,
+                ],
+                'lph_partner' => [
+                    'id' => $location->lphPartner?->id,
+                    'name' => $location->lphPartner?->name,
+                ],
+            ])->values()->all(),
         ], 'Map data loaded.');
     }
 
@@ -78,24 +93,18 @@ class MapController extends Controller
         return $regions
             ->filter(fn (Region $region) => filled($region->latitude) && filled($region->longitude))
             ->values()
-            ->map(function (Region $region, int $index) use ($partners, $categories): HalalLocation {
+            ->map(function (Region $region, int $index) use ($partners, $categories): Umkm {
                 $partner = $partners->get($index % max(1, $partners->count()));
 
-                $location = new HalalLocation([
-                    'id' => 'fallback-'.$region->id,
-                    'name' => 'UMKM '.$region->name,
-                    'slug' => null,
-                    'location_type' => 'umkm',
-                    'category' => $categories[$index % count($categories)],
-                    'city_name' => $region->name,
-                    'business_scale' => 'UMKM',
-                    'brand_name' => 'UMKM '.$region->name,
-                    'product_name' => 'Produk Halal '.$region->name,
-                    'address' => 'Sentra UMKM '.$region->name,
+                $location = new Umkm([
+                    'id' => 99999 + $region->id,
+                    'nama_umkm' => 'UMKM '.$region->name,
+                    'slug' => 'umkm-'.\Illuminate\Support\Str::slug($region->name).'-'.$region->id,
+                    'kategori' => $categories[$index % count($categories)],
+                    'kab_kota' => $region->name,
+                    'alamat' => 'Sentra UMKM '.$region->name,
                     'latitude' => $region->latitude,
                     'longitude' => $region->longitude,
-                    'certificate_number' => null,
-                    'description' => 'Titik fallback otomatis berdasarkan wilayah.',
                     'status' => 'published',
                     'region_id' => $region->id,
                     'lph_partner_id' => $partner?->id,

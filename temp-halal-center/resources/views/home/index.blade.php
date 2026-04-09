@@ -63,20 +63,20 @@
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
                                 <i data-lucide="award" class="h-5 w-5"></i>
                             </div>
-                            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-600">+12% Bulan Ini</span>
+                            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-600">Tumbuh Pesat</span>
                         </div>
                         <h3 class="font-heading text-4xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span></h3>
-                        <p class="mt-1 text-sm font-semibold text-slate-500">Sertifikat Halal Telah Terbit</p>
+                        <p class="mt-1 text-sm font-semibold text-slate-500">UMKM Halal Kaltim</p>
                     </div>
 
                     <div class="flex flex-col gap-5 sm:flex-row">
                         <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
                             <h3 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['products_total'] }}">0</span></h3>
-                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Produk Halal Telah Tersertifikasi</p>
+                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Produk Terdaftar</p>
                         </div>
                         <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
                             <h3 class="font-heading text-3xl font-extrabold tracking-tight text-cyan-500"><span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span></h3>
-                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Pendamping Halal Siap Mendampingi Proses Produk Halal</p>
+                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Lembaga Pendamping Aktif</p>
                         </div>
                     </div>
                 </div>
@@ -217,13 +217,13 @@
                     </div>
                     <div class="space-y-4">
                         @foreach($featuredProducts->take(4) as $product)
-                            <a href="{{ route('products.show', $product->slug) }}" class="group flex cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
+                            <a href="#" class="group flex cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
                                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
                                     <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->name }}</h4>
-                                    <p class="text-[11px] font-medium text-slate-500">{{ $product->brand_name }} • {{ $product->category }}</p>
+                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
+                                    <p class="text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
                                 </div>
                                 <span class="rounded bg-emerald-50 px-2 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
                             </a>
@@ -587,8 +587,6 @@
                                     <h4 class="font-heading mb-0.5 text-sm font-extrabold text-slate-900">${escapeHtml(location.name)}</h4>
                                     <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.city_name ?? location.region?.name ?? '')}</p>
                                     <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.lph_partner?.name ?? 'Mitra belum diatur')}</p>
-                                    <p class="mb-2 text-[9px] font-medium text-slate-500">No. ID: ${escapeHtml(location.certificate_number ?? '-')}</p>
-                                    <a href="${publicDetailUrl(location.slug)}" class="block w-full rounded border border-slate-200 bg-slate-100 px-2 py-1.5 text-center text-[10px] font-bold text-slate-700 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600">Lihat Detail</a>
                                 </div>
                             `;
 
