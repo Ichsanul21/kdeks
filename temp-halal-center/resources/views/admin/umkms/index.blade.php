@@ -442,7 +442,7 @@
 
     {{-- Detail Modal --}}
     <div id="umkmDetailModal" class="fixed inset-0 z-[110] hidden">
-        <div class="absolute inset-0 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmDetailModal')"></div>
+        <div id="umkmDetailBackdrop" class="absolute inset-0 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmDetailModal')"></div>
         <div class="pointer-events-none absolute inset-0 flex items-start justify-center overflow-y-auto px-4 pb-10 pt-16">
             <div id="umkmDetailContent" class="pointer-events-auto w-full max-w-3xl scale-95 rounded-3xl bg-white opacity-0 shadow-2xl transition-all">
                 <div class="flex items-center justify-between rounded-t-3xl border-b border-slate-100 bg-slate-50 p-6">
@@ -496,7 +496,7 @@
 
     {{-- Delete Modal --}}
     <div id="umkmDeleteModal" class="fixed inset-0 z-[120] hidden">
-        <div class="absolute inset-0 bg-slate-900/60 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmDeleteModal')"></div>
+        <div id="umkmDeleteBackdrop" class="absolute inset-0 bg-slate-900/60 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmDeleteModal')"></div>
         <div class="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
             <div id="umkmDeleteContent" class="pointer-events-auto w-full max-w-md scale-95 rounded-3xl bg-white opacity-0 shadow-2xl transition-all">
                 <div class="p-6 text-center md:py-8">
@@ -516,7 +516,7 @@
 
     {{-- Iframe Modal for Create & Edit --}}
     <div id="umkmIframeModal" class="fixed inset-0 z-[110] hidden">
-        <div class="absolute inset-0 bg-slate-900/60 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmIframeModal')"></div>
+        <div id="umkmIframeBackdrop" class="absolute inset-0 bg-slate-900/60 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmIframeModal')"></div>
         <div class="pointer-events-none absolute inset-0 flex items-start justify-center overflow-hidden px-4 pb-10 pt-16">
             <div id="umkmIframeContent" class="pointer-events-auto flex h-full w-full max-w-5xl scale-95 flex-col rounded-3xl bg-white opacity-0 shadow-2xl transition-all">
                 <div class="flex shrink-0 items-center justify-between rounded-t-3xl border-b border-slate-100 bg-slate-50 p-5">
