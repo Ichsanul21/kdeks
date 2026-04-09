@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class UmkmImport
 {
@@ -65,109 +66,119 @@ class UmkmImport
 
     public function importUmkmRow(array $row): void
     {
-        $sourceId = $this->resolveSourceId($row);
-        $namaUmkm = $this->cleanValue($row['nama_umkm'] ?? null);
+        try {
+            $sourceId = $this->resolveSourceId($row);
+            $namaUmkm = $this->cleanValue($row['nama_umkm'] ?? null);
 
-        if (! $sourceId && ! $namaUmkm) {
+            if (! $sourceId && ! $namaUmkm) {
+                $this->skipped++;
+                return;
+            }
+
+            $existing = $this->findExistingUmkm($sourceId, $namaUmkm, $this->cleanValue($row['nama_pemilik'] ?? null));
+
+            [$latitude, $longitude] = $this->resolveCoordinates($row, $existing);
+
+            $kabKota = $this->cleanValue($row['kab_kota'] ?? null) ?? $existing?->kab_kota;
+            $lembaga = $this->cleanValue($row['lembaga'] ?? null) ?? $existing?->lembaga;
+
+            $data = [
+                'source_id' => $sourceId,
+                'nomor' => $this->resolveInteger($row['nomor'] ?? null) ?? $existing?->nomor,
+                'nama_umkm' => $namaUmkm ?? $existing?->nama_umkm,
+                'nama_pemilik' => $this->cleanValue($row['nama_pemilik'] ?? null) ?? $existing?->nama_pemilik,
+                'lembaga' => $lembaga,
+                'kategori' => $this->cleanValue($row['kategori'] ?? null) ?? $existing?->kategori,
+                'provinsi' => $this->cleanValue($row['provinsi'] ?? null) ?? $existing?->provinsi ?? 'KALIMANTAN TIMUR',
+                'kab_kota' => $kabKota,
+                'alamat' => $this->cleanValue($row['alamat'] ?? null) ?? $existing?->alamat,
+                'detail_url' => $this->cleanValue($row['detail_url'] ?? null) ?? $existing?->detail_url,
+                'edit_url' => $this->cleanValue($row['edit_url'] ?? null) ?? $existing?->edit_url,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'nomor_wa' => $this->cleanValue($row['nomor_wa'] ?? null) ?? $existing?->nomor_wa,
+                'link_pembelian' => $this->cleanValue($row['link_pembelian'] ?? null) ?? $existing?->link_pembelian,
+                'deskripsi' => $this->cleanValue($row['deskripsi_detail'] ?? $row['deskripsi'] ?? null) ?? $existing?->deskripsi,
+                'foto_url' => $this->cleanValue($row['foto_url'] ?? null) ?? $existing?->foto_url,
+                'jumlah_produk' => $this->resolveInteger($row['jumlah_produk'] ?? null) ?? $existing?->jumlah_produk,
+                'approval' => $this->cleanValue($row['approval'] ?? null) ?? $existing?->approval ?? 'DISETUJUI',
+                'status' => $this->cleanValue($row['status'] ?? null) ?? $existing?->status ?? 'published',
+                'region_id' => $this->resolveRegionId($kabKota) ?? $existing?->region_id,
+                'lph_partner_id' => $this->resolveLphId($lembaga) ?? $existing?->lph_partner_id,
+            ];
+
+            if (! $data['nama_umkm']) {
+                $this->skipped++;
+                return;
+            }
+
+            $lookup = $sourceId
+                ? ['source_id' => $sourceId]
+                : ['nama_umkm' => $data['nama_umkm'], 'nama_pemilik' => $data['nama_pemilik']];
+
+            Umkm::updateOrCreate($lookup, array_filter(
+                $data,
+                static fn ($value): bool => $value !== null
+            ));
+
+            $this->importedUmkm++;
+        } catch (Throwable $e) {
+            report($e);
             $this->skipped++;
-            return;
         }
-
-        $existing = $this->findExistingUmkm($sourceId, $namaUmkm, $this->cleanValue($row['nama_pemilik'] ?? null));
-
-        [$latitude, $longitude] = $this->resolveCoordinates($row, $existing);
-
-        $kabKota = $this->cleanValue($row['kab_kota'] ?? null) ?? $existing?->kab_kota;
-        $lembaga = $this->cleanValue($row['lembaga'] ?? null) ?? $existing?->lembaga;
-
-        $data = [
-            'source_id' => $sourceId,
-            'nomor' => $this->resolveInteger($row['nomor'] ?? null) ?? $existing?->nomor,
-            'nama_umkm' => $namaUmkm ?? $existing?->nama_umkm,
-            'nama_pemilik' => $this->cleanValue($row['nama_pemilik'] ?? null) ?? $existing?->nama_pemilik,
-            'lembaga' => $lembaga,
-            'kategori' => $this->cleanValue($row['kategori'] ?? null) ?? $existing?->kategori,
-            'provinsi' => $this->cleanValue($row['provinsi'] ?? null) ?? $existing?->provinsi ?? 'KALIMANTAN TIMUR',
-            'kab_kota' => $kabKota,
-            'alamat' => $this->cleanValue($row['alamat'] ?? null) ?? $existing?->alamat,
-            'detail_url' => $this->cleanValue($row['detail_url'] ?? null) ?? $existing?->detail_url,
-            'edit_url' => $this->cleanValue($row['edit_url'] ?? null) ?? $existing?->edit_url,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'nomor_wa' => $this->cleanValue($row['nomor_wa'] ?? null) ?? $existing?->nomor_wa,
-            'link_pembelian' => $this->cleanValue($row['link_pembelian'] ?? null) ?? $existing?->link_pembelian,
-            'deskripsi' => $this->cleanValue($row['deskripsi_detail'] ?? $row['deskripsi'] ?? null) ?? $existing?->deskripsi,
-            'foto_url' => $this->cleanValue($row['foto_url'] ?? null) ?? $existing?->foto_url,
-            'jumlah_produk' => $this->resolveInteger($row['jumlah_produk'] ?? null) ?? $existing?->jumlah_produk,
-            'approval' => $this->cleanValue($row['approval'] ?? null) ?? $existing?->approval ?? 'DISETUJUI',
-            'status' => $this->cleanValue($row['status'] ?? null) ?? $existing?->status ?? 'published',
-            'region_id' => $this->resolveRegionId($kabKota) ?? $existing?->region_id,
-            'lph_partner_id' => $this->resolveLphId($lembaga) ?? $existing?->lph_partner_id,
-        ];
-
-        if (! $data['nama_umkm']) {
-            $this->skipped++;
-            return;
-        }
-
-        $lookup = $sourceId
-            ? ['source_id' => $sourceId]
-            : ['nama_umkm' => $data['nama_umkm'], 'nama_pemilik' => $data['nama_pemilik']];
-
-        Umkm::updateOrCreate($lookup, array_filter(
-            $data,
-            static fn ($value): bool => $value !== null
-        ));
-
-        $this->importedUmkm++;
     }
 
     public function importProdukRow(array $row): void
     {
-        $namaProduk = $this->cleanValue($row['nama_produk'] ?? null);
-        $umkmSourceId = $this->resolveSourceId(['id' => $row['umkm_id'] ?? null]);
+        try {
+            $namaProduk = $this->cleanValue($row['nama_produk'] ?? null);
+            $umkmSourceId = $this->resolveSourceId(['id' => $row['umkm_id'] ?? null]);
 
-        if (! $namaProduk || ! $umkmSourceId) {
+            if (! $namaProduk || ! $umkmSourceId) {
+                $this->skipped++;
+                return;
+            }
+
+            $umkm = Umkm::query()->where('source_id', $umkmSourceId)->first();
+
+            if (! $umkm) {
+                $umkm = Umkm::query()
+                    ->where('nama_umkm', $this->cleanValue($row['nama_umkm'] ?? null))
+                    ->where('nama_pemilik', $this->cleanValue($row['nama_pemilik'] ?? null))
+                    ->first();
+            }
+
+            if (! $umkm) {
+                $this->skipped++;
+                return;
+            }
+
+            $editUrl = $this->cleanValue($row['produk_edit_url'] ?? $row['edit_url'] ?? null);
+
+            UmkmProduk::updateOrCreate(
+                $editUrl
+                    ? ['edit_url' => $editUrl]
+                    : ['umkm_id' => $umkm->id, 'nama_produk' => $namaProduk],
+                array_filter([
+                    'umkm_id' => $umkm->id,
+                    'nomor' => $this->resolveInteger($row['produk_nomor'] ?? $row['nomor'] ?? null),
+                    'nama_produk' => $namaProduk,
+                    'detail_url' => $this->cleanValue($row['produk_detail_url'] ?? $row['detail_url'] ?? null),
+                    'edit_url' => $editUrl,
+                    'foto_url' => $this->cleanValue($row['produk_foto_url'] ?? $row['foto_url'] ?? null),
+                    'harga' => $this->cleanValue($row['harga'] ?? null),
+                    'lph_lp3h' => $this->cleanValue($row['lph_lp3h'] ?? null),
+                    'akta_halal' => $this->cleanValue($row['akta_halal'] ?? null),
+                    'tahun_terbit' => $this->cleanValue($row['tahun_terbit'] ?? null),
+                    'deskripsi' => $this->cleanValue($row['deskripsi'] ?? null),
+                ], static fn ($value): bool => $value !== null)
+            );
+
+            $this->importedProduk++;
+        } catch (Throwable $e) {
+            report($e);
             $this->skipped++;
-            return;
         }
-
-        $umkm = Umkm::query()->where('source_id', $umkmSourceId)->first();
-
-        if (! $umkm) {
-            $umkm = Umkm::query()
-                ->where('nama_umkm', $this->cleanValue($row['nama_umkm'] ?? null))
-                ->where('nama_pemilik', $this->cleanValue($row['nama_pemilik'] ?? null))
-                ->first();
-        }
-
-        if (! $umkm) {
-            $this->skipped++;
-            return;
-        }
-
-        $editUrl = $this->cleanValue($row['produk_edit_url'] ?? $row['edit_url'] ?? null);
-
-        UmkmProduk::updateOrCreate(
-            $editUrl
-                ? ['edit_url' => $editUrl]
-                : ['umkm_id' => $umkm->id, 'nama_produk' => $namaProduk],
-            array_filter([
-                'umkm_id' => $umkm->id,
-                'nomor' => $this->resolveInteger($row['produk_nomor'] ?? $row['nomor'] ?? null),
-                'nama_produk' => $namaProduk,
-                'detail_url' => $this->cleanValue($row['produk_detail_url'] ?? $row['detail_url'] ?? null),
-                'edit_url' => $editUrl,
-                'foto_url' => $this->cleanValue($row['produk_foto_url'] ?? $row['foto_url'] ?? null),
-                'harga' => $this->cleanValue($row['harga'] ?? null),
-                'lph_lp3h' => $this->cleanValue($row['lph_lp3h'] ?? null),
-                'akta_halal' => $this->cleanValue($row['akta_halal'] ?? null),
-                'tahun_terbit' => $this->cleanValue($row['tahun_terbit'] ?? null),
-                'deskripsi' => $this->cleanValue($row['deskripsi'] ?? null),
-            ], static fn ($value): bool => $value !== null)
-        );
-
-        $this->importedProduk++;
     }
 
     protected function importStandaloneCsv(UploadedFile $file): void
@@ -205,41 +216,92 @@ class UmkmImport
 
     protected function resolveCoordinates(array $row, ?Umkm $existing): array
     {
-        $latitude = $this->cleanValue($row['latitude'] ?? $row['lat'] ?? null);
-        $longitude = $this->cleanValue($row['longitude'] ?? $row['long'] ?? $row['lng'] ?? null);
+        $latitude = null;
+        $longitude = null;
 
-        $latLng = null;
-        $possibleKeys = ['latitude_longitude', 'lat_long', 'lat_lng', 'koordinat', 'koordinat_lokasi', 'location'];
-        
-        foreach ($possibleKeys as $key) {
-            if (!empty($row[$key])) {
-                $latLng = $this->cleanValue($row[$key]);
-                break;
-            }
+        // 1) Try dedicated latitude/longitude columns
+        $rawLat = $this->cleanValue($row['latitude'] ?? $row['lat'] ?? null);
+        $rawLng = $this->cleanValue($row['longitude'] ?? $row['long'] ?? $row['lng'] ?? null);
+
+        if ($this->isValidLatitude($rawLat) && $this->isValidLongitude($rawLng)) {
+            $latitude = (float) $rawLat;
+            $longitude = (float) $rawLng;
         }
 
-        if (!$latLng) {
-            foreach ($row as $key => $value) {
-                if (is_string($key) && str_contains($key, 'lat') && str_contains($key, 'long')) {
-                    $latLng = $this->cleanValue($value);
+        // 2) Try combined latitude_longitude column (e.g. "-0.52, 117.08")
+        if ($latitude === null) {
+            $latLng = null;
+            $possibleKeys = ['latitude_longitude', 'lat_long', 'lat_lng', 'koordinat', 'koordinat_lokasi', 'location'];
+
+            foreach ($possibleKeys as $key) {
+                if (!empty($row[$key])) {
+                    $latLng = $this->cleanValue($row[$key]);
                     break;
+                }
+            }
+
+            // Also scan for any key containing both 'lat' and 'long'
+            if (!$latLng) {
+                foreach ($row as $key => $value) {
+                    if (is_string($key) && str_contains($key, 'lat') && str_contains($key, 'long')) {
+                        $latLng = $this->cleanValue($value);
+                        break;
+                    }
+                }
+            }
+
+            if ($latLng && str_contains($latLng, ',')) {
+                [$lat, $lng] = array_map('trim', explode(',', $latLng, 2));
+                if ($this->isValidLatitude($lat) && $this->isValidLongitude($lng)) {
+                    $latitude = (float) $lat;
+                    $longitude = (float) $lng;
                 }
             }
         }
 
-        if ($latLng && str_contains($latLng, ',')) {
-            [$lat, $lng] = array_map('trim', explode(',', $latLng, 2));
-
-            if (!$latitude && is_numeric($lat) && is_numeric($lng)) {
-                $latitude = (float) $lat;
-                $longitude = (float) $lng;
+        // 3) Handle CSV comma-split: if latitude_longitude was "-0.52, 117.08" the CSV
+        //    parser splits it into two columns. The first part lands in latitude_longitude
+        //    as just "-0.52", and the second part ("117.08") shifts into the next column.
+        //    Detect this by checking if latitude_longitude contains a valid latitude
+        //    without a comma, and the very next key in the row holds a valid longitude.
+        if ($latitude === null) {
+            $keys = array_keys($row);
+            foreach ($possibleKeys ?? ['latitude_longitude'] as $key) {
+                $idx = array_search($key, $keys, true);
+                if ($idx === false) {
+                    continue;
+                }
+                $candidateLat = $this->cleanValue($row[$key] ?? null);
+                if (!$this->isValidLatitude($candidateLat)) {
+                    continue;
+                }
+                // Check the next column for a valid longitude
+                $nextKey = $keys[$idx + 1] ?? null;
+                if ($nextKey !== null) {
+                    $candidateLng = $this->cleanValue($row[$nextKey] ?? null);
+                    if ($this->isValidLongitude($candidateLng)) {
+                        $latitude = (float) $candidateLat;
+                        $longitude = (float) $candidateLng;
+                        break;
+                    }
+                }
             }
         }
 
         return [
-            is_numeric($latitude) ? (float) $latitude : $existing?->latitude,
-            is_numeric($longitude) ? (float) $longitude : $existing?->longitude,
+            $latitude ?? $existing?->latitude,
+            $longitude ?? $existing?->longitude,
         ];
+    }
+
+    protected function isValidLatitude(mixed $value): bool
+    {
+        return is_numeric($value) && (float) $value >= -90 && (float) $value <= 90;
+    }
+
+    protected function isValidLongitude(mixed $value): bool
+    {
+        return is_numeric($value) && (float) $value >= -180 && (float) $value <= 180;
     }
 
     protected function resolveSourceId(mixed $value): ?int
