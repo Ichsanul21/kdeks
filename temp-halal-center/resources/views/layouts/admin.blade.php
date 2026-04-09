@@ -21,6 +21,7 @@
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:justify-center { justify-content: center !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:mx-auto { margin-left: auto !important; margin-right: auto !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:rotate-180 { transform: rotate(180deg) !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:overflow-visible { overflow: visible !important; }
     </style>
 </head>
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
@@ -68,7 +69,7 @@
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-4 py-6 lg:[.sidebar-mini_&]:px-2">
+            <div class="flex-1 overflow-y-auto px-4 py-6 lg:[.sidebar-mini_&]:px-2 lg:[.sidebar-mini_&]:overflow-visible">
                 <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400 lg:[.sidebar-mini_&]:hidden">Menu Utama</p>
 
                 <div class="space-y-1">
