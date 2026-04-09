@@ -12,6 +12,16 @@
             document.documentElement.classList.add('sidebar-mini');
         }
     </script>
+    <style>
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:block { display: block !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:hidden { display: none !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:w-20 { width: 5rem !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:px-3 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:px-0 { padding-left: 0 !important; padding-right: 0 !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:justify-center { justify-content: center !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:mx-auto { margin-left: auto !important; margin-right: auto !important; }
+        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:rotate-180 { transform: rotate(180deg) !important; }
+    </style>
 </head>
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
     @include('components.watermark-overlay', ['setting' => $setting ?? null])
@@ -47,7 +57,7 @@
     <div class="flex h-screen overflow-hidden">
         @if(!request()->has('is_iframe'))
         <aside id="sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 lg:[.sidebar-mini_&]:w-20 -translate-x-full transform flex-col shadow-2xl transition-[width,transform] duration-300 lg:relative lg:translate-x-0 lg:shadow-none group">
-            <button type="button" onclick="toggleDesktopSidebar()" class="absolute -right-4 top-8 z-[60] hidden h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-emerald-200 hover:text-emerald-600 lg:flex">
+            <button type="button" onclick="toggleDesktopSidebar()" class="absolute -right-4 top-1/2 z-[60] hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-emerald-200 hover:text-emerald-600 lg:flex">
                 <i data-lucide="chevron-left" class="h-4 w-4 transition-transform duration-300 lg:[.sidebar-mini_&]:rotate-180"></i>
             </button>
             <div class="flex h-20 shrink-0 items-center gap-3 border-b border-slate-100 px-6 lg:[.sidebar-mini_&]:px-3 lg:[.sidebar-mini_&]:justify-center">
@@ -76,9 +86,9 @@
                             </span>
 
                             {{-- Custom Tooltip --}}
-                            <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-slate-800 px-3 py-2 text-xs font-bold text-white opacity-0 shadow-xl transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
+                            <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-bold text-emerald-600 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
                                 {{ $item['label'] }}
-                                <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-slate-800"></div>
+                                <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-white"></div>
                             </div>
                         </a>
                     @endforeach
@@ -99,9 +109,9 @@
                         <i data-lucide="log-out" class="h-4 w-4 shrink-0 text-slate-400 transition hover:text-red-500 lg:[.sidebar-mini_&]:hidden"></i>
                     </button>
                     {{-- Custom Tooltip Logout --}}
-                    <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-rose-600 px-3 py-2 text-xs font-bold text-white opacity-0 shadow-xl transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
+                    <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-bold text-emerald-600 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
                         Keluar dari Sistem
-                        <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-rose-600"></div>
+                        <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-white"></div>
                     </div>
                 </form>
             </div>
