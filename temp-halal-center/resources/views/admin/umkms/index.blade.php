@@ -28,8 +28,7 @@
     {{-- Import / Export Bar --}}
     <div class="admin-card mb-6 rounded-[1.75rem] p-6">
         <div class="mb-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-            Import bisa pakai `1 file XLSX` dengan 3 sheet (`UMKM Ringkas`, `UMKM Detail`, `Produk UMKM`) atau `3 file CSV` terpisah sesuai hasil scrape:
-            `umkm-terverifikasi.csv`, `umkm-terverifikasi-detail.csv`, dan `umkm-terverifikasi-produk.csv`.
+            Import bisa pakai `1 file XLSX` dengan 3 sheet (`UMKM Ringkas`, `UMKM Detail`, `Produk UMKM`) atau `3 file CSV` terpisah sesuai hasil scrape.
         </div>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex flex-wrap gap-2">
@@ -68,8 +67,7 @@
                 </div>
                 <div class="p-6 md:p-8">
                     <div class="mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                        Import bisa pakai `1 file XLSX` dengan 3 sheet (`UMKM Ringkas`, `UMKM Detail`, `Produk UMKM`) atau `3 file CSV` terpisah:
-                        `umkm-terverifikasi.csv`, `umkm-terverifikasi-detail.csv`, dan `umkm-terverifikasi-produk.csv`.
+                        Import bisa pakai `1 file XLSX` dengan 3 sheet (`UMKM Ringkas`, `UMKM Detail`, `Produk UMKM`) atau `3 file CSV` terpisah.
                     </div>
 
                     <form method="POST" action="{{ route('admin.umkms.import') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-4 md:grid-cols-2" data-umkm-import-form>
