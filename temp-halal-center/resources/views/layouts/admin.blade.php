@@ -58,8 +58,8 @@
                             <span class="flex items-center gap-3">
                                 <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5"></i>
                                 <span class="text-sm">{{ $item['label'] }}</span>
-                                @if($route === 'admin.sehati-registrations.index')
-                                    <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{{ \App\Models\SehatiRegistration::count() }}</span>
+                                @if($route === 'admin.sehati-registrations.index' && ($adminNewSehatiCount ?? 0) > 0)
+                                    <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{{ $adminNewSehatiCount }}</span>
                                 @endif
                             </span>
                         </a>
@@ -101,7 +101,11 @@
                     <div class="flex items-center gap-3 border-r border-slate-200 pr-4">
                         <button class="relative rounded-lg p-2 text-slate-400 transition hover:bg-slate-50 hover:text-slate-900">
                             <i data-lucide="bell" class="h-5 w-5"></i>
-                            <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-red-500"></span>
+                            @if(($adminNewSehatiCount ?? 0) > 0)
+                                <span class="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+                                    {{ $adminNewSehatiCount }}
+                                </span>
+                            @endif
                         </button>
                     </div>
 

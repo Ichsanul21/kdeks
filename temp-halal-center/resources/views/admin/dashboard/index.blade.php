@@ -22,7 +22,7 @@
         @foreach([
             ['label' => 'Total Sertifikat Terbit', 'value' => $stats['locations'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'accent' => '8%'],
             ['label' => 'UMKM Terdaftar', 'value' => $stats['products'] ?? 0, 'icon' => 'store', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'accent' => '12%'],
-            ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-yellow-50', 'iconColor' => 'text-yellow-600', 'accent' => null],
+            ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati_pending'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-yellow-50', 'iconColor' => 'text-yellow-600', 'accent' => null],
             ['label' => 'Pendamping Aktif', 'value' => $stats['mentors'] ?? 0, 'icon' => 'users', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'accent' => '-'],
         ] as $card)
             <div class="admin-card relative overflow-hidden rounded-2xl p-6 transition hover:shadow-md">
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-sm font-medium text-slate-500">Belum ada distribusi pendaftar untuk ditampilkan.</p>
+                    <p class="text-sm font-medium text-slate-500">Belum ada pendaftar baru untuk ditampilkan.</p>
                 @endforelse
             </div>
         </div>
@@ -171,7 +171,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-sm font-medium text-slate-500">Belum ada pendaftar SEHATI.</td>
+                            <td colspan="6" class="px-6 py-10 text-center text-sm font-medium text-slate-500">Belum ada pendaftar baru SEHATI.</td>
                         </tr>
                     @endforelse
                 </tbody>

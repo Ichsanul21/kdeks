@@ -24,6 +24,13 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
+        $newSehatiRegistrations = SehatiRegistration::query()
+            ->with('lphPartner')
+            ->where('status', 'new')
+            ->latest()
+            ->limit(6)
+            ->get();
+
         return view('admin.dashboard.index', [
             'stats' => [
                 'slides' => ProgramSlide::count(),
@@ -39,9 +46,10 @@ class DashboardController extends Controller
                 'regulations' => Regulation::count(),
                 'events' => Event::count(),
                 'sehati' => SehatiRegistration::count(),
+                'sehati_pending' => SehatiRegistration::query()->where('status', 'new')->count(),
                 'consultations' => ConsultationRequest::count(),
             ],
-            'latestSehatiRegistrations' => SehatiRegistration::with('lphPartner')->latest()->limit(6)->get(),
+            'latestSehatiRegistrations' => $newSehatiRegistrations,
             'latestConsultations' => ConsultationRequest::latest()->limit(6)->get(),
             'siteSetting' => SiteSetting::first(),
         ]);

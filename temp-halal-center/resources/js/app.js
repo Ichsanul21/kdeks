@@ -211,6 +211,13 @@ const initMap = () => {
     const mapElement = document.getElementById('leafletKaltim');
     if (!mapElement) return;
 
+    const normalizeResourceCollection = (value) => {
+        if (Array.isArray(value)) return value;
+        if (Array.isArray(value?.data)) return value.data;
+
+        return [];
+    };
+
     const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -232,6 +239,7 @@ const initMap = () => {
     });
 
     const cityFilter = document.getElementById('mapCityFilter');
+    const typeFilter = document.getElementById('mapTypeFilter');
     const partnerFilter = document.getElementById('mapPartnerFilter');
     const searchInput = document.getElementById('mapSearchInput');
     const categoryButtons = document.querySelectorAll('[data-map-category]');
@@ -241,6 +249,7 @@ const initMap = () => {
     let state = {
         category: '',
         city: '',
+        location_type: '',
         lph_partner_id: '',
         keyword: '',
     };
@@ -254,8 +263,9 @@ const initMap = () => {
         try {
             const response = await fetch(`${mapElement.dataset.mapUrl}?${query.toString()}`);
             const result = await response.json();
-            const regions = result.data.regions ?? [];
-            const locations = result.data.locations ?? [];
+            const regions = normalizeResourceCollection(result?.data?.regions);
+            const locations = normalizeResourceCollection(result?.data?.locations)
+                .filter((location) => Number.isFinite(Number(location.latitude)) && Number.isFinite(Number(location.longitude)));
 
             markersLayer.clearLayers();
 
@@ -305,6 +315,11 @@ const initMap = () => {
 
     cityFilter?.addEventListener('change', () => {
         state.city = cityFilter.value;
+        renderMap();
+    });
+
+    typeFilter?.addEventListener('change', () => {
+        state.location_type = typeFilter.value;
         renderMap();
     });
 

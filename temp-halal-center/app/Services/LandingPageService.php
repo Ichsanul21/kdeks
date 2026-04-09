@@ -25,6 +25,11 @@ class LandingPageService
 {
     public function getHomepageData(): array
     {
+        $mapLocations = HalalLocation::query()
+            ->with(['region', 'lphPartner'])
+            ->where('status', 'published')
+            ->get();
+
         return [
             'setting' => SiteSetting::query()->first(),
             'slides' => ProgramSlide::query()->where('status', 'published')->orderBy('sort_order')->get(),
@@ -42,7 +47,13 @@ class LandingPageService
             'events' => Event::query()->where('status', 'published')->orderBy('starts_at')->limit(4)->get(),
             'galleryItems' => GalleryItem::query()->latest('recorded_at')->limit(8)->get(),
             'faqs' => FrequentlyAskedQuestion::query()->orderBy('sort_order')->limit(8)->get(),
-            'featuredLocations' => HalalLocation::query()->with(['region', 'lphPartner'])->where('status', 'published')->limit(24)->get(),
+            'featuredLocations' => $mapLocations->take(24),
+            'mapCities' => $mapLocations
+                ->map(fn (HalalLocation $location) => $location->city_name ?: $location->region?->name)
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values(),
             'mapCategories' => [
                 'Makanan',
                 'Minuman',

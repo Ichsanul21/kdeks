@@ -102,9 +102,14 @@
                     <div class="pointer-events-auto flex flex-wrap gap-2 sm:flex-nowrap">
                         <select id="mapCityFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
                             <option value="">Semua Kota</option>
-                            @foreach($regions as $region)
-                                <option value="{{ $region->name }}">{{ $region->name }}</option>
+                            @foreach($mapCities as $city)
+                                <option value="{{ $city }}">{{ $city }}</option>
                             @endforeach
+                        </select>
+                        <select id="mapTypeFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
+                            <option value="">Semua Jenis</option>
+                            <option value="umkm">UMKM</option>
+                            <option value="service_office">Kantor Layanan</option>
                         </select>
                         <select id="mapPartnerFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
                             <option value="">Semua LPH/LP3H</option>
