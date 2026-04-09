@@ -205,12 +205,35 @@ class UmkmImport
 
     protected function resolveCoordinates(array $row, ?Umkm $existing): array
     {
-        $latitude = $row['latitude'] ?? null;
-        $longitude = $row['longitude'] ?? null;
-        $latLng = $this->cleanValue($row['latitude_longitude'] ?? null);
+        $latitude = $this->cleanValue($row['latitude'] ?? $row['lat'] ?? null);
+        $longitude = $this->cleanValue($row['longitude'] ?? $row['long'] ?? $row['lng'] ?? null);
+
+        $latLng = null;
+        $possibleKeys = ['latitude_longitude', 'lat_long', 'lat_lng', 'koordinat', 'koordinat_lokasi', 'location'];
+        
+        foreach ($possibleKeys as $key) {
+            if (!empty($row[$key])) {
+                $latLng = $this->cleanValue($row[$key]);
+                break;
+            }
+        }
+
+        if (!$latLng) {
+            foreach ($row as $key => $value) {
+                if (is_string($key) && str_contains($key, 'lat') && str_contains($key, 'long')) {
+                    $latLng = $this->cleanValue($value);
+                    break;
+                }
+            }
+        }
 
         if ($latLng && str_contains($latLng, ',')) {
-            [$latitude, $longitude] = array_map('trim', explode(',', $latLng, 2));
+            [$lat, $lng] = array_map('trim', explode(',', $latLng, 2));
+
+            if (!$latitude && is_numeric($lat) && is_numeric($lng)) {
+                $latitude = (float) $lat;
+                $longitude = (float) $lng;
+            }
         }
 
         return [
