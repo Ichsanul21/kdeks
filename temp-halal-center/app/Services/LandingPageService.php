@@ -54,17 +54,12 @@ class LandingPageService
                 ->unique()
                 ->sort()
                 ->values(),
-            'mapCategories' => [
-                'Makanan',
-                'Minuman',
-                'Wisata Ramah',
-                'Unit Usaha Ponpes',
-                'Produk Halal Lainnya',
-                'Rumah Potong',
-                'Industri Kreatif',
-                'Perbankan Syariah',
-                'Lembaga Keuangan',
-            ],
+            'mapCategories' => $mapLocations
+                ->pluck('kategori')
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values(),
             'statistics' => [
                 'certificates_total' => Umkm::count(),
                 'products_total' => UmkmProduk::count(),

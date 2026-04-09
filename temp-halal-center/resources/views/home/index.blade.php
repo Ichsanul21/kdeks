@@ -106,11 +106,6 @@
                                 <option value="{{ $city }}">{{ $city }}</option>
                             @endforeach
                         </select>
-                        <select id="mapTypeFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
-                            <option value="">Semua Jenis</option>
-                            <option value="umkm">UMKM</option>
-                            <option value="service_office">Kantor Layanan</option>
-                        </select>
                         <select id="mapPartnerFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
                             <option value="">Semua LPH/LP3H</option>
                             @foreach($lphPartners as $partner)
@@ -504,7 +499,7 @@
 
                 const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
 
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 }).addTo(map);
 
@@ -523,7 +518,6 @@
                 });
 
                 const cityFilter = document.getElementById('mapCityFilter');
-                const typeFilter = document.getElementById('mapTypeFilter');
                 const partnerFilter = document.getElementById('mapPartnerFilter');
                 const searchInput = document.getElementById('mapSearchInput');
                 const categoryFilter = document.getElementById('mapCategoryFilter');
@@ -533,7 +527,6 @@
                 const state = {
                     category: '',
                     city: '',
-                    location_type: '',
                     lph_partner_id: '',
                     keyword: '',
                 };
@@ -581,12 +574,41 @@
                         });
 
                         locations.forEach((location) => {
+                            const fotoHtml = location.foto_url 
+                                ? `<div class="mb-2 h-28 w-full overflow-hidden rounded-lg bg-slate-100"><img src="${escapeHtml(location.foto_url)}" alt="Foto" class="h-full w-full object-cover"></div>` 
+                                : '';
+                            const waNumber = location.nomor_wa ? location.nomor_wa.replace(/[^0-9]/g, '') : '';
+                            
+                            const waHtml = waNumber 
+                                ? `<a href="https://wa.me/${waNumber.startsWith('0') ? '62' + waNumber.substring(1) : waNumber}?text=Halo%20${encodeURIComponent(escapeHtml(location.name))}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1.5 text-center text-[10px] font-bold text-emerald-600 transition hover:bg-emerald-100">WhatsApp</a>`
+                                : '';
+
+                            const navHtml = `<a href="https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-blue-50 px-2 py-1.5 text-center text-[10px] font-bold text-blue-600 transition hover:bg-blue-100">Rute Lokasi</a>`;
+
+                            let descHtml = '';
+                            if (location.deskripsi) {
+                                descHtml = `<p class="mb-2 mt-1 text-[10px] font-medium leading-relaxed text-slate-500 line-clamp-2">${escapeHtml(location.deskripsi)}</p>`;
+                            }
+
                             const popupContent = `
-                                <div class="min-w-[180px] text-left">
-                                    <span class="mb-1.5 inline-block rounded border border-cyan-100 bg-cyan-50 px-2 py-0.5 text-[8px] font-bold uppercase text-cyan-600">${escapeHtml(location.category)}</span>
-                                    <h4 class="font-heading mb-0.5 text-sm font-extrabold text-slate-900">${escapeHtml(location.name)}</h4>
-                                    <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.city_name ?? location.region?.name ?? '')}</p>
-                                    <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.lph_partner?.name ?? 'Mitra belum diatur')}</p>
+                                <div class="min-w-[220px] max-w-[260px] text-left">
+                                    ${fotoHtml}
+                                    <div class="mb-1.5 flex items-start justify-between gap-2">
+                                        <span class="inline-block rounded border border-cyan-100 bg-cyan-50 px-2 py-0.5 text-[8px] font-bold uppercase text-cyan-600">${escapeHtml(location.category ?? 'UMKM')}</span>
+                                    </div>
+                                    <h4 class="font-heading mb-0.5 text-sm font-extrabold leading-tight text-slate-900">${escapeHtml(location.name)}</h4>
+                                    <p class="mb-0 text-[10px] font-medium text-slate-500">Pemilik: ${escapeHtml(location.nama_pemilik && location.nama_pemilik !== '-' ? location.nama_pemilik : 'Tidak diketahui')}</p>
+                                    ${descHtml}
+                                    
+                                    <div class="mt-2 mb-2 border-l-2 border-slate-200 pl-2">
+                                        <p class="text-[9px] font-bold text-slate-600">${escapeHtml(location.address ?? location.city_name ?? '')}</p>
+                                        <p class="mt-0.5 text-[9px] font-medium text-slate-400">Mitra: ${escapeHtml(location.lph_partner?.name ?? '-')}</p>
+                                    </div>
+                                    
+                                    <div class="mt-3 flex gap-2">
+                                        ${waHtml}
+                                        ${navHtml}
+                                    </div>
                                 </div>
                             `;
 
@@ -608,11 +630,6 @@
 
                 cityFilter?.addEventListener('change', () => {
                     state.city = cityFilter.value;
-                    renderMap();
-                });
-
-                typeFilter?.addEventListener('change', () => {
-                    state.location_type = typeFilter.value;
                     renderMap();
                 });
 
