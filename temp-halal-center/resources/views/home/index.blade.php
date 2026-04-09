@@ -457,4 +457,206 @@
             <div id="searchResults" class="mt-5 grid gap-3 sm:grid-cols-2"></div>
         </div>
     </div>
+
+    <script>
+        (() => {
+            const escapeHtml = (value) => {
+                if (value === null || value === undefined) return '';
+
+                return String(value)
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            };
+
+            const publicDetailUrl = (slug) => slug ? `/locations/${slug}` : '#';
+
+            const normalizeCollection = (value) => {
+                if (Array.isArray(value)) return value;
+                if (Array.isArray(value?.data)) return value.data;
+
+                return [];
+            };
+
+            const bootLandingMap = () => {
+                if (!window.L) return;
+
+                const currentMapElement = document.getElementById('leafletKaltim');
+                if (!currentMapElement) return;
+
+                let mapElement = currentMapElement;
+
+                if (mapElement.dataset.mapBooted === 'true') return;
+
+                if (mapElement._leaflet_id) {
+                    const replacement = mapElement.cloneNode(false);
+                    replacement.dataset.mapUrl = mapElement.dataset.mapUrl;
+                    mapElement.parentNode.replaceChild(replacement, mapElement);
+                    mapElement = replacement;
+                }
+
+                mapElement.dataset.mapBooted = 'true';
+
+                const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
+
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                }).addTo(map);
+
+                const aggregateIcon = L.divIcon({
+                    className: 'leaflet-custom-marker',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10],
+                    popupAnchor: [0, -10],
+                });
+
+                const businessIcon = L.divIcon({
+                    className: 'leaflet-business-marker',
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6],
+                    popupAnchor: [0, -8],
+                });
+
+                const cityFilter = document.getElementById('mapCityFilter');
+                const typeFilter = document.getElementById('mapTypeFilter');
+                const partnerFilter = document.getElementById('mapPartnerFilter');
+                const searchInput = document.getElementById('mapSearchInput');
+                const categoryButtons = document.querySelectorAll('[data-map-category]');
+                const zoomButtons = document.querySelectorAll('[data-map-zoom]');
+                const markersLayer = L.layerGroup().addTo(map);
+
+                const state = {
+                    category: '',
+                    city: '',
+                    location_type: '',
+                    lph_partner_id: '',
+                    keyword: '',
+                };
+
+                const renderMap = async () => {
+                    const query = new URLSearchParams();
+                    Object.entries(state).forEach(([key, value]) => {
+                        if (value) query.set(key, value);
+                    });
+
+                    try {
+                        const response = await fetch(`${mapElement.dataset.mapUrl}?${query.toString()}`);
+                        const result = await response.json();
+                        const regions = normalizeCollection(result?.data?.regions);
+                        const locations = normalizeCollection(result?.data?.locations)
+                            .filter((location) => Number.isFinite(Number(location.latitude)) && Number.isFinite(Number(location.longitude)));
+
+                        markersLayer.clearLayers();
+
+                        regions.forEach((region) => {
+                            if (!Number.isFinite(Number(region.latitude)) || !Number.isFinite(Number(region.longitude))) {
+                                return;
+                            }
+
+                            const regionLocations = locations.filter((location) => location.region?.id === region.id);
+                            if (!regionLocations.length) return;
+
+                            const popupContent = `
+                                <div class="text-left">
+                                    <h4 class="font-heading mb-1 text-sm font-extrabold text-slate-900">${escapeHtml(region.name)}</h4>
+                                    <p class="mb-2 border-b border-slate-100 pb-2 text-[10px] font-semibold text-slate-500">Sebaran usaha dan layanan halal</p>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-[9px] font-bold uppercase text-slate-400">Titik Tersedia</p>
+                                            <p class="text-sm font-extrabold text-emerald-600">${new Intl.NumberFormat('id-ID').format(regionLocations.length)}</p>
+                                        </div>
+                                        <a href="/products?keyword=${encodeURIComponent(region.name)}" class="rounded bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-600">Lihat Produk</a>
+                                    </div>
+                                </div>
+                            `;
+
+                            L.marker([Number(region.latitude), Number(region.longitude)], { icon: aggregateIcon })
+                                .bindPopup(popupContent)
+                                .addTo(markersLayer);
+                        });
+
+                        locations.forEach((location) => {
+                            const popupContent = `
+                                <div class="min-w-[180px] text-left">
+                                    <span class="mb-1.5 inline-block rounded border border-cyan-100 bg-cyan-50 px-2 py-0.5 text-[8px] font-bold uppercase text-cyan-600">${escapeHtml(location.category)}</span>
+                                    <h4 class="font-heading mb-0.5 text-sm font-extrabold text-slate-900">${escapeHtml(location.name)}</h4>
+                                    <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.city_name ?? location.region?.name ?? '')}</p>
+                                    <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.lph_partner?.name ?? 'Mitra belum diatur')}</p>
+                                    <p class="mb-2 text-[9px] font-medium text-slate-500">No. ID: ${escapeHtml(location.certificate_number ?? '-')}</p>
+                                    <a href="${publicDetailUrl(location.slug)}" class="block w-full rounded border border-slate-200 bg-slate-100 px-2 py-1.5 text-center text-[10px] font-bold text-slate-700 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600">Lihat Detail</a>
+                                </div>
+                            `;
+
+                            L.marker([Number(location.latitude), Number(location.longitude)], { icon: businessIcon })
+                                .bindPopup(popupContent)
+                                .addTo(markersLayer);
+                        });
+
+                        if (locations.length) {
+                            const bounds = L.latLngBounds(locations.map((location) => [Number(location.latitude), Number(location.longitude)]));
+                            map.fitBounds(bounds.pad(0.12));
+                        } else {
+                            map.setView([-0.502, 117.153], 6);
+                        }
+                    } catch (error) {
+                        markersLayer.clearLayers();
+                    }
+                };
+
+                cityFilter?.addEventListener('change', () => {
+                    state.city = cityFilter.value;
+                    renderMap();
+                });
+
+                typeFilter?.addEventListener('change', () => {
+                    state.location_type = typeFilter.value;
+                    renderMap();
+                });
+
+                partnerFilter?.addEventListener('change', () => {
+                    state.lph_partner_id = partnerFilter.value;
+                    renderMap();
+                });
+
+                let searchTimer = null;
+                searchInput?.addEventListener('input', () => {
+                    if (searchTimer) window.clearTimeout(searchTimer);
+
+                    searchTimer = window.setTimeout(() => {
+                        state.keyword = searchInput.value.trim();
+                        renderMap();
+                    }, 250);
+                });
+
+                categoryButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        categoryButtons.forEach((item) => item.classList.remove('active'));
+                        button.classList.add('active');
+                        state.category = button.dataset.mapCategory || '';
+                        renderMap();
+                    });
+                });
+
+                zoomButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        if (button.dataset.mapZoom === 'in') map.zoomIn();
+                        if (button.dataset.mapZoom === 'out') map.zoomOut();
+                    });
+                });
+
+                window.setTimeout(() => map.invalidateSize(), 120);
+                renderMap();
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', bootLandingMap);
+            } else {
+                bootLandingMap();
+            }
+
+            window.setTimeout(bootLandingMap, 400);
+        })();
+    </script>
 @endsection
