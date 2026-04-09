@@ -21,11 +21,6 @@
 
         <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
             <div class="flex max-w-2xl flex-col gap-6">
-                <div class="inline-flex w-max items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-500 shadow-sm">
-                    <i data-lucide="info" class="h-3 w-3 text-slate-400"></i>
-                    {{ data_get($setting, 'hero_badge', 'Portal Informasi Resmi') }}
-                </div>
-
                 <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
                     Komite Daerah <br>
                     <span class="text-gradient">Ekonomi Syariah</span> <br>
