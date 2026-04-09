@@ -259,9 +259,10 @@
             </form>
         </div>
 
-        <div class="overflow-x-auto pb-4">
-            <table class="admin-table min-w-full text-left text-sm whitespace-nowrap">
-                <thead>
+        <div id="umkmDataContainer" class="relative transition-opacity duration-300">
+            <div class="overflow-x-auto pb-4">
+                <table class="admin-table min-w-full text-left text-sm whitespace-nowrap">
+                    <thead>
                     <tr>
                         <th class="pb-4 pr-4">ID</th>
                         <th class="pb-4 pr-4">Foto</th>
@@ -361,7 +362,8 @@
             </table>
         </div>
 
-        <div class="mt-6">{{ $items->onEachSide(1)->links('components.admin-pagination') }}</div>
+            <div class="mt-6">{{ $items->onEachSide(1)->links('components.admin-pagination') }}</div>
+        </div>
     </div>
 
     <div id="umkmQuickEditModal" class="fixed inset-0 z-[110] hidden">
@@ -567,20 +569,112 @@
             
             openModal('umkmIframeModal');
         }
-        // Auto-search Debounce
+        // Flawless AJAX Live Search & Pagination
+        const fetchTableData = async (url) => {
+            const container = document.getElementById('umkmDataContainer');
+            if (!container) return;
+            
+            container.style.opacity = '0.4';
+            container.style.pointerEvents = 'none';
+            
+            try {
+                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const newContainer = doc.getElementById('umkmDataContainer');
+                
+                if (newContainer) {
+                    container.innerHTML = newContainer.innerHTML;
+                    if (window.lucide && window.lucide.createIcons) {
+                        window.lucide.createIcons();
+                    }
+                }
+                
+                // Update URL silently
+                window.history.pushState({}, '', url);
+            } catch (err) {
+                console.error("Gagal refresh tabel", err);
+            } finally {
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+            }
+        };
+
         const searchForm = document.getElementById('searchForm');
+        let typingTimer;
+
         if (searchForm) {
             const searchInput = searchForm.querySelector('input[name="search"]');
-            let typingTimer;
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     clearTimeout(typingTimer);
                     typingTimer = setTimeout(() => {
-                        searchForm.submit();
-                    }, 500);
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('search', searchInput.value);
+                        url.searchParams.delete('page'); // Reset to page 1 on new search
+                        fetchTableData(url.toString());
+                    }, 400);
+                });
+            }
+
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                clearTimeout(typingTimer);
+                const url = new URL(window.location.href);
+                if (searchInput) url.searchParams.set('search', searchInput.value);
+                url.searchParams.delete('page');
+                fetchTableData(url.toString());
+            });
+
+            const perPageSelect = searchForm.querySelector('select[name="per_page"]');
+            if (perPageSelect) {
+                // Remove native onchange behavior because we use AJAX now, but first strip it in HTML
+                perPageSelect.removeAttribute('onchange');
+                perPageSelect.addEventListener('change', (e) => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('per_page', e.target.value);
+                    url.searchParams.delete('page');
+                    fetchTableData(url.toString());
                 });
             }
         }
+
+        const filterForm = document.getElementById('filterAccordion')?.querySelector('form');
+        if (filterForm) {
+            filterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const url = new URL(window.location.href);
+                const formData = new FormData(filterForm);
+                for (const [key, value] of formData.entries()) {
+                    if (key !== 'search') {
+                        if (value) url.searchParams.set(key, value);
+                        else url.searchParams.delete(key);
+                    }
+                }
+                url.searchParams.delete('page');
+                fetchTableData(url.toString());
+            });
+            
+            const resetBtn = filterForm.querySelector('a');
+            if(resetBtn) {
+                resetBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetchTableData(resetBtn.href);
+                    filterForm.reset();
+                });
+            }
+        }
+
+        // Intercept Pagination Links
+        document.addEventListener('click', (e) => {
+            const pageLink = e.target.closest('nav[role="navigation"] a');
+            // Pastikan link berada di dalam container pagination kita, bukan di sidebar
+            if (pageLink && pageLink.href && pageLink.closest('#umkmDataContainer')) {
+                e.preventDefault();
+                fetchTableData(pageLink.href);
+            }
+        });
 
         // Setup detail & delete buttons using event delegation
         document.addEventListener('click', (e) => {
