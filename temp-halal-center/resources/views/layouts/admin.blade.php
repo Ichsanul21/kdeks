@@ -21,7 +21,6 @@
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:justify-center { justify-content: center !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:mx-auto { margin-left: auto !important; margin-right: auto !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:rotate-180 { transform: rotate(180deg) !important; }
-        .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:overflow-visible { overflow: visible !important; }
     </style>
 </head>
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
@@ -69,7 +68,7 @@
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-4 py-6 lg:[.sidebar-mini_&]:px-2 lg:[.sidebar-mini_&]:overflow-visible">
+            <div class="flex-1 overflow-y-auto px-4 py-6 lg:[.sidebar-mini_&]:px-2">
                 <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400 lg:[.sidebar-mini_&]:hidden">Menu Utama</p>
 
                 <div class="space-y-1">
@@ -77,30 +76,24 @@
                         @php
                             $active = request()->routeIs($route) || ($route !== 'admin.dashboard' && str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route)));
                         @endphp
-                        <a href="{{ route($route) }}" class="admin-nav-link group relative lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $active ? 'admin-nav-link-active' : '' }}">
+                        <a href="{{ route($route) }}" class="admin-nav-link relative lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $active ? 'admin-nav-link-active' : '' }}">
                             <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
-                                <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto"></i>
+                                <i data-lucide="{{ $item['icon'] }}" data-sidebar-tooltip="{{ $item['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block"></i>
                                 <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $item['label'] }}</span>
                                 @if($route === 'admin.sehati-registrations.index' && ($adminNewSehatiCount ?? 0) > 0)
                                     <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600 lg:[.sidebar-mini_&]:hidden">{{ $adminNewSehatiCount }}</span>
                                 @endif
                             </span>
-
-                            {{-- Custom Tooltip --}}
-                            <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-bold text-emerald-600 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
-                                {{ $item['label'] }}
-                                <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-white"></div>
-                            </div>
                         </a>
                     @endforeach
                 </div>
             </div>
 
             <div class="shrink-0 border-t border-slate-100 p-4 lg:[.sidebar-mini_&]:p-2">
-                <form method="POST" action="{{ route('logout') }}" class="group relative">
+                <form method="POST" action="{{ route('logout') }}" class="relative">
                     @csrf
                     <button type="submit" class="flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-slate-50 lg:[.sidebar-mini_&]:justify-center">
-                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-sm font-bold text-white">
+                        <div data-sidebar-tooltip="Keluar dari Sistem" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-sm font-bold text-white">
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         </div>
                         <div class="min-w-0 flex-1 lg:[.sidebar-mini_&]:hidden">
@@ -109,11 +102,6 @@
                         </div>
                         <i data-lucide="log-out" class="h-4 w-4 shrink-0 text-slate-400 transition hover:text-red-500 lg:[.sidebar-mini_&]:hidden"></i>
                     </button>
-                    {{-- Custom Tooltip Logout --}}
-                    <div class="pointer-events-none absolute left-full top-1/2 z-[100] ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-bold text-emerald-600 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-200 group-hover:ml-5 group-hover:opacity-100 hidden lg:[.sidebar-mini_&]:block">
-                        Keluar dari Sistem
-                        <div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-white"></div>
-                    </div>
                 </form>
             </div>
         </aside>
@@ -203,6 +191,34 @@
             html.classList.toggle('sidebar-mini');
             localStorage.setItem('sidebarMini', html.classList.contains('sidebar-mini'));
         }
+
+        // Global Sidebar Tooltip Logic
+        (function() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'pointer-events-none fixed z-[9999] whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-bold text-emerald-600 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 transition-all duration-200 mt-0 ml-0 hidden lg:block';
+            tooltip.innerHTML = '<span id="global-tt-text"></span><div class="absolute left-0 top-1/2 -ml-1 -translate-y-1/2 border-y-4 border-r-4 border-y-transparent border-r-white"></div>';
+            document.body.appendChild(tooltip);
+
+            document.addEventListener('mouseover', e => {
+                if (!document.documentElement.classList.contains('sidebar-mini')) return;
+                const target = e.target.closest('[data-sidebar-tooltip]');
+                if (target) {
+                    document.getElementById('global-tt-text').innerText = target.getAttribute('data-sidebar-tooltip');
+                    const rect = target.getBoundingClientRect();
+                    tooltip.style.left = (rect.right + 10) + 'px';
+                    tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+                    tooltip.style.transform = 'translateY(-50%)';
+                    tooltip.style.opacity = '1';
+                    tooltip.style.marginLeft = '8px';
+                }
+            });
+            document.addEventListener('mouseout', e => {
+                if (e.target.closest('[data-sidebar-tooltip]')) {
+                    tooltip.style.opacity = '0';
+                    tooltip.style.marginLeft = '0px';
+                }
+            });
+        })();
     </script>
 </body>
 </html>
