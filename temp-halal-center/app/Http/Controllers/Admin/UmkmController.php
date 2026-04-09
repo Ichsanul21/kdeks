@@ -90,7 +90,8 @@ class UmkmController extends BaseCrudController
             $query->orderByDesc('id')->orderByDesc('source_id');
         }
 
-        $items = $query->paginate(15)->withQueryString();
+        $perPage = max(10, min(100, $request->integer('per_page', 15)));
+        $items = $query->paginate($perPage)->withQueryString();
 
         $approvals = Umkm::query()
             ->whereNotNull('approval')

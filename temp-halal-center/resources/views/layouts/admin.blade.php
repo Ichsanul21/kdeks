@@ -35,9 +35,12 @@
         }
     @endphp
 
-    <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-sm lg:hidden" onclick="toggleSidebar()"></div>
+    @if(!request()->has('is_iframe'))
+        <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-sm lg:hidden" onclick="toggleSidebar()"></div>
+    @endif
 
     <div class="flex h-screen overflow-hidden">
+        @if(!request()->has('is_iframe'))
         <aside id="sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full transform flex-col shadow-2xl transition-transform duration-300 lg:static lg:translate-x-0 lg:shadow-none">
             <div class="flex h-20 shrink-0 items-center gap-3 border-b border-slate-100 px-6">
                 <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-8 w-auto object-contain sm:h-9">
@@ -83,8 +86,10 @@
                 </form>
             </div>
         </aside>
+        @endif
 
         <div class="flex h-screen flex-1 flex-col overflow-hidden bg-slate-50/50">
+            @if(!request()->has('is_iframe'))
             <header class="admin-topbar flex h-20 shrink-0 items-center justify-between px-6">
                 <div class="flex items-center gap-4">
                     <button class="p-1 text-slate-500 transition hover:text-slate-900 lg:hidden" onclick="toggleSidebar()">
@@ -115,6 +120,7 @@
                     </div>
                 </div>
             </header>
+            @endif
 
             <main class="flex-1 overflow-y-auto p-6 md:p-8">
                 @if(session('status'))
@@ -125,6 +131,7 @@
 
                 @yield('content')
 
+                @if(!request()->has('is_iframe'))
                 <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 md:flex-row">
                     <p class="text-xs font-bold text-slate-400">© {{ now()->year }} Sistem Informasi KDEKS Kaltim.</p>
                     <div class="flex gap-4 text-xs font-bold text-slate-400">
@@ -132,6 +139,7 @@
                         <span>Log Aktivitas</span>
                     </div>
                 </div>
+                @endif
             </main>
         </div>
     </div>
