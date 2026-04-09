@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -7,6 +6,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script>
+        // Prevent FOUC for sidebar mini state
+        if (localStorage.getItem('sidebarMini') === 'true') {
+            document.documentElement.classList.add('sidebar-mini');
+        }
+    </script>
 </head>
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
     @include('components.watermark-overlay', ['setting' => $setting ?? null])
@@ -41,28 +46,29 @@
 
     <div class="flex h-screen overflow-hidden">
         @if(!request()->has('is_iframe'))
-        <aside id="sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full transform flex-col shadow-2xl transition-transform duration-300 lg:static lg:translate-x-0 lg:shadow-none">
-            <div class="flex h-20 shrink-0 items-center gap-3 border-b border-slate-100 px-6">
-                <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-8 w-auto object-contain sm:h-9">
+        <aside id="sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 flex w-64 lg:[.sidebar-mini_&]:w-20 -translate-x-full transform flex-col shadow-2xl transition-[width,transform] duration-300 lg:static lg:translate-x-0 lg:shadow-none group">
+            <div class="flex h-20 shrink-0 items-center gap-3 border-b border-slate-100 px-6 lg:[.sidebar-mini_&]:px-3 lg:[.sidebar-mini_&]:justify-center">
+                <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS Kaltim" class="h-8 w-auto object-contain sm:h-9 lg:[.sidebar-mini_&]:hidden">
+                <img src="{{ asset('storage/branding/logo.png') }}" alt="KDEKS" class="hidden h-8 w-auto object-contain lg:[.sidebar-mini_&]:block">
                 <button class="ml-auto text-slate-400 transition hover:text-slate-900 lg:hidden" onclick="toggleSidebar()">
                     <i data-lucide="x" class="h-5 w-5"></i>
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-4 py-6">
-                <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Menu Utama</p>
+            <div class="flex-1 overflow-y-auto px-4 py-6 lg:[.sidebar-mini_&]:px-2">
+                <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400 lg:[.sidebar-mini_&]:hidden">Menu Utama</p>
 
                 <div class="space-y-1">
                     @foreach($adminNavigation as $route => $item)
                         @php
                             $active = request()->routeIs($route) || ($route !== 'admin.dashboard' && str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route)));
                         @endphp
-                        <a href="{{ route($route) }}" class="admin-nav-link {{ $active ? 'admin-nav-link-active' : '' }}">
-                            <span class="flex items-center gap-3">
-                                <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5"></i>
-                                <span class="text-sm">{{ $item['label'] }}</span>
+                        <a href="{{ route($route) }}" title="{{ $item['label'] }}" class="admin-nav-link lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $active ? 'admin-nav-link-active' : '' }}">
+                            <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
+                                <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto"></i>
+                                <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $item['label'] }}</span>
                                 @if($route === 'admin.sehati-registrations.index' && ($adminNewSehatiCount ?? 0) > 0)
-                                    <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{{ $adminNewSehatiCount }}</span>
+                                    <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600 lg:[.sidebar-mini_&]:hidden">{{ $adminNewSehatiCount }}</span>
                                 @endif
                             </span>
                         </a>
@@ -70,18 +76,18 @@
                 </div>
             </div>
 
-            <div class="shrink-0 border-t border-slate-100 p-4">
-                <form method="POST" action="{{ route('logout') }}">
+            <div class="shrink-0 border-t border-slate-100 p-4 lg:[.sidebar-mini_&]:p-2">
+                <form method="POST" action="{{ route('logout') }}" title="Keluar">
                     @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-slate-50">
-                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-sm font-bold text-white">
+                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-slate-50 lg:[.sidebar-mini_&]:justify-center">
+                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-sm font-bold text-white">
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         </div>
-                        <div class="min-w-0 flex-1">
+                        <div class="min-w-0 flex-1 lg:[.sidebar-mini_&]:hidden">
                             <p class="truncate text-sm font-bold text-slate-900">{{ Auth::user()->name ?? 'Admin KDEKS' }}</p>
                             <p class="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{{ Auth::user()?->getRoleNames()->first() ?? 'Administrator' }}</p>
                         </div>
-                        <i data-lucide="log-out" class="h-4 w-4 text-slate-400 transition hover:text-red-500"></i>
+                        <i data-lucide="log-out" class="h-4 w-4 shrink-0 text-slate-400 transition hover:text-red-500 lg:[.sidebar-mini_&]:hidden"></i>
                     </button>
                 </form>
             </div>
@@ -92,8 +98,13 @@
             @if(!request()->has('is_iframe'))
             <header class="admin-topbar flex h-20 shrink-0 items-center justify-between px-6">
                 <div class="flex items-center gap-4">
+                    <!-- Mobile Hamburger -->
                     <button class="p-1 text-slate-500 transition hover:text-slate-900 lg:hidden" onclick="toggleSidebar()">
                         <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                    <!-- Desktop Minimize Toggle -->
+                    <button class="hidden p-1 text-slate-500 transition hover:text-slate-900 lg:block" onclick="toggleDesktopSidebar()">
+                        <i data-lucide="align-left" class="h-6 w-6 lg:[.sidebar-mini_&]:rotate-180 transition-transform"></i>
                     </button>
 
                     <form method="GET" action="{{ url()->current() }}" class="hidden w-80 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 transition-all focus-within:border-emerald-500/50 focus-within:ring-2 focus-within:ring-emerald-500/20 md:flex">
@@ -164,6 +175,13 @@
             quill.root.innerHTML = input.value || '';
             quill.on('text-change', () => input.value = quill.root.innerHTML);
         });
+    </script>
+    <script>
+        function toggleDesktopSidebar() {
+            const html = document.documentElement;
+            html.classList.toggle('sidebar-mini');
+            localStorage.setItem('sidebarMini', html.classList.contains('sidebar-mini'));
+        }
     </script>
 </body>
 </html>
