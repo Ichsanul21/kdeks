@@ -4,17 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\SiteSettingRequest;
 use App\Models\SiteSetting;
-use Illuminate\Database\Eloquent\Model;
 
 class SiteSettingController extends BaseCrudController
 {
-    private const WATERMARK_FIELDS = [
-        'watermark_enabled',
-        'watermark_text',
-        'watermark_image_path',
-        'watermark_opacity',
-    ];
-
     protected string $modelClass = SiteSetting::class;
     protected string $pageTitle = 'Profil Lembaga';
     protected string $routePrefix = 'admin.site-settings';
@@ -46,36 +38,7 @@ class SiteSettingController extends BaseCrudController
         ['name' => 'default_locale', 'label' => 'Bahasa Default', 'type' => 'select', 'options' => ['id' => 'Indonesia', 'en' => 'English']],
         ['name' => 'logo_path', 'label' => 'Logo', 'type' => 'image'],
         ['name' => 'og_image_path', 'label' => 'OG Image', 'type' => 'image'],
-        ['name' => 'watermark_enabled', 'label' => 'Aktifkan Watermark Global', 'type' => 'checkbox'],
-        ['name' => 'watermark_text', 'label' => 'Teks Watermark', 'type' => 'text'],
-        ['name' => 'watermark_image_path', 'label' => 'Gambar Watermark (PNG)', 'type' => 'image'],
-        ['name' => 'watermark_opacity', 'label' => 'Opacity Watermark', 'type' => 'number', 'step' => '0.05'],
     ];
 
-    protected array $publicFileFields = ['logo_path', 'og_image_path', 'watermark_image_path'];
-
-    protected function resolvedFields(): array
-    {
-        if (auth()->user()?->hasRole('developer')) {
-            return $this->formFields;
-        }
-
-        return array_values(array_filter(
-            $this->formFields,
-            fn (array $field): bool => ! in_array($field['name'], self::WATERMARK_FIELDS, true)
-        ));
-    }
-
-    protected function validatedData(?Model $model = null): array
-    {
-        $validated = parent::validatedData($model);
-
-        if (! auth()->user()?->hasRole('developer')) {
-            foreach (self::WATERMARK_FIELDS as $field) {
-                unset($validated[$field]);
-            }
-        }
-
-        return $validated;
-    }
+    protected array $publicFileFields = ['logo_path', 'og_image_path'];
 }

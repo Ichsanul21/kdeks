@@ -26,11 +26,12 @@
             'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles'],
             'admin.sector-items.index' => ['label' => 'Sektor', 'icon' => 'briefcase-business'],
             'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
+            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
             'admin.consultation-requests.index' => ['label' => 'Konsultasi', 'icon' => 'messages-square'],
         ];
 
         if (auth()->user()?->hasRole('developer')) {
-            $adminNavigation['admin.site-settings.index'] = ['label' => 'Pengaturan Web', 'icon' => 'settings'];
+            $adminNavigation['admin.watermark-settings.edit'] = ['label' => 'Watermark', 'icon' => 'shield-alert'];
         }
     @endphp
 

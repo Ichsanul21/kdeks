@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\RegulationController;
 use App\Http\Controllers\Admin\SectorItemController;
 use App\Http\Controllers\Admin\SehatiRegistrationController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\WatermarkSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController as UserProfileController;
 use App\Http\Controllers\SearchController;
@@ -54,6 +55,11 @@ Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as(
     Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
     Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
     Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
+});
+
+Route::middleware(['auth', 'role:developer'])->prefix('admin')->as('admin.')->group(function (): void {
+    Route::get('/watermark-settings', [WatermarkSettingController::class, 'edit'])->name('watermark-settings.edit');
+    Route::put('/watermark-settings', [WatermarkSettingController::class, 'update'])->name('watermark-settings.update');
 });
 
 Route::middleware('auth')->group(function () {

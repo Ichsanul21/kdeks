@@ -32,9 +32,9 @@
                     Kaltim
                 </h1>
 
-                <p class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg">
-                    {{ data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') }}
-                </p>
+                <div class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg [&_p]:inline [&_p]:m-0">
+                    {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
+                </div>
 
                 <div class="mt-2 flex flex-wrap gap-4">
                     <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">

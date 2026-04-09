@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', data_get($setting, 'meta_title', 'Halal Center Kaltim'))</title>
-    <meta name="description" content="{{ data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.') }}">
+    <meta name="description" content="{{ strip_tags((string) data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.')) }}">
     <meta name="keywords" content="{{ data_get($setting, 'meta_keywords', 'halal kaltim, sertifikasi halal, umkm halal, ekonomi syariah') }}">
     <meta property="og:title" content="@yield('title', data_get($setting, 'meta_title', 'Halal Center Kaltim'))">
-    <meta property="og:description" content="{{ data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.') }}">
+    <meta property="og:description" content="{{ strip_tags((string) data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.')) }}">
     <meta property="og:image" content="{{ data_get($setting, 'og_image_path') ? asset('storage/'.data_get($setting, 'og_image_path')) : asset('storage/branding/logo.png') }}">
     <meta property="og:type" content="website">
     @yield('meta')
