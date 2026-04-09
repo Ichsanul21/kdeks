@@ -52,14 +52,12 @@
 
         <div class="watermark-band watermark-band-image" aria-hidden="true">
             @if(filled($watermarkImagePath))
-                @foreach(range(1, 6) as $index)
-                    <img
-                        src="{{ asset('storage/'.$watermarkImagePath) }}"
-                        alt=""
-                        class="watermark-center-image"
-                        draggable="false"
-                    >
-                @endforeach
+                <img
+                    src="{{ asset('storage/'.$watermarkImagePath) }}"
+                    alt=""
+                    class="watermark-center-image watermark-center-image-hero"
+                    draggable="false"
+                >
             @endif
         </div>
 

@@ -345,8 +345,8 @@ const createWatermarkMarkup = (text, imageUrl) => {
         () => (text ? `<span class="watermark-center-text">${escapeHtml(text)}</span>` : ''),
     ).join('');
     const imageLarge = Array.from(
-        { length: 6 },
-        () => (imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-center-image" draggable="false">` : ''),
+        { length: 1 },
+        () => (imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-center-image watermark-center-image-hero" draggable="false">` : ''),
     ).join('');
 
     return `
