@@ -203,39 +203,39 @@
         </div>
 
         <div id="filterAccordion" class="mb-6 hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 @if(request()->hasAny(['status', 'approval', 'kab_kota', 'sort', 'dir'])) !block @endif">
-            <form method="GET" class="grid gap-4 lg:grid-cols-5 lg:items-end">
+            <form method="GET" class="flex flex-wrap items-end gap-3 lg:gap-4">
                 @if(request('search'))
                     <input type="hidden" name="search" value="{{ request('search') }}">
                 @endif
-                <div>
+                <div class="flex-1 min-w-[140px] max-w-full">
                     <label class="mb-1 block text-xs font-bold text-slate-500">Status</label>
-                    <select name="status" class="admin-input !py-2.5 text-sm">
+                    <select name="status" class="admin-input !py-2.5 text-sm w-full">
                         <option value="">Semua</option>
                         <option value="published" @selected(request('status') === 'published')>Published</option>
                         <option value="draft" @selected(request('status') === 'draft')>Draft</option>
                     </select>
                 </div>
-                <div>
+                <div class="flex-1 min-w-[140px] max-w-full">
                     <label class="mb-1 block text-xs font-bold text-slate-500">Approval</label>
-                    <select name="approval" class="admin-input !py-2.5 text-sm">
+                    <select name="approval" class="admin-input !py-2.5 text-sm w-full">
                         <option value="">Semua</option>
                         @foreach(($approvals ?? []) as $value)
                             <option value="{{ $value }}" @selected(request('approval') === $value)>{{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div>
+                <div class="flex-1 min-w-[140px] max-w-full">
                     <label class="mb-1 block text-xs font-bold text-slate-500">Kab/Kota</label>
-                    <select name="kab_kota" class="admin-input !py-2.5 text-sm">
+                    <select name="kab_kota" class="admin-input !py-2.5 text-sm w-full">
                         <option value="">Semua</option>
                         @foreach(($kabKotas ?? []) as $value)
                             <option value="{{ $value }}" @selected(request('kab_kota') === $value)>{{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div>
+                <div class="flex-1 min-w-[140px] max-w-full">
                     <label class="mb-1 block text-xs font-bold text-slate-500">Sort</label>
-                    <select name="sort" class="admin-input !py-2.5 text-sm">
+                    <select name="sort" class="admin-input !py-2.5 text-sm w-full">
                         <option value="latest" @selected(request('sort', 'latest') === 'latest')>Terbaru</option>
                         <option value="source_id" @selected(request('sort') === 'source_id')>Source ID</option>
                         <option value="nama_umkm" @selected(request('sort') === 'nama_umkm')>Nama UMKM</option>
@@ -244,15 +244,15 @@
                         <option value="approval" @selected(request('sort') === 'approval')>Approval</option>
                     </select>
                 </div>
-                <div class="flex gap-2">
-                    <select name="dir" class="admin-input !py-2.5 text-sm">
+                <div class="flex w-full flex-wrap gap-2 sm:w-auto">
+                    <select name="dir" class="admin-input !py-2.5 text-sm w-full sm:w-[100px]">
                         <option value="desc" @selected(request('dir', 'desc') === 'desc')>Desc</option>
                         <option value="asc" @selected(request('dir') === 'asc')>Asc</option>
                     </select>
-                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-800">
+                    <button type="submit" class="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-400">
                         Terapkan
                     </button>
-                    <a href="{{ route('admin.umkms.index') }}" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <a href="{{ route('admin.umkms.index') }}" class="inline-flex flex-1 sm:flex-none items-center justify-center rounded-xl bg-rose-50 px-5 py-2.5 text-sm font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
                         Reset
                     </a>
                 </div>
@@ -294,7 +294,7 @@
                                 'longitude' => $item->longitude,
                             ];
                         @endphp
-                        <tr class="border-t border-slate-100 transition hover:bg-slate-50" data-umkm='@json($umkmPayload)'>
+                        <tr class="border-t border-slate-100 transition hover:bg-slate-50" data-umkm="{{ json_encode($umkmPayload) }}">
                             <td class="py-4 pr-4 text-xs font-bold text-slate-500">
                                 {{ $item->source_id ?? $item->id }}
                             </td>
@@ -567,39 +567,60 @@
             
             openModal('umkmIframeModal');
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            // Setup detail buttons
-            document.querySelectorAll('[data-umkm-view-detail]').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    const row = this.closest('tr');
-                    if (!row) return;
-                    
-                    const data = JSON.parse(row.dataset.umkm);
-                    
-                    document.getElementById('umkmDetailNama').value = data.nama_umkm || '-';
-                    document.getElementById('umkmDetailPemilik').value = data.nama_pemilik || '-';
-                    document.getElementById('umkmDetailKabKota').value = data.kab_kota || '-';
-                    document.getElementById('umkmDetailKategori').value = data.kategori || '-';
-                    document.getElementById('umkmDetailApproval').value = data.approval || 'Menunggu';
-                    document.getElementById('umkmDetailAlamat').value = data.alamat || '-';
-                    document.getElementById('umkmDetailWa').value = data.nomor_wa || '-';
-                    document.getElementById('umkmDetailLink').value = data.link_pembelian || '-';
-                    
-                    openModal('umkmDetailModal');
+        // Auto-search Debounce
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            const searchInput = searchForm.querySelector('input[name="search"]');
+            let typingTimer;
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(() => {
+                        searchForm.submit();
+                    }, 500);
                 });
-            });
+            }
+        }
+
+        // Setup detail & delete buttons using event delegation
+        document.addEventListener('click', (e) => {
+            const detailBtn = e.target.closest('[data-umkm-view-detail]');
+            if (detailBtn) {
+                const row = detailBtn.closest('tr');
+                if (!row) return;
+                
+                let data = {};
+                try {
+                    data = JSON.parse(row.dataset.umkm || '{}');
+                } catch (err) {
+                    console.error("Gagal parse data UMKM", err);
+                }
+                
+                document.getElementById('umkmDetailNama').value = data.nama_umkm || '-';
+                document.getElementById('umkmDetailPemilik').value = data.nama_pemilik || '-';
+                document.getElementById('umkmDetailKabKota').value = data.kab_kota || '-';
+                document.getElementById('umkmDetailKategori').value = data.kategori || '-';
+                document.getElementById('umkmDetailApproval').value = data.approval || 'Menunggu';
+                document.getElementById('umkmDetailAlamat').value = data.alamat || '-';
+                document.getElementById('umkmDetailWa').value = data.nomor_wa || '-';
+                document.getElementById('umkmDetailLink').value = data.link_pembelian || '-';
+                
+                if (typeof openModal === 'function') openModal('umkmDetailModal');
+                else if (window.openModal) window.openModal('umkmDetailModal');
+            }
+
+            const deleteConfirmBtn = e.target.closest('#confirmDeleteBtn');
+            if (deleteConfirmBtn && currentDeleteId) {
+                const form = document.getElementById('delete-form-' + currentDeleteId);
+                if (form) form.submit();
+            }
         });
 
         let currentDeleteId = null;
         function confirmDeleteAlert(id) {
             currentDeleteId = id;
-            openModal('umkmDeleteModal');
+            if (typeof openModal === 'function') openModal('umkmDeleteModal');
+            else if (window.openModal) window.openModal('umkmDeleteModal');
         }
-
-        document.getElementById('confirmDeleteBtn')?.addEventListener('click', () => {
-            if (currentDeleteId) {
-                document.getElementById('delete-form-' + currentDeleteId).submit();
-            }
-        });
     </script>
 @endsection
