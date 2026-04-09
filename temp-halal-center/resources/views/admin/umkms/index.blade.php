@@ -177,28 +177,27 @@
 
     {{-- Toolbar --}}
     <div class="admin-card rounded-[1.75rem] p-6">
-        <div class="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center">
-            <form method="GET" id="searchForm" class="flex flex-1 flex-col sm:flex-row gap-3">
-                <div class="shrink-0">
-                    <select name="per_page" class="h-14 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm outline-none transition focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10">
-                        <option value="15" @selected(request('per_page') == 15)>15 Baris</option>
-                        <option value="25" @selected(request('per_page') == 25)>25 Baris</option>
-                        <option value="50" @selected(request('per_page') == 50)>50 Baris</option>
-                        <option value="100" @selected(request('per_page') == 100)>100 Baris</option>
-                    </select>
-                </div>
-                <div class="relative flex-1">
-                    <i data-lucide="search" class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Nama UMKM, pemilik, kategori, kab/kota..." class="h-14 w-full rounded-2xl border border-slate-200 bg-white pl-12 pr-24 text-sm font-semibold text-slate-900 shadow-sm outline-none transition focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10">
-                    <button type="submit" class="absolute bottom-2 right-2 top-2 rounded-xl bg-emerald-500 px-5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-400">Cari</button>
-                </div>
-            </form>
-
-            <button type="button" onclick="document.getElementById('filterAccordion').classList.toggle('hidden')" class="inline-flex h-14 w-full shrink-0 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 lg:w-auto">
-                <i data-lucide="sliders-horizontal" class="h-5 w-5"></i>
-                <span>Filter & Sort</span>
-            </button>
-        </div>
+        <form method="GET" id="searchForm" class="mb-5 flex flex-col sm:flex-row gap-3 w-full items-start">
+            <div class="shrink-0">
+                <select name="per_page" class="h-14 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm outline-none transition focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10">
+                    <option value="15" @selected(request('per_page') == 15)>15 Baris</option>
+                    <option value="25" @selected(request('per_page') == 25)>25 Baris</option>
+                    <option value="50" @selected(request('per_page') == 50)>50 Baris</option>
+                    <option value="100" @selected(request('per_page') == 100)>100 Baris</option>
+                </select>
+            </div>
+            <div class="relative flex-1 w-full sm:w-auto">
+                <i data-lucide="search" class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Nama UMKM, pemilik, kategori, kab/kota..." class="h-14 w-full rounded-2xl border border-slate-200 bg-white pl-12 pr-24 text-sm font-semibold text-slate-900 shadow-sm outline-none transition focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10">
+                <button type="submit" class="absolute bottom-2 right-2 top-2 rounded-xl bg-emerald-500 px-5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-400">Cari</button>
+            </div>
+            <div class="shrink-0 w-full sm:w-auto">
+                <button type="button" onclick="document.getElementById('filterAccordion').classList.toggle('hidden')" class="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <i data-lucide="sliders-horizontal" class="h-5 w-5"></i>
+                    <span>Filter & Sort</span>
+                </button>
+            </div>
+        </form>
 
         <div id="filterAccordion" class="mb-6 hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 @if(request()->hasAny(['status', 'approval', 'kab_kota', 'sort', 'dir'])) !block @endif">
             <form method="GET" class="flex flex-wrap items-end gap-3 lg:gap-4">
