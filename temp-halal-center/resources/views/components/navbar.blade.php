@@ -5,8 +5,14 @@
         </a>
 
         <div class="hidden items-center space-x-8 lg:flex">
-            @foreach (['webgis' => 'Pemetaan', 'potensi' => 'Potensi Sektor', 'direktori' => 'Direktori', 'data' => 'Dokumen'] as $anchor => $label)
-                <a href="#{{ $anchor }}" class="text-sm font-semibold text-slate-500 transition-colors hover:text-emerald-600">{{ $label }}</a>
+            @foreach ([
+                route('home').'#webgis' => 'Pemetaan',
+                route('articles.index') => 'Artikel',
+                route('gallery.index') => 'Galeri',
+                route('products.index') => 'Direktori',
+                route('resources.index') => 'Dokumen',
+            ] as $href => $label)
+                <a href="{{ $href }}" class="text-sm font-semibold text-slate-500 transition-colors hover:text-emerald-600">{{ $label }}</a>
             @endforeach
         </div>
 
@@ -36,8 +42,14 @@
         </button>
     </div>
     <div class="flex flex-col gap-6 overflow-y-auto p-6">
-        @foreach (['webgis' => 'Pemetaan', 'potensi' => 'Potensi Sektor', 'direktori' => 'Direktori', 'data' => 'Dokumen'] as $anchor => $label)
-            <a href="#{{ $anchor }}" onclick="toggleMobileMenu()" class="border-b border-slate-50 pb-4 text-base font-bold text-slate-800">{{ $label }}</a>
+        @foreach ([
+            route('home').'#webgis' => 'Pemetaan',
+            route('articles.index') => 'Artikel',
+            route('gallery.index') => 'Galeri',
+            route('products.index') => 'Direktori',
+            route('resources.index') => 'Dokumen',
+        ] as $href => $label)
+            <a href="{{ $href }}" onclick="toggleMobileMenu()" class="border-b border-slate-50 pb-4 text-base font-bold text-slate-800">{{ $label }}</a>
         @endforeach
         <button onclick="openModal('searchModal'); toggleMobileMenu()" class="flex items-center justify-between border-b border-slate-50 pb-4 text-left text-base font-bold text-slate-800">
             Pencarian Terpadu

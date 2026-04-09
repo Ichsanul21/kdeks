@@ -12,17 +12,17 @@
             <div>
                 <h4 class="mb-4 text-sm font-extrabold text-slate-900">Layanan Publik</h4>
                 <ul class="space-y-2 text-xs font-medium text-slate-500">
-                    <li><a href="#sehati" class="transition hover:text-emerald-600">Pendaftaran Sertifikasi</a></li>
-                    <li><a href="#direktori" class="transition hover:text-emerald-600">Direktori Produk</a></li>
-                    <li><a href="#webgis" class="transition hover:text-emerald-600">Peta Sebaran UMKM</a></li>
+                    <li><a href="{{ route('home') }}#sehati" class="transition hover:text-emerald-600">Pendaftaran Sertifikasi</a></li>
+                    <li><a href="{{ route('products.index') }}" class="transition hover:text-emerald-600">Direktori Produk</a></li>
+                    <li><a href="{{ route('home') }}#webgis" class="transition hover:text-emerald-600">Peta Sebaran UMKM</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="mb-4 text-sm font-extrabold text-slate-900">Informasi</h4>
                 <ul class="space-y-2 text-xs font-medium text-slate-500">
-                    <li><a href="#potensi" class="transition hover:text-emerald-600">Potensi Pengembangan</a></li>
-                    <li><a href="#data" class="transition hover:text-emerald-600">Dokumen & Regulasi</a></li>
-                    <li><a href="#direktori" class="transition hover:text-emerald-600">Produk Halal</a></li>
+                    <li><a href="{{ route('articles.index') }}" class="transition hover:text-emerald-600">Artikel & Publikasi</a></li>
+                    <li><a href="{{ route('resources.index') }}" class="transition hover:text-emerald-600">Dokumen & Regulasi</a></li>
+                    <li><a href="{{ route('gallery.index') }}" class="transition hover:text-emerald-600">Galeri Kegiatan</a></li>
                 </ul>
             </div>
             <div>

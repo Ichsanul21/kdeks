@@ -6,10 +6,18 @@
             <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">Content Management</p>
             <h2 class="mt-2 font-heading text-3xl font-extrabold text-slate-900 md:text-4xl">{{ $pageTitle }}</h2>
         </div>
-        <a href="{{ route($routePrefix.'.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-400">
-            <i data-lucide="plus" class="h-4 w-4"></i>
-            Tambah Data
-        </a>
+        <div class="flex flex-wrap gap-3">
+            @if($publicIndexRoute)
+                <a href="{{ route($publicIndexRoute) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <i data-lucide="external-link" class="h-4 w-4"></i>
+                    Lihat Publik
+                </a>
+            @endif
+            <a href="{{ route($routePrefix.'.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-400">
+                <i data-lucide="plus" class="h-4 w-4"></i>
+                Tambah Data
+            </a>
+        </div>
     </div>
 
     <div class="admin-card rounded-[1.75rem] p-6">
@@ -40,6 +48,20 @@
                             @endforeach
                             <td class="py-4">
                                 <div class="flex justify-end gap-3">
+                                    @if(
+                                        $publicShowRoute
+                                        && ($publicShowRouteKey === null || filled(data_get($item, $publicShowRouteKey)))
+                                        && (! filled(data_get($item, 'status')) || data_get($item, 'status') === 'published')
+                                    )
+                                        <a
+                                            href="{{ $publicShowRouteKey ? route($publicShowRoute, data_get($item, $publicShowRouteKey)) : route($publicShowRoute) }}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600"
+                                        >
+                                            Preview
+                                        </a>
+                                    @endif
                                     <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">Edit</a>
                                     <form method="POST" action="{{ route($routePrefix.'.destroy', $item->id) }}" onsubmit="return confirm('Hapus data ini?')">
                                         @csrf

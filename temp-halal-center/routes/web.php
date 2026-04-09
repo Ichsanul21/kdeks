@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\WatermarkSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController as UserProfileController;
+use App\Http\Controllers\PublicContentController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,18 @@ Route::post('/sehati-registration', [HomeController::class, 'storeSehatiRegistra
 Route::get('/search', SearchController::class)->name('search');
 Route::get('/documents/{type}/{id}', [HomeController::class, 'downloadDocument'])->name('documents.download');
 Route::get('/locale/{locale}', [HomeController::class, 'switchLocale'])->name('locale.switch');
+Route::get('/articles', [PublicContentController::class, 'articlesIndex'])->name('articles.index');
+Route::get('/articles/{slug}', [PublicContentController::class, 'articleShow'])->name('articles.show');
+Route::get('/gallery', [PublicContentController::class, 'galleryIndex'])->name('gallery.index');
+Route::get('/products', [PublicContentController::class, 'productsIndex'])->name('products.index');
+Route::get('/products/{slug}', [PublicContentController::class, 'productShow'])->name('products.show');
+Route::get('/locations/{slug}', [PublicContentController::class, 'locationShow'])->name('locations.show');
+Route::get('/resources', [PublicContentController::class, 'resourcesIndex'])->name('resources.index');
+Route::get('/resources/{slug}', [PublicContentController::class, 'resourceShow'])->name('resources.show');
+Route::get('/regulations', [PublicContentController::class, 'regulationsIndex'])->name('regulations.index');
+Route::get('/regulations/{slug}', [PublicContentController::class, 'regulationShow'])->name('regulations.show');
+Route::get('/events', [PublicContentController::class, 'eventsIndex'])->name('events.index');
+Route::get('/events/{slug}', [PublicContentController::class, 'eventShow'])->name('events.show');
 
 Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

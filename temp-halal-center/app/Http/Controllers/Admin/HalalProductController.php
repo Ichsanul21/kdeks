@@ -12,6 +12,8 @@ class HalalProductController extends BaseCrudController
     protected string $pageTitle = 'Direktori Produk';
     protected string $routePrefix = 'admin.halal-products';
     protected string $requestClass = HalalProductRequest::class;
+    protected ?string $publicIndexRoute = 'products.index';
+    protected ?string $publicShowRoute = 'products.show';
     protected array $searchColumns = ['name', 'brand_name', 'category', 'certificate_number'];
     protected array $tableColumns = [
         ['key' => 'name', 'label' => 'Produk'],

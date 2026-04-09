@@ -11,6 +11,8 @@ class EventController extends BaseCrudController
     protected string $pageTitle = 'Agenda';
     protected string $routePrefix = 'admin.events';
     protected string $requestClass = EventRequest::class;
+    protected ?string $publicIndexRoute = 'events.index';
+    protected ?string $publicShowRoute = 'events.show';
     protected array $searchColumns = ['title', 'location_name', 'status'];
     protected array $tableColumns = [
         ['key' => 'title', 'label' => 'Agenda'],

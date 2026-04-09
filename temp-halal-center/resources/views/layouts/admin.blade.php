@@ -91,10 +91,10 @@
                         <i data-lucide="menu" class="h-6 w-6"></i>
                     </button>
 
-                    <div class="hidden w-80 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 transition-all focus-within:border-emerald-500/50 focus-within:ring-2 focus-within:ring-emerald-500/20 md:flex">
+                    <form method="GET" action="{{ url()->current() }}" class="hidden w-80 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 transition-all focus-within:border-emerald-500/50 focus-within:ring-2 focus-within:ring-emerald-500/20 md:flex">
                         <i data-lucide="search" class="h-4 w-4 text-slate-400"></i>
-                        <input type="text" placeholder="Cari nama UMKM, sertifikat, dokumen..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
-                    </div>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama UMKM, sertifikat, dokumen..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
+                    </form>
                 </div>
 
                 <div class="flex items-center gap-4">

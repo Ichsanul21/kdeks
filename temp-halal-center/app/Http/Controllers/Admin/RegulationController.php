@@ -11,6 +11,8 @@ class RegulationController extends BaseCrudController
     protected string $pageTitle = 'Regulasi';
     protected string $routePrefix = 'admin.regulations';
     protected string $requestClass = RegulationRequest::class;
+    protected ?string $publicIndexRoute = 'regulations.index';
+    protected ?string $publicShowRoute = 'regulations.show';
     protected array $searchColumns = ['title', 'regulation_type', 'regulation_number'];
     protected array $tableColumns = [
         ['key' => 'title', 'label' => 'Judul'],

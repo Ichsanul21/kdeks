@@ -11,6 +11,9 @@ class GalleryItemController extends BaseCrudController
     protected string $pageTitle = 'Galeri';
     protected string $routePrefix = 'admin.gallery-items';
     protected string $requestClass = GalleryItemRequest::class;
+    protected ?string $publicIndexRoute = 'gallery.index';
+    protected ?string $publicShowRoute = 'gallery.index';
+    protected ?string $publicShowRouteKey = null;
     protected array $searchColumns = ['title', 'media_type', 'caption'];
     protected array $tableColumns = [
         ['key' => 'title', 'label' => 'Judul'],

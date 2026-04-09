@@ -13,6 +13,8 @@ class HalalLocationController extends BaseCrudController
     protected string $pageTitle = 'Titik WebGIS';
     protected string $routePrefix = 'admin.halal-locations';
     protected string $requestClass = HalalLocationRequest::class;
+    protected ?string $publicIndexRoute = 'home';
+    protected ?string $publicShowRoute = 'locations.show';
     protected array $searchColumns = ['name', 'category', 'brand_name', 'product_name', 'city_name', 'certificate_number'];
     protected array $tableColumns = [
         ['key' => 'name', 'label' => 'Nama'],
@@ -49,9 +51,10 @@ class HalalLocationController extends BaseCrudController
             ['name' => 'owner_name', 'label' => 'Pemilik', 'type' => 'text'],
             ['name' => 'brand_name', 'label' => 'Brand', 'type' => 'text'],
             ['name' => 'product_name', 'label' => 'Produk', 'type' => 'text'],
-            ['name' => 'address', 'label' => 'Alamat', 'type' => 'textarea', 'required' => true],
-            ['name' => 'latitude', 'label' => 'Latitude', 'type' => 'number', 'step' => '0.0000001', 'required' => true],
-            ['name' => 'longitude', 'label' => 'Longitude', 'type' => 'number', 'step' => '0.0000001', 'required' => true],
+            ['name' => 'address', 'label' => 'Alamat', 'type' => 'textarea', 'required' => true, 'id' => 'location-address'],
+            ['name' => 'location_picker', 'label' => 'Pilih Titik Peta', 'type' => 'map-picker', 'latitude_target' => 'location-latitude', 'longitude_target' => 'location-longitude', 'address_target' => 'location-address'],
+            ['name' => 'latitude', 'label' => 'Latitude', 'type' => 'number', 'step' => '0.0000001', 'required' => true, 'id' => 'location-latitude'],
+            ['name' => 'longitude', 'label' => 'Longitude', 'type' => 'number', 'step' => '0.0000001', 'required' => true, 'id' => 'location-longitude'],
             ['name' => 'phone', 'label' => 'Telepon', 'type' => 'text'],
             ['name' => 'email', 'label' => 'Email', 'type' => 'email'],
             ['name' => 'website_url', 'label' => 'Website', 'type' => 'url'],

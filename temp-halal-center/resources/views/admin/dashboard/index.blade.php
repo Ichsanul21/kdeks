@@ -7,10 +7,10 @@
             <p class="mt-1 text-sm font-medium text-slate-500">Pantau seluruh aktivitas ekosistem halal Kaltim hari ini.</p>
         </div>
         <div class="flex gap-2">
-            <button class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
-                <i data-lucide="download" class="h-4 w-4 text-slate-400"></i>
-                Unduh Laporan
-            </button>
+            <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                <i data-lucide="external-link" class="h-4 w-4 text-slate-400"></i>
+                Lihat Website
+            </a>
             <a href="{{ route('admin.sehati-registrations.create') }}" class="flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-400">
                 <i data-lucide="plus" class="h-4 w-4"></i>
                 Tambah Data

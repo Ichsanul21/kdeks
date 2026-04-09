@@ -11,6 +11,8 @@ class ArticleController extends BaseCrudController
     protected string $pageTitle = 'Artikel & Publikasi';
     protected string $routePrefix = 'admin.articles';
     protected string $requestClass = ArticleRequest::class;
+    protected ?string $publicIndexRoute = 'articles.index';
+    protected ?string $publicShowRoute = 'articles.show';
     protected array $searchColumns = ['title', 'author_name', 'type', 'status'];
     protected array $tableColumns = [
         ['key' => 'title', 'label' => 'Judul'],

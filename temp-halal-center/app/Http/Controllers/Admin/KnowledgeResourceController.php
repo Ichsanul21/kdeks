@@ -11,6 +11,8 @@ class KnowledgeResourceController extends BaseCrudController
     protected string $pageTitle = 'Ruang Pengetahuan';
     protected string $routePrefix = 'admin.knowledge-resources';
     protected string $requestClass = KnowledgeResourceRequest::class;
+    protected ?string $publicIndexRoute = 'resources.index';
+    protected ?string $publicShowRoute = 'resources.show';
     protected array $searchColumns = ['title', 'type', 'summary'];
     protected array $tableColumns = [
         ['key' => 'title', 'label' => 'Judul'],

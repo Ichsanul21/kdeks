@@ -26,6 +26,20 @@ const escapeHtml = (value) => {
         .replaceAll("'", '&#039;');
 };
 
+const publicDetailUrl = (type, slug) => {
+    if (!slug) return '#';
+
+    const routes = {
+        articles: `/articles/${slug}`,
+        products: `/products/${slug}`,
+        resources: `/resources/${slug}`,
+        regulations: `/regulations/${slug}`,
+        locations: `/locations/${slug}`,
+    };
+
+    return routes[type] || '#';
+};
+
 window.toggleMobileMenu = function toggleMobileMenu() {
     const menu = document.getElementById('mobileMenu');
     if (!menu) return;
@@ -176,7 +190,11 @@ const initSearchModal = () => {
                             <p class="text-[10px] font-extrabold uppercase tracking-[0.28em] text-slate-400">${escapeHtml(type)}</p>
                             <div class="mt-3 space-y-2">
                                 ${items.length
-                                    ? items.map((item) => `<div class="text-sm font-semibold text-slate-800">${escapeHtml(item.title ?? item.name)}</div>`).join('')
+                                    ? items.map((item) => `
+                                        <a href="${publicDetailUrl(type, item.slug)}" class="block rounded-xl border border-slate-100 px-3 py-2 text-sm font-semibold text-slate-800 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">
+                                            ${escapeHtml(item.title ?? item.name)}
+                                        </a>
+                                    `).join('')
                                     : '<p class="text-sm text-slate-400">Tidak ada hasil</p>'}
                             </div>
                         </div>
@@ -254,9 +272,8 @@ const initMap = () => {
                                 <p class="text-[9px] font-bold uppercase text-slate-400">Titik Tersedia</p>
                                 <p class="text-sm font-extrabold text-emerald-600">${new Intl.NumberFormat('id-ID').format(regionLocations.length)}</p>
                             </div>
-                            <button class="rounded bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-600">Detail</button>
+                            <a href="/products?keyword=${encodeURIComponent(region.name)}" class="rounded bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-600">Lihat Produk</a>
                         </div>
-                    </div>
                     </div>
                 `;
 
@@ -273,7 +290,7 @@ const initMap = () => {
                         <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.city_name ?? location.region?.name ?? '')}</p>
                         <p class="mb-1 text-[9px] font-medium text-slate-500">${escapeHtml(location.lph_partner?.name ?? 'Mitra belum diatur')}</p>
                         <p class="mb-2 text-[9px] font-medium text-slate-500">No. ID: ${escapeHtml(location.certificate_number ?? '-')}</p>
-                        <button class="w-full rounded border border-slate-200 bg-slate-100 px-2 py-1.5 text-[10px] font-bold text-slate-700 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600">Lihat Produk</button>
+                        <a href="${publicDetailUrl('locations', location.slug)}" class="block w-full rounded border border-slate-200 bg-slate-100 px-2 py-1.5 text-center text-[10px] font-bold text-slate-700 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600">Lihat Detail</a>
                     </div>
                 `;
 
@@ -322,6 +339,127 @@ const initMap = () => {
     });
 
     renderMap();
+};
+
+const initAdminMapPickers = () => {
+    const pickers = document.querySelectorAll('[data-map-picker]');
+    if (!pickers.length || !window.L) return;
+
+    pickers.forEach((picker, index) => {
+        const latInput = document.getElementById(picker.dataset.latitudeTarget);
+        const lngInput = document.getElementById(picker.dataset.longitudeTarget);
+        const addressInput = document.getElementById(picker.dataset.addressTarget);
+        const searchInput = picker.querySelector('[data-map-search]');
+        const searchButton = picker.querySelector('[data-map-search-button]');
+        const reverseButton = picker.querySelector('[data-map-reverse-button]');
+        const status = picker.querySelector('[data-map-status]');
+        const canvas = picker.querySelector('[data-map-canvas]');
+
+        if (!latInput || !lngInput || !canvas) return;
+
+        const defaultLat = Number.parseFloat(latInput.value || '-0.502106');
+        const defaultLng = Number.parseFloat(lngInput.value || '117.153709');
+        const map = L.map(canvas, { zoomControl: true }).setView([defaultLat, defaultLng], latInput.value && lngInput.value ? 14 : 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(map);
+
+        const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+        const updateFields = (lat, lng) => {
+            latInput.value = Number(lat).toFixed(7);
+            lngInput.value = Number(lng).toFixed(7);
+            marker.setLatLng([lat, lng]);
+            if (status) {
+                status.textContent = `Koordinat terpilih: ${Number(lat).toFixed(7)}, ${Number(lng).toFixed(7)}`;
+            }
+        };
+
+        const reverseGeocode = async () => {
+            const lat = Number.parseFloat(latInput.value);
+            const lng = Number.parseFloat(lngInput.value);
+
+            if (Number.isNaN(lat) || Number.isNaN(lng)) {
+                if (status) status.textContent = 'Isi latitude dan longitude dulu sebelum mencari alamat.';
+                return;
+            }
+
+            if (status) status.textContent = 'Mencari alamat dari titik...';
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`);
+                const payload = await response.json();
+
+                if (addressInput && payload.display_name) {
+                    addressInput.value = payload.display_name;
+                }
+
+                if (status) status.textContent = payload.display_name || 'Alamat tidak ditemukan untuk titik ini.';
+            } catch (error) {
+                if (status) status.textContent = 'Gagal mengambil alamat dari koordinat.';
+            }
+        };
+
+        map.on('click', (event) => {
+            updateFields(event.latlng.lat, event.latlng.lng);
+        });
+
+        marker.on('dragend', (event) => {
+            const position = event.target.getLatLng();
+            updateFields(position.lat, position.lng);
+        });
+
+        [latInput, lngInput].forEach((input) => {
+            input.addEventListener('change', () => {
+                const lat = Number.parseFloat(latInput.value);
+                const lng = Number.parseFloat(lngInput.value);
+
+                if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+                    updateFields(lat, lng);
+                    map.setView([lat, lng], 14);
+                }
+            });
+        });
+
+        searchButton?.addEventListener('click', async () => {
+            const keyword = searchInput?.value?.trim();
+
+            if (!keyword) {
+                if (status) status.textContent = 'Masukkan alamat atau nama tempat yang ingin dicari.';
+                return;
+            }
+
+            if (status) status.textContent = 'Mencari lokasi...';
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(keyword)}&limit=1`);
+                const payload = await response.json();
+                const firstResult = payload?.[0];
+
+                if (!firstResult) {
+                    if (status) status.textContent = 'Lokasi tidak ditemukan.';
+                    return;
+                }
+
+                const lat = Number.parseFloat(firstResult.lat);
+                const lng = Number.parseFloat(firstResult.lon);
+
+                updateFields(lat, lng);
+                map.setView([lat, lng], 15);
+
+                if (addressInput) {
+                    addressInput.value = firstResult.display_name || addressInput.value;
+                }
+            } catch (error) {
+                if (status) status.textContent = 'Gagal mencari lokasi.';
+            }
+        });
+
+        reverseButton?.addEventListener('click', reverseGeocode);
+
+        window.setTimeout(() => map.invalidateSize(), 120 + index * 60);
+    });
 };
 
 const createWatermarkTileMarkup = (text, imageUrl, secondary = false) => `
@@ -454,6 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCounters();
     initSearchModal();
     initMap();
+    initAdminMapPickers();
     initAggressiveWatermark();
 
     document.querySelectorAll('[data-open-on-load="true"]').forEach((element) => {

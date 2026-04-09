@@ -26,10 +26,13 @@ abstract class BaseCrudController extends Controller
     protected array $formFields = [];
     protected array $publicFileFields = [];
     protected array $privateFileFields = [];
+    protected ?string $publicIndexRoute = null;
+    protected ?string $publicShowRoute = null;
+    protected ?string $publicShowRouteKey = 'slug';
 
     public function index(Request $request): View
     {
-        $query = $this->modelClass::query();
+        $query = $this->indexQuery();
 
         if ($search = $request->string('search')->toString()) {
             $query->where(function ($builder) use ($search): void {
@@ -46,6 +49,9 @@ abstract class BaseCrudController extends Controller
             'routePrefix' => $this->routePrefix,
             'items' => $items,
             'tableColumns' => $this->tableColumns,
+            'publicIndexRoute' => $this->publicIndexRoute,
+            'publicShowRoute' => $this->publicShowRoute,
+            'publicShowRouteKey' => $this->publicShowRouteKey,
         ]);
     }
 
@@ -106,7 +112,14 @@ abstract class BaseCrudController extends Controller
             'formFields' => $this->resolvedFields(),
             'publicFileFields' => $this->publicFileFields,
             'privateFileFields' => $this->privateFileFields,
+            'publicShowRoute' => $this->publicShowRoute,
+            'publicShowRouteKey' => $this->publicShowRouteKey,
         ]);
+    }
+
+    protected function indexQuery()
+    {
+        return $this->modelClass::query();
     }
 
     protected function resolvedFields(): array

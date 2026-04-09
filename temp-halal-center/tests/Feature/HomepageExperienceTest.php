@@ -22,6 +22,8 @@ class HomepageExperienceTest extends TestCase
         $response->assertSee('Program Sertifikasi');
         $response->assertSee('Direktori Produk');
         $response->assertSeeText('Dokumen & Regulasi');
+        $response->assertSeeText('Artikel & Publikasi');
+        $response->assertSeeText('Galeri Dokumentasi');
     }
 
     public function test_sehati_registration_can_be_submitted(): void
@@ -57,5 +59,30 @@ class HomepageExperienceTest extends TestCase
             'product_name',
             'phone',
         ]);
+    }
+
+    public function test_public_content_routes_render_real_detail_pages(): void
+    {
+        $this->seed(DemoContentSeeder::class);
+
+        $article = \App\Models\Article::query()->where('status', 'published')->firstOrFail();
+        $product = \App\Models\HalalProduct::query()->where('status', 'published')->firstOrFail();
+        $resource = \App\Models\KnowledgeResource::query()->firstOrFail();
+        $regulation = \App\Models\Regulation::query()->firstOrFail();
+        $event = \App\Models\Event::query()->where('status', 'published')->firstOrFail();
+        $location = \App\Models\HalalLocation::query()->where('status', 'published')->firstOrFail();
+
+        $this->get(route('articles.index'))->assertOk()->assertSeeText('Artikel & Publikasi');
+        $this->get(route('articles.show', $article->slug))->assertOk()->assertSeeText($article->title);
+        $this->get(route('gallery.index'))->assertOk()->assertSeeText('Galeri Kegiatan');
+        $this->get(route('products.index'))->assertOk()->assertSeeText('Produk Halal');
+        $this->get(route('products.show', $product->slug))->assertOk()->assertSeeText($product->name);
+        $this->get(route('resources.index'))->assertOk()->assertSeeText('Pustaka Dokumen');
+        $this->get(route('resources.show', $resource->slug))->assertOk()->assertSeeText($resource->title);
+        $this->get(route('regulations.index'))->assertOk()->assertSeeText('Regulasi');
+        $this->get(route('regulations.show', $regulation->slug))->assertOk()->assertSeeText($regulation->title);
+        $this->get(route('events.index'))->assertOk()->assertSeeText('Agenda Kegiatan');
+        $this->get(route('events.show', $event->slug))->assertOk()->assertSeeText($event->title);
+        $this->get(route('locations.show', $location->slug))->assertOk()->assertSeeText($location->name);
     }
 }

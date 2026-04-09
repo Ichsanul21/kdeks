@@ -205,10 +205,11 @@
                 <div>
                     <div class="mb-8 flex items-end justify-between">
                         <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Direktori Produk</h2>
+                        <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
                     </div>
                     <div class="space-y-4">
                         @foreach($featuredProducts->take(4) as $product)
-                            <div class="group flex cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
+                            <a href="{{ route('products.show', $product->slug) }}" class="group flex cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
                                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
                                     <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
                                 </div>
@@ -217,7 +218,7 @@
                                     <p class="text-[11px] font-medium text-slate-500">{{ $product->brand_name }} • {{ $product->category }}</p>
                                 </div>
                                 <span class="rounded bg-emerald-50 px-2 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -225,10 +226,14 @@
                 <div id="data">
                     <div class="mb-8 flex items-end justify-between">
                         <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
+                        <div class="flex gap-4">
+                            <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
+                            <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
+                        </div>
                     </div>
                     <div class="space-y-4">
                         @foreach($resources->take(2) as $resource)
-                            <a href="{{ $resource->document_path ? route('documents.download', ['type' => 'resource', 'id' => $resource->id]) : '#' }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
+                            <a href="{{ route('resources.show', $resource->slug) }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
                                 <div class="flex items-center gap-4">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500">
                                         <i data-lucide="file-text" class="h-4 w-4"></i>
@@ -243,7 +248,7 @@
                         @endforeach
 
                         @foreach($regulations->take(2) as $regulation)
-                            <a href="{{ $regulation->document_path ? route('documents.download', ['type' => 'regulation', 'id' => $regulation->id]) : '#' }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
+                            <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
                                 <div class="flex items-center gap-4">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-500">
                                         <i data-lucide="scale" class="h-4 w-4"></i>
@@ -258,6 +263,97 @@
                         @endforeach
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="mb-10 flex items-end justify-between">
+                <div>
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Artikel & Publikasi</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Update berita, publikasi, dan riset terbaru KDEKS Kaltim.</p>
+                </div>
+                <a href="{{ route('articles.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+            </div>
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                @foreach($featuredArticles->take(4) as $article)
+                    <a href="{{ route('articles.show', $article->slug) }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        @if($article->cover_image_path)
+                            <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
+                        @endif
+                        <div class="p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-600">{{ strtoupper($article->type) }}</p>
+                            <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $article->title }}</h3>
+                            <p class="mt-3 text-sm leading-7 text-slate-500">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 110) }}</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section id="agenda" class="border-t border-slate-100 bg-white py-24">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="mb-10 flex items-end justify-between">
+                <div>
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Agenda Kegiatan</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Kegiatan dan agenda resmi yang bisa diikuti masyarakat serta pelaku usaha.</p>
+                </div>
+                <a href="{{ route('events.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+            </div>
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                @foreach($events->take(4) as $event)
+                    <a href="{{ route('events.show', $event->slug) }}" class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-600">{{ optional($event->starts_at)->translatedFormat('d M Y') }}</p>
+                        <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $event->title }}</h3>
+                        <p class="mt-3 text-sm leading-7 text-slate-500">{{ $event->summary }}</p>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="border-t border-slate-100 bg-slate-50 py-24">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="mb-10 flex items-end justify-between">
+                <div>
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Galeri Dokumentasi</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Dokumentasi visual kegiatan, workshop, dan publikasi KDEKS Kaltim.</p>
+                </div>
+                <a href="{{ route('gallery.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+            </div>
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                @foreach($galleryItems->take(4) as $item)
+                    <a href="{{ route('gallery.index') }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        @if($item->media_type === 'image' && $item->media_path)
+                            <img src="{{ asset('storage/'.$item->media_path) }}" alt="{{ $item->title }}" class="h-56 w-full object-cover">
+                        @else
+                            <div class="flex h-56 items-center justify-center bg-slate-900 text-sm font-bold text-white">Media Video</div>
+                        @endif
+                        <div class="p-5">
+                            <h3 class="text-base font-extrabold text-slate-900">{{ $item->title }}</h3>
+                            <p class="mt-3 text-sm leading-7 text-slate-500">{{ $item->caption ?: 'Dokumentasi resmi KDEKS Kaltim.' }}</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="border-t border-slate-100 bg-white py-24">
+        <div class="mx-auto max-w-5xl px-6">
+            <div class="mb-10 text-center">
+                <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Pertanyaan Umum</h2>
+                <p class="mt-2 text-sm font-medium text-slate-500">Jawaban singkat untuk alur layanan publik yang paling sering ditanyakan.</p>
+            </div>
+            <div class="space-y-4">
+                @foreach($faqs->take(6) as $faq)
+                    <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6">
+                        <h3 class="text-base font-extrabold text-slate-900">{{ $faq->question }}</h3>
+                        <div class="mt-3 text-sm leading-7 text-slate-500">{!! $faq->answer !!}</div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
