@@ -324,6 +324,97 @@ const initMap = () => {
     renderMap();
 };
 
+const createWatermarkTileMarkup = (text, imageUrl, secondary = false) => `
+    <div class="watermark-tile${secondary ? ' watermark-tile-secondary' : ''}">
+        ${imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-tile-image" draggable="false">` : ''}
+        ${text ? `<span class="watermark-tile-text">${escapeHtml(text)}</span>` : ''}
+    </div>
+`;
+
+const createWatermarkMarkup = (text, imageUrl) => {
+    const tilesPrimary = Array.from({ length: 20 }, () => createWatermarkTileMarkup(text, imageUrl)).join('');
+    const tilesSecondary = Array.from({ length: 20 }, () => createWatermarkTileMarkup(text, imageUrl, true)).join('');
+
+    return `
+        <div class="watermark-overlay-grid watermark-overlay-grid-primary">${tilesPrimary}</div>
+        <div class="watermark-overlay-grid watermark-overlay-grid-secondary" aria-hidden="true">${tilesSecondary}</div>
+        <div class="watermark-center-badge" aria-hidden="true">
+            ${imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-center-image" draggable="false">` : ''}
+            ${text ? `<span class="watermark-center-text">${escapeHtml(text)}</span>` : ''}
+        </div>
+    `;
+};
+
+const initAggressiveWatermark = () => {
+    const overlay = document.querySelector('[data-watermark-root="true"]');
+    if (!overlay) return;
+
+    const restoreOverlay = () => {
+        const existing = document.getElementById('globalWatermarkOverlay');
+        const text = overlay.dataset.watermarkText || '';
+        const imageUrl = overlay.dataset.watermarkImage || '';
+        const opacity = overlay.dataset.watermarkOpacity || '0.18';
+
+        if (!text && !imageUrl) return;
+
+        const root = existing || overlay;
+        root.id = 'globalWatermarkOverlay';
+        root.dataset.watermarkRoot = 'true';
+        root.dataset.watermarkText = text;
+        root.dataset.watermarkImage = imageUrl;
+        root.dataset.watermarkOpacity = opacity;
+        root.style.setProperty('--watermark-opacity', opacity);
+
+        if (!root.parentElement) {
+            document.body.appendChild(root);
+        }
+
+        root.className = 'watermark-overlay';
+        root.setAttribute('aria-hidden', 'true');
+        root.innerHTML = createWatermarkMarkup(text, imageUrl);
+
+        if (getComputedStyle(root).display === 'none' || getComputedStyle(root).visibility === 'hidden') {
+            root.style.display = 'block';
+            root.style.visibility = 'visible';
+            root.style.opacity = '1';
+        }
+    };
+
+    restoreOverlay();
+
+    const observer = new MutationObserver(() => {
+        const root = document.getElementById('globalWatermarkOverlay');
+        if (!root || !document.body.contains(root)) {
+            restoreOverlay();
+            return;
+        }
+
+        const computedStyle = getComputedStyle(root);
+        if (
+            root.className !== 'watermark-overlay'
+            || computedStyle.display === 'none'
+            || computedStyle.visibility === 'hidden'
+            || Number.parseFloat(computedStyle.opacity || '1') === 0
+        ) {
+            restoreOverlay();
+        }
+    });
+
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'style'],
+    });
+
+    window.setInterval(() => {
+        const root = document.getElementById('globalWatermarkOverlay');
+        if (!root || !document.body.contains(root)) {
+            restoreOverlay();
+        }
+    }, 1200);
+};
+
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         window.closeModal('searchModal');
@@ -337,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCounters();
     initSearchModal();
     initMap();
+    initAggressiveWatermark();
 
     document.querySelectorAll('[data-open-on-load="true"]').forEach((element) => {
         if (element.id) {

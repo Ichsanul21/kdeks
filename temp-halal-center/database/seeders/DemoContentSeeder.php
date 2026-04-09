@@ -32,6 +32,7 @@ class DemoContentSeeder extends Seeder
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $editorRole = Role::firstOrCreate(['name' => 'editor']);
+        $developerRole = Role::firstOrCreate(['name' => 'developer']);
 
         $admin = User::updateOrCreate(
             ['email' => 'admin@halalcenter.test'],
@@ -43,6 +44,11 @@ class DemoContentSeeder extends Seeder
             ['email' => 'editor@halalcenter.test'],
             ['name' => 'Halal Center Editor', 'password' => Hash::make('password')]
         )->syncRoles([$editorRole]);
+
+        User::updateOrCreate(
+            ['email' => 'developer@halalcenter.test'],
+            ['name' => 'Halal Center Developer', 'password' => Hash::make('password')]
+        )->syncRoles([$developerRole]);
 
         SiteSetting::updateOrCreate(['id' => 1], [
             'institution_name' => 'KDEKS Kalimantan Timur',
@@ -61,6 +67,9 @@ class DemoContentSeeder extends Seeder
             'meta_description' => 'Portal resmi KDEKS Kalimantan Timur untuk sertifikasi halal, peta sebaran usaha halal, dokumen, dan pengembangan ekonomi syariah.',
             'meta_keywords' => 'KDEKS Kaltim, sertifikasi halal, ekonomi syariah, webgis halal, SEHATI',
             'default_locale' => 'id',
+            'watermark_enabled' => false,
+            'watermark_text' => 'UNPAID PREVIEW',
+            'watermark_opacity' => 0.18,
         ]);
 
         $regions = collect([

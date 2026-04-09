@@ -27,5 +27,17 @@ class SiteSetting extends Model
         'meta_description',
         'meta_keywords',
         'default_locale',
+        'watermark_enabled',
+        'watermark_text',
+        'watermark_image_path',
+        'watermark_opacity',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'watermark_enabled' => 'boolean',
+            'watermark_opacity' => 'float',
+        ];
+    }
 }

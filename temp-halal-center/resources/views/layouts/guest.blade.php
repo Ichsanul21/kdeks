@@ -11,6 +11,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="auth-shell font-sans text-slate-900 antialiased">
+        @include('components.watermark-overlay', ['setting' => $setting ?? null])
         <div class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-8">
             <div class="organic-shape left-[-100px] top-[-120px] h-[380px] w-[380px] bg-emerald-200/60"></div>
             <div class="organic-shape right-[-120px] top-[10%] h-[420px] w-[420px] bg-cyan-200/50"></div>

@@ -33,7 +33,7 @@ Route::get('/search', SearchController::class)->name('search');
 Route::get('/documents/{type}/{id}', [HomeController::class, 'downloadDocument'])->name('documents.download');
 Route::get('/locale/{locale}', [HomeController::class, 'switchLocale'])->name('locale.switch');
 
-Route::middleware(['auth', 'role:admin|editor'])->prefix('admin')->as('admin.')->group(function (): void {
+Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('site-settings', SiteSettingController::class)->except(['show']);
     Route::resource('regions', RegionController::class)->except(['show']);

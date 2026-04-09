@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
+    @include('components.watermark-overlay', ['setting' => $setting ?? null])
     @php
         $adminNavigation = [
             'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard'],
@@ -25,9 +26,12 @@
             'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles'],
             'admin.sector-items.index' => ['label' => 'Sektor', 'icon' => 'briefcase-business'],
             'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
-            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
             'admin.consultation-requests.index' => ['label' => 'Konsultasi', 'icon' => 'messages-square'],
         ];
+
+        if (auth()->user()?->hasRole('developer')) {
+            $adminNavigation['admin.site-settings.index'] = ['label' => 'Pengaturan Web', 'icon' => 'settings'];
+        }
     @endphp
 
     <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-sm lg:hidden" onclick="toggleSidebar()"></div>
