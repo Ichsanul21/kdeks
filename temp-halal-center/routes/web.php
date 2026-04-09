@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\RegulationController;
 use App\Http\Controllers\Admin\SectorItemController;
 use App\Http\Controllers\Admin\SehatiRegistrationController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\UmkmController;
+use App\Http\Controllers\Admin\UmkmProdukController;
 use App\Http\Controllers\Admin\WatermarkSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController as UserProfileController;
@@ -68,6 +70,14 @@ Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as(
     Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
     Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
     Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
+    Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');
+    Route::get('umkms/export', [UmkmController::class, 'export'])->name('umkms.export');
+    Route::resource('umkms', UmkmController::class)->except(['show']);
+    Route::get('umkms/{umkm}/produks/create', [UmkmProdukController::class, 'create'])->name('umkms.produks.create');
+    Route::post('umkms/{umkm}/produks', [UmkmProdukController::class, 'store'])->name('umkms.produks.store');
+    Route::get('umkms/{umkm}/produks/{produk}/edit', [UmkmProdukController::class, 'edit'])->name('umkms.produks.edit');
+    Route::put('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'update'])->name('umkms.produks.update');
+    Route::delete('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'destroy'])->name('umkms.produks.destroy');
 });
 
 Route::middleware(['auth', 'role:developer'])->prefix('admin')->as('admin.')->group(function (): void {
