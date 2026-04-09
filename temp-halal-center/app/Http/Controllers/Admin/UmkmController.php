@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Throwable;
 use ZipArchive;
 
 class UmkmController extends BaseCrudController
@@ -165,13 +166,20 @@ class UmkmController extends BaseCrudController
                 ->withErrors(['import_file' => 'Unggah satu file XLSX/CSV atau kombinasi file CSV UMKM, detail, dan produk.']);
         }
 
-        $import = new UmkmImport();
-        $import->import(
-            $request->file('import_file'),
-            $request->file('umkm_file'),
-            $request->file('umkm_detail_file'),
-            $request->file('produk_file'),
-        );
+        try {
+            $import = new UmkmImport();
+            $import->import(
+                $request->file('import_file'),
+                $request->file('umkm_file'),
+                $request->file('umkm_detail_file'),
+                $request->file('produk_file'),
+            );
+        } catch (Throwable $e) {
+            report($e);
+
+            return redirect()->route("{$this->routePrefix}.index")
+                ->withErrors(['import' => 'Import gagal diproses di server. Cek log aplikasi (storage/logs) dan pastikan server punya extension PHP yang diperlukan untuk Excel/ZIP.']);
+        }
 
         $stats = $import->getStats();
 
@@ -187,15 +195,27 @@ class UmkmController extends BaseCrudController
         $format = $request->get('format', 'xlsx');
         $filename = 'umkm-export-' . now()->format('Y-m-d-His');
 
-        if ($format === 'csv') {
-            return $this->downloadCsvBundle($filename);
-        }
+        try {
+            if ($format === 'csv') {
+                return $this->downloadCsvBundle($filename);
+            }
 
-        return Excel::download(new UmkmExport(), "{$filename}.xlsx");
+            return Excel::download(new UmkmExport(), "{$filename}.xlsx");
+        } catch (Throwable $e) {
+            report($e);
+
+            return redirect()->route("{$this->routePrefix}.index")
+                ->withErrors(['export' => 'Export gagal diproses di server. Cek log aplikasi (storage/logs) dan pastikan extension PHP ZIP aktif.']);
+        }
     }
 
-    protected function downloadCsvBundle(string $filename): BinaryFileResponse
+    protected function downloadCsvBundle(string $filename): BinaryFileResponse|RedirectResponse
     {
+        if (! class_exists(ZipArchive::class)) {
+            return redirect()->route("{$this->routePrefix}.index")
+                ->withErrors(['export' => 'Export CSV ZIP membutuhkan extension PHP ZIP (ZipArchive). Aktifkan/instal php-zip di server.']);
+        }
+
         $temporaryDirectory = storage_path('app/temp');
         File::ensureDirectoryExists($temporaryDirectory);
 
@@ -206,7 +226,11 @@ class UmkmController extends BaseCrudController
         }
 
         $zip = new ZipArchive();
-        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $opened = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        if ($opened !== true) {
+            return redirect()->route("{$this->routePrefix}.index")
+                ->withErrors(['export' => 'Gagal membuat file ZIP sementara. Pastikan folder storage/app/temp writable oleh user web server (www-data/nginx) dan extension ZIP aktif.']);
+        }
         $zip->addFromString('umkm-terverifikasi.csv', $this->buildSummaryCsv());
         $zip->addFromString('umkm-terverifikasi-detail.csv', $this->buildDetailCsv());
         $zip->addFromString('umkm-terverifikasi-produk.csv', $this->buildProdukCsv());

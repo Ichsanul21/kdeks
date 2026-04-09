@@ -598,6 +598,8 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         window.closeModal('searchModal');
         window.closeModal('sehatiModal');
+        window.closeModal('umkmImportModal');
+        window.closeModal('umkmExportModal');
     }
 });
 
