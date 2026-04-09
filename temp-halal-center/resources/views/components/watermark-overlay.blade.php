@@ -17,57 +17,75 @@
         style="--watermark-opacity: {{ max(0.05, min(1, $watermarkOpacity)) }};"
         aria-hidden="true"
     >
-        <div class="watermark-overlay-grid watermark-overlay-grid-primary">
-            @foreach(range(1, 20) as $index)
-                <div class="watermark-tile">
+        <div class="watermark-marquee watermark-marquee-text watermark-marquee-diagonal watermark-marquee-top" aria-hidden="true">
+            <div class="watermark-marquee-track">
+                @foreach(range(1, 10) as $index)
+                    @if($watermarkText !== '')
+                        <span class="watermark-tile-text watermark-tile-text-small">{{ $watermarkText }}</span>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+
+        <div class="watermark-marquee watermark-marquee-image watermark-marquee-diagonal watermark-marquee-upper" aria-hidden="true">
+            <div class="watermark-marquee-track">
+                @foreach(range(1, 14) as $index)
                     @if(filled($watermarkImagePath))
                         <img
                             src="{{ asset('storage/'.$watermarkImagePath) }}"
                             alt=""
-                            class="watermark-tile-image"
+                            class="watermark-tile-image watermark-tile-image-small"
                             draggable="false"
                         >
                     @endif
-
-                    @if($watermarkText !== '')
-                        <span class="watermark-tile-text">{{ $watermarkText }}</span>
-                    @endif
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
 
-        <div class="watermark-overlay-grid watermark-overlay-grid-secondary" aria-hidden="true">
-            @foreach(range(1, 20) as $index)
-                <div class="watermark-tile watermark-tile-secondary">
-                    @if(filled($watermarkImagePath))
-                        <img
-                            src="{{ asset('storage/'.$watermarkImagePath) }}"
-                            alt=""
-                            class="watermark-tile-image"
-                            draggable="false"
-                        >
-                    @endif
-
-                    @if($watermarkText !== '')
-                        <span class="watermark-tile-text">{{ $watermarkText }}</span>
-                    @endif
-                </div>
-            @endforeach
-        </div>
-
-        <div class="watermark-center-badge" aria-hidden="true">
-            @if(filled($watermarkImagePath))
-                <img
-                    src="{{ asset('storage/'.$watermarkImagePath) }}"
-                    alt=""
-                    class="watermark-center-image"
-                    draggable="false"
-                >
-            @endif
-
+        <div class="watermark-band watermark-band-text" aria-hidden="true">
             @if($watermarkText !== '')
-                <span class="watermark-center-text">{{ $watermarkText }}</span>
+                @foreach(range(1, 4) as $index)
+                    <span class="watermark-center-text">{{ $watermarkText }}</span>
+                @endforeach
             @endif
+        </div>
+
+        <div class="watermark-band watermark-band-image" aria-hidden="true">
+            @if(filled($watermarkImagePath))
+                @foreach(range(1, 6) as $index)
+                    <img
+                        src="{{ asset('storage/'.$watermarkImagePath) }}"
+                        alt=""
+                        class="watermark-center-image"
+                        draggable="false"
+                    >
+                @endforeach
+            @endif
+        </div>
+
+        <div class="watermark-marquee watermark-marquee-text watermark-marquee-diagonal watermark-marquee-lower" aria-hidden="true">
+            <div class="watermark-marquee-track watermark-marquee-track-reverse">
+                @foreach(range(1, 10) as $index)
+                    @if($watermarkText !== '')
+                        <span class="watermark-tile-text watermark-tile-text-small">{{ $watermarkText }}</span>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+
+        <div class="watermark-marquee watermark-marquee-image watermark-marquee-diagonal watermark-marquee-bottom" aria-hidden="true">
+            <div class="watermark-marquee-track watermark-marquee-track-reverse">
+                @foreach(range(1, 14) as $index)
+                    @if(filled($watermarkImagePath))
+                        <img
+                            src="{{ asset('storage/'.$watermarkImagePath) }}"
+                            alt=""
+                            class="watermark-tile-image watermark-tile-image-small"
+                            draggable="false"
+                        >
+                    @endif
+                @endforeach
+            </div>
         </div>
     </div>
 @endif

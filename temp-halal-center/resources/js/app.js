@@ -332,15 +332,41 @@ const createWatermarkTileMarkup = (text, imageUrl, secondary = false) => `
 `;
 
 const createWatermarkMarkup = (text, imageUrl) => {
-    const tilesPrimary = Array.from({ length: 20 }, () => createWatermarkTileMarkup(text, imageUrl)).join('');
-    const tilesSecondary = Array.from({ length: 20 }, () => createWatermarkTileMarkup(text, imageUrl, true)).join('');
+    const textSmall = Array.from(
+        { length: 10 },
+        () => (text ? `<span class="watermark-tile-text watermark-tile-text-small">${escapeHtml(text)}</span>` : ''),
+    ).join('');
+    const imageSmall = Array.from(
+        { length: 14 },
+        () => (imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-tile-image watermark-tile-image-small" draggable="false">` : ''),
+    ).join('');
+    const textLarge = Array.from(
+        { length: 4 },
+        () => (text ? `<span class="watermark-center-text">${escapeHtml(text)}</span>` : ''),
+    ).join('');
+    const imageLarge = Array.from(
+        { length: 6 },
+        () => (imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-center-image" draggable="false">` : ''),
+    ).join('');
 
     return `
-        <div class="watermark-overlay-grid watermark-overlay-grid-primary">${tilesPrimary}</div>
-        <div class="watermark-overlay-grid watermark-overlay-grid-secondary" aria-hidden="true">${tilesSecondary}</div>
-        <div class="watermark-center-badge" aria-hidden="true">
-            ${imageUrl ? `<img src="${imageUrl}" alt="" class="watermark-center-image" draggable="false">` : ''}
-            ${text ? `<span class="watermark-center-text">${escapeHtml(text)}</span>` : ''}
+        <div class="watermark-marquee watermark-marquee-text watermark-marquee-diagonal watermark-marquee-top" aria-hidden="true">
+            <div class="watermark-marquee-track">${textSmall}</div>
+        </div>
+        <div class="watermark-marquee watermark-marquee-image watermark-marquee-diagonal watermark-marquee-upper" aria-hidden="true">
+            <div class="watermark-marquee-track">${imageSmall}</div>
+        </div>
+        <div class="watermark-band watermark-band-text" aria-hidden="true">
+            ${textLarge}
+        </div>
+        <div class="watermark-band watermark-band-image" aria-hidden="true">
+            ${imageLarge}
+        </div>
+        <div class="watermark-marquee watermark-marquee-text watermark-marquee-diagonal watermark-marquee-lower" aria-hidden="true">
+            <div class="watermark-marquee-track watermark-marquee-track-reverse">${textSmall}</div>
+        </div>
+        <div class="watermark-marquee watermark-marquee-image watermark-marquee-diagonal watermark-marquee-bottom" aria-hidden="true">
+            <div class="watermark-marquee-track watermark-marquee-track-reverse">${imageSmall}</div>
         </div>
     `;
 };

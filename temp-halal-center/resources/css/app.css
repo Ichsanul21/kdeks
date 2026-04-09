@@ -248,41 +248,46 @@
         opacity: calc(var(--watermark-opacity, 0.18) * 0.85);
     }
 
-    .watermark-overlay-grid {
+    .watermark-marquee {
         position: absolute;
-        inset: 0;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(220px, 1fr));
-        gap: 4rem;
-        min-width: 140vw;
-        min-height: 140vh;
-        padding: 5rem;
-        transform: translate(-10%, -8%) rotate(-24deg);
+        left: -20vw;
+        width: 140vw;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .watermark-marquee-diagonal {
+        transform: rotate(-19deg);
         transform-origin: center;
     }
 
-    .watermark-overlay-grid-primary {
-        animation: watermark-drift-a 18s linear infinite;
+    .watermark-marquee-top {
+        top: 7%;
     }
 
-    .watermark-overlay-grid-secondary {
-        transform: translate(-8%, -10%) rotate(-12deg) scale(1.02);
-        animation: watermark-drift-b 24s linear infinite;
+    .watermark-marquee-upper {
+        top: 24%;
     }
 
-    .watermark-tile {
-        display: flex;
+    .watermark-marquee-lower {
+        top: 62%;
+    }
+
+    .watermark-marquee-bottom {
+        top: 79%;
+    }
+
+    .watermark-marquee-track {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        min-height: 120px;
-        text-align: center;
-        opacity: 1;
-        mix-blend-mode: normal;
+        gap: 2.5rem;
+        min-width: max-content;
+        padding: 1rem 0;
+        animation: watermark-marquee-forward 16s linear infinite;
     }
 
-    .watermark-tile-secondary {
-        opacity: 1;
+    .watermark-marquee-track-reverse {
+        animation-name: watermark-marquee-reverse;
     }
 
     .watermark-tile-image {
@@ -298,6 +303,13 @@
         filter: none;
     }
 
+    .watermark-tile-image-small {
+        max-width: 54px;
+        max-height: 54px;
+        padding: 0.25rem;
+        border-radius: 0.85rem;
+    }
+
     .watermark-tile-text {
         color: rgba(15, 23, 42, 0.9);
         font-size: 1.1rem;
@@ -308,45 +320,56 @@
         opacity: min(1, calc(var(--watermark-opacity, 0.18) * 1.45));
     }
 
-    .watermark-center-badge {
+    .watermark-tile-text-small {
+        font-size: 0.78rem;
+        letter-spacing: 0.2em;
+    }
+
+    .watermark-band {
         position: absolute;
-        left: 50%;
-        top: 50%;
+        left: 0;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1.25rem;
-        min-width: min(82vw, 720px);
-        padding: 1.5rem 2rem;
-        border: 2px dashed rgba(15, 23, 42, 0.25);
-        border-radius: 2rem;
-        background: rgba(255, 255, 255, 0.18);
-        backdrop-filter: blur(1.5px);
-        transform: translate(-50%, -50%) rotate(-12deg);
-        box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
-        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 2.2));
-        mix-blend-mode: normal;
+        gap: 1.5rem;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .watermark-band-text {
+        top: 42%;
+        padding: 0.75rem 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    }
+
+    .watermark-band-image {
+        top: 51%;
+        padding: 0.6rem 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
     }
 
     .watermark-center-image {
         display: block;
-        max-width: 110px;
-        max-height: 110px;
+        max-width: 72px;
+        max-height: 72px;
         padding: 0.45rem;
         border-radius: 1.2rem;
         background: rgba(255, 255, 255, 0.4);
         box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
         object-fit: contain;
         filter: none;
+        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 5.2));
     }
 
     .watermark-center-text {
         color: rgba(15, 23, 42, 0.95);
-        font-size: clamp(1.1rem, 3vw, 2.25rem);
+        font-size: clamp(1rem, 2.2vw, 1.8rem);
         font-weight: 900;
-        letter-spacing: 0.28em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
         white-space: nowrap;
+        opacity: min(1, calc(var(--watermark-opacity, 0.18) * 2.2));
     }
 
     .map-category-button.active {
@@ -418,27 +441,21 @@
         }
     }
 
-    @keyframes watermark-drift-a {
+    @keyframes watermark-marquee-forward {
         0% {
-            transform: translate(-10%, -8%) rotate(-24deg);
-        }
-        50% {
-            transform: translate(-8%, -10%) rotate(-22deg);
+            transform: translateX(0);
         }
         100% {
-            transform: translate(-10%, -8%) rotate(-24deg);
+            transform: translateX(-50%);
         }
     }
 
-    @keyframes watermark-drift-b {
+    @keyframes watermark-marquee-reverse {
         0% {
-            transform: translate(-8%, -10%) rotate(-12deg) scale(1.02);
-        }
-        50% {
-            transform: translate(-10%, -7%) rotate(-10deg) scale(1.04);
+            transform: translateX(-50%);
         }
         100% {
-            transform: translate(-8%, -10%) rotate(-12deg) scale(1.02);
+            transform: translateX(0);
         }
     }
 
@@ -447,29 +464,16 @@
     }
 
     @media (max-width: 1024px) {
-        .watermark-overlay-grid {
-            grid-template-columns: repeat(3, minmax(180px, 1fr));
-            gap: 3rem;
+        .watermark-marquee-track {
+            gap: 1.8rem;
         }
 
-        .watermark-center-badge {
-            min-width: min(84vw, 560px);
-            padding: 1.2rem 1.4rem;
+        .watermark-center-text {
+            font-size: 0.95rem;
         }
     }
 
     @media (max-width: 640px) {
-        .watermark-overlay-grid {
-            grid-template-columns: repeat(2, minmax(140px, 1fr));
-            gap: 2rem;
-            padding: 3rem;
-        }
-
-        .watermark-tile {
-            min-height: 90px;
-            gap: 0.75rem;
-        }
-
         .watermark-tile-image {
             max-width: 56px;
             max-height: 56px;
@@ -480,20 +484,19 @@
             letter-spacing: 0.18em;
         }
 
-        .watermark-center-badge {
-            gap: 0.75rem;
-            padding: 1rem 1.1rem;
-            border-radius: 1.25rem;
+        .watermark-tile-image-small {
+            max-width: 42px;
+            max-height: 42px;
         }
 
         .watermark-center-image {
-            max-width: 56px;
-            max-height: 56px;
+            max-width: 46px;
+            max-height: 46px;
         }
 
         .watermark-center-text {
-            font-size: 0.85rem;
-            letter-spacing: 0.16em;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
         }
     }
 }
