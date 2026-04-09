@@ -23,6 +23,7 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
@@ -50,7 +51,7 @@ class DemoContentSeeder extends Seeder
             ['name' => 'Halal Center Developer', 'password' => Hash::make('password')]
         )->syncRoles([$developerRole]);
 
-        SiteSetting::updateOrCreate(['id' => 1], [
+        $siteSettingData = [
             'institution_name' => 'KDEKS Kalimantan Timur',
             'tagline' => 'Komite Daerah Ekonomi Syariah Kaltim yang transparan, maju, dan mudah diakses masyarakat.',
             'hero_badge' => 'Portal Informasi Resmi',
@@ -67,10 +68,16 @@ class DemoContentSeeder extends Seeder
             'meta_description' => 'Portal resmi KDEKS Kalimantan Timur untuk sertifikasi halal, peta sebaran usaha halal, dokumen, dan pengembangan ekonomi syariah.',
             'meta_keywords' => 'KDEKS Kaltim, sertifikasi halal, ekonomi syariah, webgis halal, SEHATI',
             'default_locale' => 'id',
-            'watermark_enabled' => false,
-            'watermark_text' => 'UNPAID PREVIEW',
-            'watermark_opacity' => 0.18,
-        ]);
+        ];
+
+        // Seed tetap jalan walau migration watermark belum diterapkan (mis. urutan deploy keliru).
+        if (Schema::hasColumn('site_settings', 'watermark_enabled')) {
+            $siteSettingData['watermark_enabled'] = false;
+            $siteSettingData['watermark_text'] = 'UNPAID PREVIEW';
+            $siteSettingData['watermark_opacity'] = 0.18;
+        }
+
+        SiteSetting::updateOrCreate(['id' => 1], $siteSettingData);
 
         $regions = collect([
             ['name' => 'Samarinda', 'latitude' => -0.502106, 'longitude' => 117.153709, 'halal_msmes_count' => 142, 'mentor_count' => 18, 'issued_certificate_count' => 96, 'service_office_count' => 4, 'sort_order' => 1],
