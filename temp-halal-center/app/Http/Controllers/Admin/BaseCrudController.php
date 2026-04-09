@@ -75,7 +75,7 @@ abstract class BaseCrudController extends Controller
         return $this->formView($this->findModel($id), 'edit');
     }
 
-    public function update(string $id): RedirectResponse
+    public function update(string $id): \Symfony\Component\HttpFoundation\Response
     {
         $model = $this->findModel($id);
         $model->fill($this->validatedData($model));

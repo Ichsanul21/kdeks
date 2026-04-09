@@ -202,8 +202,9 @@ class UmkmController extends BaseCrudController
         ]);
     }
 
-    public function update(Request $request, string $id): RedirectResponse|JsonResponse
+    public function update(string $id): \Symfony\Component\HttpFoundation\Response
     {
+        $request = request();
         $model = $this->findModel($id);
 
         if ($request->expectsJson()) {
