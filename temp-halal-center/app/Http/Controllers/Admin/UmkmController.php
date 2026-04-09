@@ -7,6 +7,7 @@ use App\Exports\UmkmDetailSheet;
 use App\Exports\UmkmProdukSheet;
 use App\Exports\UmkmSummarySheet;
 use App\Http\Requests\UmkmRequest;
+use App\Http\Requests\UmkmPatchRequest;
 use App\Imports\UmkmImport;
 use App\Models\LphPartner;
 use App\Models\Region;
@@ -15,8 +16,10 @@ use App\Models\UmkmProduk;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 use ZipArchive;
@@ -42,7 +45,7 @@ class UmkmController extends BaseCrudController
 
     protected function indexQuery()
     {
-        return Umkm::query()->withCount('produks')->orderByDesc('source_id')->orderByDesc('id');
+        return Umkm::query()->withCount('produks');
     }
 
     public function index(Request $request): View
@@ -57,7 +60,55 @@ class UmkmController extends BaseCrudController
             });
         }
 
-        $items = $query->latest()->paginate(15)->withQueryString();
+        if ($status = $request->string('status')->toString()) {
+            $query->where('status', $status);
+        }
+
+        if ($approval = $request->string('approval')->toString()) {
+            $query->where('approval', $approval);
+        }
+
+        if ($kabKota = $request->string('kab_kota')->toString()) {
+            $query->where('kab_kota', $kabKota);
+        }
+
+        $sort = $request->string('sort', 'latest')->toString();
+        $dir = strtolower($request->string('dir', 'desc')->toString()) === 'asc' ? 'asc' : 'desc';
+
+        $sortMap = [
+            'latest' => null,
+            'source_id' => 'source_id',
+            'nama_umkm' => 'nama_umkm',
+            'kab_kota' => 'kab_kota',
+            'kategori' => 'kategori',
+            'approval' => 'approval',
+        ];
+
+        if (($sortColumn = ($sortMap[$sort] ?? null)) !== null) {
+            $query->orderBy($sortColumn, $dir)->orderByDesc('id');
+        } else {
+            $query->orderByDesc('id')->orderByDesc('source_id');
+        }
+
+        $items = $query->paginate(15)->withQueryString();
+
+        $approvals = Umkm::query()
+            ->whereNotNull('approval')
+            ->where('approval', '!=', '')
+            ->distinct()
+            ->orderBy('approval')
+            ->pluck('approval')
+            ->values()
+            ->all();
+
+        $kabKotas = Umkm::query()
+            ->whereNotNull('kab_kota')
+            ->where('kab_kota', '!=', '')
+            ->distinct()
+            ->orderBy('kab_kota')
+            ->pluck('kab_kota')
+            ->values()
+            ->all();
 
         return view('admin.umkms.index', [
             'pageTitle' => $this->pageTitle,
@@ -69,6 +120,8 @@ class UmkmController extends BaseCrudController
             'publicShowRouteKey' => $this->publicShowRouteKey,
             'totalUmkm' => Umkm::count(),
             'totalProduk' => UmkmProduk::count(),
+            'approvals' => $approvals,
+            'kabKotas' => $kabKotas,
         ]);
     }
 
@@ -149,10 +202,60 @@ class UmkmController extends BaseCrudController
         ]);
     }
 
+    public function update(Request $request, string $id): RedirectResponse|JsonResponse
+    {
+        $model = $this->findModel($id);
+
+        if ($request->expectsJson()) {
+            /** @var UmkmPatchRequest $patchRequest */
+            $patchRequest = app(UmkmPatchRequest::class);
+            $patchRequest->setContainer(app())->setRedirector(app('redirect'));
+
+            if (! $patchRequest->authorize()) {
+                abort(403);
+            }
+
+            $validated = Validator::make(
+                $request->all(),
+                $patchRequest->rules(),
+                $patchRequest->messages(),
+                $patchRequest->attributes()
+            )->validate();
+
+            $model->fill($validated);
+            $dirty = array_keys($model->getDirty());
+
+            $this->syncFiles($model);
+            $model->save();
+
+            return response()->json([
+                'message' => 'UMKM berhasil diperbarui.',
+                'changed' => $dirty,
+                'data' => [
+                    'id' => $model->id,
+                    'source_id' => $model->source_id,
+                    'nama_umkm' => $model->nama_umkm,
+                    'nama_pemilik' => $model->nama_pemilik,
+                    'kab_kota' => $model->kab_kota,
+                    'kategori' => $model->kategori,
+                    'approval' => $model->approval,
+                    'status' => $model->status,
+                    'alamat' => $model->alamat,
+                    'nomor_wa' => $model->nomor_wa,
+                    'link_pembelian' => $model->link_pembelian,
+                    'latitude' => $model->latitude,
+                    'longitude' => $model->longitude,
+                ],
+            ]);
+        }
+
+        return parent::update($id);
+    }
+
     /**
      * Import UMKM data from CSV/XLSX.
      */
-    public function import(Request $request): RedirectResponse
+    public function import(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
             'import_file' => ['nullable', 'file', 'mimes:csv,xlsx,xls,txt', 'max:20480'],
@@ -162,8 +265,14 @@ class UmkmController extends BaseCrudController
         ]);
 
         if (! $request->hasFile('import_file') && ! $request->hasFile('umkm_file') && ! $request->hasFile('umkm_detail_file') && ! $request->hasFile('produk_file')) {
+            $message = 'Unggah satu file XLSX/CSV atau kombinasi file CSV UMKM, detail, dan produk.';
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 422);
+            }
+
             return redirect()->route("{$this->routePrefix}.index")
-                ->withErrors(['import_file' => 'Unggah satu file XLSX/CSV atau kombinasi file CSV UMKM, detail, dan produk.']);
+                ->withErrors(['import_file' => $message]);
         }
 
         try {
@@ -177,14 +286,28 @@ class UmkmController extends BaseCrudController
         } catch (Throwable $e) {
             report($e);
 
+            $message = 'Import gagal diproses di server. Cek log aplikasi (storage/logs) dan pastikan server punya extension PHP yang diperlukan untuk Excel/ZIP.';
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 500);
+            }
+
             return redirect()->route("{$this->routePrefix}.index")
-                ->withErrors(['import' => 'Import gagal diproses di server. Cek log aplikasi (storage/logs) dan pastikan server punya extension PHP yang diperlukan untuk Excel/ZIP.']);
+                ->withErrors(['import' => $message]);
         }
 
         $stats = $import->getStats();
+        $successMessage = "Import berhasil! {$stats['umkm']} UMKM dan {$stats['produk']} produk diproses. {$stats['skipped']} baris dilewati.";
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $successMessage,
+                'stats' => $stats,
+            ]);
+        }
 
         return redirect()->route("{$this->routePrefix}.index")
-            ->with('status', "Import berhasil! {$stats['umkm']} UMKM dan {$stats['produk']} produk diproses. {$stats['skipped']} baris dilewati.");
+            ->with('status', $successMessage);
     }
 
     /**

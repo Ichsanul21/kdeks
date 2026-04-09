@@ -241,6 +241,7 @@ const initMap = () => {
     const cityFilter = document.getElementById('mapCityFilter');
     const typeFilter = document.getElementById('mapTypeFilter');
     const partnerFilter = document.getElementById('mapPartnerFilter');
+    const categoryFilter = document.getElementById('mapCategoryFilter');
     const searchInput = document.getElementById('mapSearchInput');
     const categoryButtons = document.querySelectorAll('[data-map-category]');
     const zoomButtons = document.querySelectorAll('[data-map-zoom]');
@@ -309,7 +310,8 @@ const initMap = () => {
                     .addTo(markersLayer);
             });
         } catch (error) {
-            markersLayer.clearLayers();
+            // Don't wipe the map completely; keep last successful render if API fails.
+            console.error('Map render failed:', error);
         }
     };
 
@@ -325,6 +327,11 @@ const initMap = () => {
 
     partnerFilter?.addEventListener('change', () => {
         state.lph_partner_id = partnerFilter.value;
+        renderMap();
+    });
+
+    categoryFilter?.addEventListener('change', () => {
+        state.category = categoryFilter.value;
         renderMap();
     });
 
@@ -594,12 +601,285 @@ const initAggressiveWatermark = () => {
     }, 1200);
 };
 
+const initAdminUmkmImport = () => {
+    const form = document.querySelector('[data-umkm-import-form]');
+    if (!form || !window.axios) return;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const progressWrap = form.querySelector('[data-umkm-import-progress]');
+    const progressBar = form.querySelector('[data-umkm-import-bar]');
+    const progressLabel = form.querySelector('[data-umkm-import-label]');
+    const progressPercent = form.querySelector('[data-umkm-import-percent]');
+    const successBox = form.querySelector('[data-umkm-import-success]');
+    const errorBox = form.querySelector('[data-umkm-import-error]');
+
+    const setBusy = (busy) => {
+        if (submitButton) submitButton.disabled = !!busy;
+        if (submitButton) submitButton.classList.toggle('opacity-60', !!busy);
+        if (submitButton) submitButton.classList.toggle('pointer-events-none', !!busy);
+    };
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (successBox) successBox.classList.add('hidden');
+        if (errorBox) errorBox.classList.add('hidden');
+
+        if (progressWrap) progressWrap.classList.remove('hidden');
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressLabel) progressLabel.textContent = 'Uploading...';
+        if (progressPercent) progressPercent.textContent = '0%';
+
+        setBusy(true);
+
+        const formData = new FormData(form);
+        const token = form.querySelector('input[name="_token"]')?.value;
+
+        try {
+            const response = await window.axios.post(form.action, formData, {
+                headers: {
+                    ...(token ? { 'X-CSRF-TOKEN': token } : {}),
+                    Accept: 'application/json',
+                },
+                onUploadProgress: (progressEvent) => {
+                    const total = progressEvent.total || 0;
+                    const loaded = progressEvent.loaded || 0;
+                    const percent = total ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
+
+                    if (progressBar) progressBar.style.width = `${percent}%`;
+                    if (progressPercent) progressPercent.textContent = `${percent}%`;
+
+                    if (percent >= 100 && progressLabel) {
+                        progressLabel.textContent = 'Processing...';
+                    }
+                },
+            });
+
+            if (successBox) {
+                successBox.textContent = response?.data?.message || 'Import selesai.';
+                successBox.classList.remove('hidden');
+            }
+
+            // Refresh to reflect imported data.
+            window.setTimeout(() => window.location.reload(), 900);
+        } catch (error) {
+            const message =
+                error?.response?.data?.message
+                || Object.values(error?.response?.data?.errors || {})?.flat()?.[0]
+                || 'Import gagal. Coba lagi atau cek log server.';
+
+            if (errorBox) {
+                errorBox.textContent = message;
+                errorBox.classList.remove('hidden');
+            }
+        } finally {
+            setBusy(false);
+        }
+    });
+};
+
+const initAdminUmkmQuickEdit = () => {
+    const modalId = 'umkmQuickEditModal';
+    const modal = document.getElementById(modalId);
+    const form = document.querySelector('[data-umkm-quick-form]');
+    if (!modal || !form || !window.axios) return;
+
+    const fields = {
+        id: document.getElementById('umkmQuickEditId'),
+        nama_umkm: document.getElementById('umkmQuickEditNama'),
+        nama_pemilik: document.getElementById('umkmQuickEditPemilik'),
+        kab_kota: document.getElementById('umkmQuickEditKabKota'),
+        kategori: document.getElementById('umkmQuickEditKategori'),
+        approval: document.getElementById('umkmQuickEditApproval'),
+        alamat: document.getElementById('umkmQuickEditAlamat'),
+        nomor_wa: document.getElementById('umkmQuickEditWa'),
+        link_pembelian: document.getElementById('umkmQuickEditLink'),
+        status: document.getElementById('umkmQuickEditStatus'),
+    };
+
+    const diffBox = document.getElementById('umkmQuickEditDiff');
+    const errorBox = document.getElementById('umkmQuickEditError');
+    const submitButton = document.getElementById('umkmQuickEditSubmit');
+    const submitText = document.getElementById('umkmQuickEditSubmitText');
+    const toggleDiffButton = document.getElementById('umkmQuickEditToggleDiff');
+
+    let activeRow = null;
+    let original = null;
+
+    const normalize = (value) => (value === null || value === undefined) ? '' : String(value).trim();
+
+    const getCurrentValues = () => ({
+        nama_umkm: normalize(fields.nama_umkm?.value),
+        nama_pemilik: normalize(fields.nama_pemilik?.value),
+        kab_kota: normalize(fields.kab_kota?.value),
+        kategori: normalize(fields.kategori?.value),
+        approval: normalize(fields.approval?.value),
+        alamat: normalize(fields.alamat?.value),
+        nomor_wa: normalize(fields.nomor_wa?.value),
+        link_pembelian: normalize(fields.link_pembelian?.value),
+        status: normalize(fields.status?.value),
+    });
+
+    const computeDiff = () => {
+        if (!original) return [];
+
+        const current = getCurrentValues();
+        const changes = [];
+
+        Object.entries(current).forEach(([key, value]) => {
+            const before = normalize(original[key]);
+            if (value !== before) {
+                changes.push({ key, before, after: value });
+            }
+        });
+
+        return changes;
+    };
+
+    const renderDiff = () => {
+        if (!diffBox) return;
+        const changes = computeDiff();
+        if (!changes.length) {
+            diffBox.innerHTML = '<span class="font-semibold text-slate-600">Tidak ada perubahan.</span>';
+            return;
+        }
+
+        const html = changes.map((item) => {
+            const before = item.before === '' ? '<span class="text-slate-400">(kosong)</span>' : `<span class="font-semibold text-slate-700">${escapeHtml(item.before)}</span>`;
+            const after = item.after === '' ? '<span class="text-slate-400">(kosong)</span>' : `<span class="font-semibold text-emerald-700">${escapeHtml(item.after)}</span>`;
+            return `<div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 py-2 text-xs last:border-b-0"><span class="font-bold uppercase tracking-[0.12em] text-slate-500">${escapeHtml(item.key)}</span><span>${before} <span class="text-slate-400">→</span> ${after}</span></div>`;
+        }).join('');
+
+        diffBox.innerHTML = html;
+    };
+
+    const setBusy = (busy) => {
+        if (submitButton) submitButton.disabled = !!busy;
+        if (submitButton) submitButton.classList.toggle('opacity-60', !!busy);
+        if (submitButton) submitButton.classList.toggle('pointer-events-none', !!busy);
+        if (submitText) submitText.textContent = busy ? 'Menyimpan...' : 'Simpan Update';
+    };
+
+    document.addEventListener('click', (event) => {
+        const button = event.target?.closest?.('[data-umkm-quick-edit]');
+        if (!button) return;
+
+        const row = button.closest('tr');
+        if (!row) return;
+
+        let payload = null;
+        try {
+            payload = JSON.parse(row.getAttribute('data-umkm') || 'null');
+        } catch (e) {
+            payload = null;
+        }
+        if (!payload?.id) return;
+
+        activeRow = row;
+        original = payload;
+
+        if (errorBox) errorBox.classList.add('hidden');
+        if (diffBox) diffBox.classList.add('hidden');
+
+        if (fields.id) fields.id.value = payload.id ?? '';
+        if (fields.nama_umkm) fields.nama_umkm.value = payload.nama_umkm ?? '';
+        if (fields.nama_pemilik) fields.nama_pemilik.value = payload.nama_pemilik ?? '';
+        if (fields.kab_kota) fields.kab_kota.value = payload.kab_kota ?? '';
+        if (fields.kategori) fields.kategori.value = payload.kategori ?? '';
+        if (fields.approval) fields.approval.value = payload.approval ?? '';
+        if (fields.alamat) fields.alamat.value = payload.alamat ?? '';
+        if (fields.nomor_wa) fields.nomor_wa.value = payload.nomor_wa ?? '';
+        if (fields.link_pembelian) fields.link_pembelian.value = payload.link_pembelian ?? '';
+        if (fields.status) fields.status.value = payload.status ?? 'published';
+
+        window.openModal(modalId);
+        renderDiff();
+    });
+
+    toggleDiffButton?.addEventListener('click', () => {
+        if (!diffBox) return;
+        diffBox.classList.toggle('hidden');
+        renderDiff();
+    });
+
+    form.addEventListener('input', () => {
+        renderDiff();
+    });
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!original?.id) return;
+
+        if (errorBox) errorBox.classList.add('hidden');
+
+        const changes = computeDiff();
+        if (!changes.length) {
+            if (errorBox) {
+                errorBox.textContent = 'Tidak ada perubahan untuk disimpan.';
+                errorBox.classList.remove('hidden');
+            }
+            return;
+        }
+
+        setBusy(true);
+
+        const token = form.querySelector('input[name="_token"]')?.value;
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        if (token) formData.append('_token', token);
+
+        changes.forEach((change) => {
+            formData.append(change.key, change.after);
+        });
+
+        try {
+            const response = await window.axios.post(`/admin/umkms/${original.id}`, formData, {
+                headers: {
+                    ...(token ? { 'X-CSRF-TOKEN': token } : {}),
+                    Accept: 'application/json',
+                },
+            });
+
+            const newData = response?.data?.data;
+            if (newData && activeRow) {
+                activeRow.setAttribute('data-umkm', JSON.stringify({ ...original, ...newData }));
+
+                const tds = activeRow.querySelectorAll('td');
+                // [0]=foto, [1]=source_id, [2]=nama_umkm, [3]=pemilik, [4]=kab_kota, [5]=kategori, [6]=approval, [7]=produk_count, [8]=aksi
+                if (tds[1]) tds[1].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.source_id ?? original.source_id ?? '')}</span>`;
+                if (tds[2]) tds[2].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.nama_umkm ?? '')}</span>`;
+                if (tds[3]) tds[3].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.nama_pemilik ?? '')}</span>`;
+                if (tds[4]) tds[4].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.kab_kota ?? '')}</span>`;
+                if (tds[5]) tds[5].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.kategori ?? '')}</span>`;
+                if (tds[6]) tds[6].innerHTML = `<span class="font-medium text-slate-700">${escapeHtml(newData.approval ?? '')}</span>`;
+
+                original = { ...original, ...newData };
+            }
+
+            window.closeModal(modalId);
+        } catch (error) {
+            const message =
+                error?.response?.data?.message
+                || Object.values(error?.response?.data?.errors || {})?.flat()?.[0]
+                || 'Gagal menyimpan update. Coba lagi.';
+
+            if (errorBox) {
+                errorBox.textContent = message;
+                errorBox.classList.remove('hidden');
+            }
+        } finally {
+            setBusy(false);
+        }
+    });
+};
+
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         window.closeModal('searchModal');
         window.closeModal('sehatiModal');
         window.closeModal('umkmImportModal');
         window.closeModal('umkmExportModal');
+        window.closeModal('umkmQuickEditModal');
     }
 });
 
@@ -611,6 +891,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initAdminMapPickers();
     initAggressiveWatermark();
+    initAdminUmkmImport();
+    initAdminUmkmQuickEdit();
 
     document.querySelectorAll('[data-open-on-load="true"]').forEach((element) => {
         if (element.id) {
