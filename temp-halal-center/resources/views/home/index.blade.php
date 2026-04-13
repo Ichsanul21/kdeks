@@ -22,8 +22,8 @@
         <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
             <div class="flex max-w-2xl flex-col gap-6">
                 <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
-                    Komite Daerah <br>
-                    <span class="text-gradient">Ekonomi Syariah</span> <br>
+                    Komite Daerah Ekonomi<br>
+                    <span class="text-gradient">dan Keuangan Syariah</span> <br>
                     Kaltim
                 </h1>
 
@@ -497,7 +497,7 @@
 
                 mapElement.dataset.mapBooted = 'true';
 
-                const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
+                const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 7);
 
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -574,12 +574,12 @@
                         });
 
                         locations.forEach((location) => {
-                            const fotoHtml = location.foto_url 
-                                ? `<div class="mb-2 h-28 w-full overflow-hidden rounded-lg bg-slate-100"><img src="${escapeHtml(location.foto_url)}" alt="Foto" class="h-full w-full object-cover"></div>` 
+                            const fotoHtml = location.foto_url
+                                ? `<div class="mb-2 h-28 w-full overflow-hidden rounded-lg bg-slate-100"><img src="${escapeHtml(location.foto_url)}" alt="Foto" class="h-full w-full object-cover"></div>`
                                 : '';
                             const waNumber = location.nomor_wa ? location.nomor_wa.replace(/[^0-9]/g, '') : '';
-                            
-                            const waHtml = waNumber 
+
+                            const waHtml = waNumber
                                 ? `<a href="https://wa.me/${waNumber.startsWith('0') ? '62' + waNumber.substring(1) : waNumber}?text=Halo%20${encodeURIComponent(escapeHtml(location.name))}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1.5 text-center text-[10px] font-bold text-emerald-600 transition hover:bg-emerald-100">WhatsApp</a>`
                                 : '';
 
@@ -599,12 +599,12 @@
                                     <h4 class="font-heading mb-0.5 text-sm font-extrabold leading-tight text-slate-900">${escapeHtml(location.name)}</h4>
                                     <p class="mb-0 text-[10px] font-medium text-slate-500">Pemilik: ${escapeHtml(location.nama_pemilik && location.nama_pemilik !== '-' ? location.nama_pemilik : 'Tidak diketahui')}</p>
                                     ${descHtml}
-                                    
+
                                     <div class="mt-2 mb-2 border-l-2 border-slate-200 pl-2">
                                         <p class="text-[9px] font-bold text-slate-600">${escapeHtml(location.address ?? location.city_name ?? '')}</p>
                                         <p class="mt-0.5 text-[9px] font-medium text-slate-400">Mitra: ${escapeHtml(location.lph_partner?.name ?? '-')}</p>
                                     </div>
-                                    
+
                                     <div class="mt-3 flex gap-2">
                                         ${waHtml}
                                         ${navHtml}
@@ -617,11 +617,18 @@
                                 .addTo(markersLayer);
                         });
 
-                        if (locations.length) {
+                        // Fokus otomatis tetap di Kalimantan Timur meskipun data tersebar luas
+                        // Kita hanya melakukan fitBounds jika ada filter kota spesifik yang dipilih
+                        if (state.city && locations.length) {
                             const bounds = L.latLngBounds(locations.map((location) => [Number(location.latitude), Number(location.longitude)]));
                             map.fitBounds(bounds.pad(0.12));
-                        } else {
-                            map.setView([-0.502, 117.153], 6);
+                        } else if (!state.city && !map.getBounds().contains([-0.502, 117.153])) {
+                            // Jika tidak ada filter kota dan map berada di luar Kaltim (misal setelah geser jauh), 
+                            // kita bisa biarkan pengguna menjelajah (sesuai request "sisanya bisa geser geser")
+                            // Namun untuk render pertama atau reset, kita pastikan view ke Kaltim
+                            if (!state.keyword && !state.category && !state.lph_partner_id) {
+                                map.setView([-0.502, 117.153], 7);
+                            }
                         }
                     } catch (error) {
                         markersLayer.clearLayers();
