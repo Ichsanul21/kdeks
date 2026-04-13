@@ -15,16 +15,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="relative overflow-x-hidden bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
-    @include('components.watermark-overlay', ['setting' => $setting ?? null])
-    <div class="organic-shape left-[-100px] top-[-100px] h-[500px] w-[500px] bg-emerald-200/50"></div>
-    <div class="organic-shape right-[-200px] top-[20%] h-[600px] w-[600px] bg-cyan-200/50 [animation-delay:2s]"></div>
-    <div class="organic-shape bottom-[10%] left-[20%] h-[400px] w-[400px] bg-blue-200/40 [animation-delay:4s]"></div>
-    <div class="page-shell">
-        @include('components.navbar', ['setting' => $setting, 'locale' => $locale ?? 'id'])
-        <main>
-            @yield('content')
-        </main>
-        @include('components.footer', ['setting' => $setting])
+    <div class="relative min-h-screen overflow-x-hidden">
+        @include('components.watermark-overlay', ['setting' => $setting ?? null])
+        
+        <div class="organic-shape pointer-events-none left-[-100px] top-[-100px] h-[500px] w-[500px] bg-emerald-200/50"></div>
+        <div class="organic-shape pointer-events-none right-[-200px] top-[20%] h-[600px] w-[600px] bg-cyan-200/50 [animation-delay:2s]"></div>
+        <div class="organic-shape pointer-events-none bottom-[10%] left-[20%] h-[400px] w-[400px] bg-blue-200/40 [animation-delay:4s]"></div>
+
+        <div class="page-shell relative">
+            @include('components.navbar', ['setting' => $setting, 'locale' => $locale ?? 'id'])
+            <main>
+                @yield('content')
+            </main>
+            @include('components.footer', ['setting' => $setting])
+        </div>
     </div>
 </body>
 </html>

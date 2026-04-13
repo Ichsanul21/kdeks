@@ -23,8 +23,8 @@
             <div class="grid items-center gap-16 lg:grid-cols-2">
                 <div class="flex max-w-2xl flex-col gap-6">
                     <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
-                        Komite Daerah <br>
-                        <span class="text-gradient">Keuangan dan Ekonomi</span> <br>
+                        Komite Daerah
+                        <span class="text-gradient md:block">Keuangan dan Ekonomi</span>
                         Syariah Kaltim
                     </h1>
 
@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="relative flex aspect-square w-full items-center justify-center md:aspect-video lg:aspect-square">
+                <div class="relative flex min-h-[450px] w-full items-center justify-center md:aspect-video md:min-h-0 lg:aspect-square">
                     <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
                     <div class="relative flex w-full max-w-md flex-col gap-5 animate-float">
                         <div class="rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
@@ -76,7 +76,7 @@
                 <div class="mt-12 grid max-w-2xl gap-3 sm:grid-cols-2">
                     @foreach($slides->take(2) as $slide)
                         <div class="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                            <p class="text-[10px] font-extrabold uppercase tracking-[0.28em] text-emerald-600">{{ $slide->subtitle }}</p>
+                            <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.28em]">{{ $slide->subtitle }}</p>
                             <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
                             <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
                         </div>
@@ -95,49 +95,59 @@
                 </div>
             </div>
 
-            <div class="relative flex h-[500px] w-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-100 shadow-sm md:h-[550px]">
-                <div class="pointer-events-none absolute left-5 right-16 top-5 z-[500] flex flex-col gap-3 sm:right-auto">
-                    <div class="pointer-events-auto flex w-full items-center gap-3 rounded-xl border border-slate-100 bg-white/95 p-2 shadow-sm backdrop-blur sm:w-80">
-                        <i data-lucide="search" class="ml-2 h-4 w-4 shrink-0 text-slate-400"></i>
-                        <input id="mapSearchInput" type="text" placeholder="Cari kota atau usaha halal..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
+            <div class="relative">
+                <div class="absolute inset-x-0 -top-10 bottom-10 rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-[100px] opacity-80"></div>
+                <div class="relative flex min-h-[500px] w-full flex-col overflow-hidden rounded-[2.5rem] border border-white bg-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:h-[600px]">
+                    <div class="pointer-events-none absolute inset-x-5 top-5 z-[500] flex flex-col gap-3 sm:left-8 sm:right-auto sm:top-8 sm:w-80">
+                        <div class="pointer-events-auto flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white/95 p-3.5 shadow-sm backdrop-blur-md">
+                            <i data-lucide="search" class="ml-2 h-4 w-4 shrink-0 text-slate-400"></i>
+                            <input id="mapSearchInput" type="text" placeholder="Cari kota atau usaha..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
+                        </div>
+                        <div class="pointer-events-auto flex flex-col gap-2 sm:flex-row">
+                            <select id="mapCityFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-4 py-2.5 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                                <option value="">Semua Kota</option>
+                                @foreach($mapCities as $city)
+                                    <option value="{{ $city }}">{{ $city }}</option>
+                                @endforeach
+                            </select>
+                            <select id="mapPartnerFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-4 py-2.5 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                                <option value="">LP3H / LPH</option>
+                                @foreach($lphPartners as $partner)
+                                    <option value="{{ $partner->id }}">{{ $partner->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="pointer-events-auto flex flex-wrap gap-2 sm:flex-nowrap">
-                        <select id="mapCityFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
-                            <option value="">Semua Kota</option>
-                            @foreach($mapCities as $city)
-                                <option value="{{ $city }}">{{ $city }}</option>
-                            @endforeach
-                        </select>
-                        <select id="mapPartnerFilter" class="cursor-pointer rounded-lg border border-slate-100 bg-white/95 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
-                            <option value="">Semua LPH/LP3H</option>
-                            @foreach($lphPartners as $partner)
-                                <option value="{{ $partner->id }}">{{ $partner->name }}</option>
-                            @endforeach
-                        </select>
+
+                    <div class="pointer-events-auto absolute right-5 top-5 z-[500] hidden flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:flex sm:right-8 sm:top-8">
+                        <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-3 text-slate-500 transition hover:bg-slate-50">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                        </button>
+                        <button type="button" data-map-zoom="out" class="p-3 text-slate-500 transition hover:bg-slate-50">
+                            <i data-lucide="minus" class="h-4 w-4"></i>
+                        </button>
                     </div>
-                </div>
 
-                <div class="pointer-events-auto absolute right-5 top-5 z-[500] flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur">
-                    <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-2.5 text-slate-500 transition hover:bg-slate-50">
-                        <i data-lucide="plus" class="h-4 w-4"></i>
-                    </button>
-                    <button type="button" data-map-zoom="out" class="p-2.5 text-slate-500 transition hover:bg-slate-50">
-                        <i data-lucide="minus" class="h-4 w-4"></i>
-                    </button>
-                </div>
+                    <div id="leafletKaltim" class="absolute inset-0 z-0" data-map-url="{{ url('/api/map') }}"></div>
 
-                <div id="leafletKaltim" class="absolute inset-0 z-0" data-map-url="{{ url('/api/map') }}"></div>
-
-                <div class="pointer-events-none absolute bottom-5 left-0 right-0 z-[500] px-5">
-                    <div class="pointer-events-auto flex justify-start">
-                        <div class="relative">
-                            <select id="mapCategoryFilter" class="cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 pr-10 text-xs font-bold text-slate-700 shadow-sm outline-none backdrop-blur">
+                    <div class="pointer-events-none absolute bottom-5 left-5 right-5 z-[500] flex items-center justify-between gap-4 sm:bottom-8 sm:left-8 sm:right-8">
+                        <div class="pointer-events-auto relative w-full sm:w-auto">
+                            <select id="mapCategoryFilter" class="w-full cursor-pointer appearance-none rounded-2xl border border-slate-200 bg-white/95 px-5 py-3.5 pr-12 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md sm:w-auto sm:text-xs">
                                 <option value="">Semua Kategori</option>
                                 @foreach($mapCategories as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
                             </select>
-                            <i data-lucide="chevrons-up-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                            <i data-lucide="chevrons-up-down" class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                        </div>
+
+                        <div class="pointer-events-auto flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:hidden">
+                            <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-3 text-slate-500 transition hover:bg-slate-50">
+                                <i data-lucide="plus" class="h-4 w-4"></i>
+                            </button>
+                            <button type="button" data-map-zoom="out" class="p-3 text-slate-500 transition hover:bg-slate-50">
+                                <i data-lucide="minus" class="h-4 w-4"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -181,7 +191,7 @@
             <div class="relative flex flex-col items-center justify-between gap-10 overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:flex-row md:p-16">
                 <div class="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-[100px]"></div>
                 <div class="relative z-10 max-w-xl">
-                    <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.28em] text-white">
+                    <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.1em] text-white sm:text-[10px] sm:tracking-[0.28em]">
                         100% Subsidi Pemerintah
                     </div>
                     <h2 class="mb-4 font-heading text-3xl font-extrabold tracking-tight text-white md:text-5xl">Program Sertifikasi <span class="text-emerald-400">SEHATI</span></h2>
@@ -288,7 +298,7 @@
                             <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
                         @endif
                         <div class="p-5">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-600">{{ strtoupper($article->type) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ strtoupper($article->type) }}</p>
                             <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $article->title }}</h3>
                             <p class="mt-3 text-sm leading-7 text-slate-500">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 110) }}</p>
                         </div>
@@ -310,7 +320,7 @@
             <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                 @foreach($events->take(4) as $event)
                     <a href="{{ route('events.show', $event->slug) }}" class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-600">{{ optional($event->starts_at)->translatedFormat('d M Y') }}</p>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ optional($event->starts_at)->translatedFormat('d M Y') }}</p>
                         <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $event->title }}</h3>
                         <p class="mt-3 text-sm leading-7 text-slate-500">{{ $event->summary }}</p>
                     </a>
