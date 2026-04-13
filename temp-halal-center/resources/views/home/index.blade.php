@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', data_get($setting, 'meta_title', 'KDEKS Kalimantan Timur'))
+@section('title', data_get($setting, 'meta_title', 'Komite Daerah Ekonomi dan Keuangan Syariah KalTim'))
 
 @section('content')
     @if(session('status'))
@@ -21,10 +21,10 @@
 
         <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
             <div class="flex max-w-2xl flex-col gap-6">
-                <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
-                    Komite Daerah Ekonomi<br>
-                    <span class="text-gradient">dan Keuangan Syariah</span> <br>
-                    Kaltim
+                <h1 class="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
+                    Komite Daerah Ekonomi dan<br>
+                    <span class="text-gradient">Keuangan Syariah</span> <br>
+                    KalTim
                 </h1>
 
                 <div class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg [&_p]:inline [&_p]:m-0">
@@ -497,7 +497,7 @@
 
                 mapElement.dataset.mapBooted = 'true';
 
-                const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 7);
+                const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
 
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -617,18 +617,11 @@
                                 .addTo(markersLayer);
                         });
 
-                        // Fokus otomatis tetap di Kalimantan Timur meskipun data tersebar luas
-                        // Kita hanya melakukan fitBounds jika ada filter kota spesifik yang dipilih
-                        if (state.city && locations.length) {
+                        if (locations.length) {
                             const bounds = L.latLngBounds(locations.map((location) => [Number(location.latitude), Number(location.longitude)]));
                             map.fitBounds(bounds.pad(0.12));
-                        } else if (!state.city && !map.getBounds().contains([-0.502, 117.153])) {
-                            // Jika tidak ada filter kota dan map berada di luar Kaltim (misal setelah geser jauh), 
-                            // kita bisa biarkan pengguna menjelajah (sesuai request "sisanya bisa geser geser")
-                            // Namun untuk render pertama atau reset, kita pastikan view ke Kaltim
-                            if (!state.keyword && !state.category && !state.lph_partner_id) {
-                                map.setView([-0.502, 117.153], 7);
-                            }
+                        } else {
+                            map.setView([-0.502, 117.153], 6);
                         }
                     } catch (error) {
                         markersLayer.clearLayers();
