@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="border-t border-slate-200 pt-6 text-center text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">
-            &copy; {{ now()->year }} Komite Daerah Ekonomi dan Keuangan Syariah (KDEKS) Kalimantan Timur.
+            &copy; {{ now()->year }} Komite Daerah Keuangan dan Ekonomi Syariah (KDEKS) Kalimantan Timur.
         </div>
     </div>
 </footer>
