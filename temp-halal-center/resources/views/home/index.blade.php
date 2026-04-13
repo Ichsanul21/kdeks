@@ -499,11 +499,39 @@
 
                 mapElement.dataset.mapBooted = 'true';
 
-                const map = L.map(mapElement, { zoomControl: false }).setView([0.706, 116.426], 7);
+                const map = L.map(mapElement, { zoomControl: false }).setView([0.706, 116.426], 8);
 
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 }).addTo(map);
+
+                const highlightKaltim = async () => {
+                    try {
+                        // Using a more up-to-date GeoJSON source that separates Kaltara from Kaltim
+                        const response = await fetch('https://raw.githubusercontent.com/fahadh4ilyas/indonesia-geojson-archive/master/Indonesia_provinces.geojson');
+                        const data = await response.json();
+                        const kaltim = data.features.find(f => {
+                            const name = f.properties.Propinsi || f.properties.NAME_1 || f.properties.name || f.properties.PROVINSI || '';
+                            return name.toUpperCase() === 'KALIMANTAN TIMUR';
+                        });
+
+                        if (kaltim) {
+                            L.geoJSON(kaltim, {
+                                style: {
+                                    fillColor: '#10b981',
+                                    fillOpacity: 0.08,
+                                    color: '#10b981',
+                                    weight: 2,
+                                    dashArray: '4, 4',
+                                    lineCap: 'round',
+                                }
+                            }).addTo(map);
+                        }
+                    } catch (e) {
+                        // Silent fail
+                    }
+                };
+                highlightKaltim();
 
                 const aggregateIcon = L.divIcon({
                     className: 'leaflet-custom-marker',
@@ -623,7 +651,7 @@
                             const bounds = L.latLngBounds(locations.map((location) => [Number(location.latitude), Number(location.longitude)]));
                             map.fitBounds(bounds.pad(0.12));
                         } else {
-                            map.setView([0.706, 116.426], 7);
+                            map.setView([0.706, 116.426], 8);
                         }
                     } catch (error) {
                         markersLayer.clearLayers();
