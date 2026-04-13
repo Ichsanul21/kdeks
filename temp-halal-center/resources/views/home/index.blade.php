@@ -19,68 +19,70 @@
         <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
         <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
 
-        <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
-            <div class="flex max-w-2xl flex-col gap-6">
-                <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
-                    Komite Daerah <br>
-                    <span class="text-gradient">Keuangan dan Ekonomi</span> <br>
-                    Syariah Kaltim
-                </h1>
+        <div class="relative z-10 mx-auto max-w-7xl px-6">
+            <div class="grid items-center gap-16 lg:grid-cols-2">
+                <div class="flex max-w-2xl flex-col gap-6">
+                    <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
+                        Komite Daerah <br>
+                        <span class="text-gradient">Keuangan dan Ekonomi</span> <br>
+                        Syariah Kaltim
+                    </h1>
 
-                <div class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg [&_p]:inline [&_p]:m-0">
-                    {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
-                </div>
-
-                <div class="mt-2 flex flex-wrap gap-4">
-                    <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
-                        Daftar Sertifikasi Gratis
-                        <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                    </button>
-                    <a href="#webgis" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
-                        <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
-                        Jelajahi Peta
-                    </a>
-                </div>
-
-                @if($slides->isNotEmpty())
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                        @foreach($slides->take(2) as $slide)
-                            <div class="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                                <p class="text-[10px] font-extrabold uppercase tracking-[0.28em] text-emerald-600">{{ $slide->subtitle }}</p>
-                                <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
-                                <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-
-            <div class="relative flex aspect-square w-full items-center justify-center md:aspect-video lg:aspect-square">
-                <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
-                <div class="relative flex w-full max-w-md flex-col gap-5 animate-float">
-                    <div class="rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                        <div class="mb-2 flex items-center justify-between">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
-                                <i data-lucide="award" class="h-5 w-5"></i>
-                            </div>
-                            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-600">Tumbuh Pesat</span>
-                        </div>
-                        <h3 class="font-heading text-4xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span></h3>
-                        <p class="mt-1 text-sm font-semibold text-slate-500">UMKM Halal Kaltim</p>
+                    <div class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg [&_p]:inline [&_p]:m-0">
+                        {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
                     </div>
 
-                    <div class="flex flex-col gap-5 sm:flex-row">
-                        <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                            <h3 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['products_total'] }}">0</span></h3>
-                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Produk Terdaftar</p>
+                    <div class="mt-2 flex flex-wrap gap-4">
+                        <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
+                            Daftar Sertifikasi Gratis
+                            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                        </button>
+                        <a href="#webgis" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
+                            <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
+                            Jelajahi Peta
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative flex aspect-square w-full items-center justify-center md:aspect-video lg:aspect-square">
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
+                    <div class="relative flex w-full max-w-md flex-col gap-5 animate-float">
+                        <div class="rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                            <div class="mb-2 flex items-center justify-between">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+                                    <i data-lucide="award" class="h-5 w-5"></i>
+                                </div>
+                                <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-600">Tumbuh Pesat</span>
+                            </div>
+                            <h3 class="font-heading text-4xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span></h3>
+                            <p class="mt-1 text-sm font-semibold text-slate-500">UMKM Halal Kaltim</p>
                         </div>
-                        <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                            <h3 class="font-heading text-3xl font-extrabold tracking-tight text-cyan-500"><span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span></h3>
-                            <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Lembaga Pendamping Aktif</p>
+
+                        <div class="flex flex-col gap-5 sm:flex-row">
+                            <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                                <h3 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['products_total'] }}">0</span></h3>
+                                <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Produk Terdaftar</p>
+                            </div>
+                            <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                                <h3 class="font-heading text-3xl font-extrabold tracking-tight text-cyan-500"><span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span></h3>
+                                <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Lembaga Pendamping Aktif</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            @if($slides->isNotEmpty())
+                <div class="mt-12 grid max-w-2xl gap-3 sm:grid-cols-2">
+                    @foreach($slides->take(2) as $slide)
+                        <div class="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                            <p class="text-[10px] font-extrabold uppercase tracking-[0.28em] text-emerald-600">{{ $slide->subtitle }}</p>
+                            <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
+                            <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
