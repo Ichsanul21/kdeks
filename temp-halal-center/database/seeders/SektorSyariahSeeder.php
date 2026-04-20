@@ -75,8 +75,8 @@ class SektorSyariahSeeder extends Seeder
             [
                 'title' => 'Bisnis dan Kewirausahaan Syariah',
                 'slug' => 'bisnis-kewirausahaan-syariah',
-                'icon_key' => 'briefcase',
-                'summary' => 'Pemberdayaan UMKM dan penguatan bisnis syariah.',
+                'icon_key' => 'store',
+                'summary' => 'Pembinaan usaha dan penguatan wirausaha halal yang kompetitif.',
                 'content' => '<p>Direktorat Bisnis dan Kewirausahaan Syariah mempunyai tugas melaksanakan penyusunan rekomendasi, penyiapan, perumusan dan pelaksanaan koordinasi, serta pelaksanaan pemantauan dan evaluasi arah kebijakan dan program strategis di bidang bisnis dan kewirausahaan syariah dan pengelolaan data nasional ekonomi dan keuangan syariah.</p>
                              <p>Dalam melaksanakan tugas, Direktorat Bisnis dan Kewirausahaan Syariah menyelenggarakan fungsi:</p>
                              <ol>
