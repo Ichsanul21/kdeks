@@ -22,6 +22,13 @@ class SehatiRegistrationStoreRequest extends FormRequest
             'product_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
             'description' => ['nullable', 'string'],
+            'provinsi' => ['nullable', 'string', 'max:255'],
+            'kab_kota' => ['nullable', 'string', 'max:255'],
+            'kecamatan' => ['nullable', 'string', 'max:255'],
+            'kelurahan_desa' => ['nullable', 'string', 'max:255'],
+            'alamat' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
         ];
     }
 }

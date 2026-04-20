@@ -107,3 +107,5 @@
         </div>
     </form>
 @endsection
+
+@include('components.indonesia-address-script')

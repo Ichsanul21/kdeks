@@ -90,6 +90,23 @@ window.openModal = function openModal(id) {
     if (focusInput) {
         window.setTimeout(() => focusInput.focus(), 120);
     }
+
+    const pickers = content.querySelectorAll('[data-map-picker]');
+    pickers.forEach(picker => {
+        const canvas = picker.querySelector('[data-map-canvas]');
+        if (canvas && canvas._leaflet_map) {
+            window.setTimeout(() => {
+                canvas._leaflet_map.invalidateSize();
+                const latInput = document.getElementById(picker.dataset.latitudeTarget);
+                const lngInput = document.getElementById(picker.dataset.longitudeTarget);
+                if (latInput && lngInput && latInput.value && lngInput.value) {
+                    canvas._leaflet_map.setView([latInput.value, lngInput.value], 15);
+                } else {
+                    canvas._leaflet_map.setView([-0.502106, 117.153709], 7);
+                }
+            }, 350);
+        }
+    });
 };
 
 window.closeModal = function closeModal(id) {
@@ -383,6 +400,7 @@ const initAdminMapPickers = () => {
         const defaultLat = Number.parseFloat(latInput.value || '-0.502106');
         const defaultLng = Number.parseFloat(lngInput.value || '117.153709');
         const map = L.map(canvas, { zoomControl: true }).setView([defaultLat, defaultLng], latInput.value && lngInput.value ? 14 : 7);
+        canvas._leaflet_map = map;
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors',

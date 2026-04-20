@@ -60,24 +60,22 @@
                                 </td>
                             @endforeach
                             <td class="py-4">
-                                <div class="flex items-center justify-center gap-2">
+                                <div class="flex items-center justify-center gap-1.5">
                                     @if($routePrefix === 'admin.sehati-registrations' && $item->status === 'diproses')
-                                        <div class="flex items-center gap-2">
-                                            <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
-                                                @csrf
-                                                <input type="hidden" name="decision" value="yes">
-                                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500 text-white transition hover:bg-emerald-600" title="Setujui">
-                                                    <i data-lucide="check" class="h-4 w-4"></i>
-                                                </button>
-                                            </form>
-                                            <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
-                                                @csrf
-                                                <input type="hidden" name="decision" value="no">
-                                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500 text-white transition hover:bg-rose-600" title="Tolak">
-                                                    <i data-lucide="x" class="h-4 w-4"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
+                                            @csrf
+                                            <input type="hidden" name="decision" value="yes">
+                                            <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500 text-white transition hover:bg-emerald-600" title="Setujui">
+                                                <i data-lucide="check" class="h-4 w-4"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
+                                            @csrf
+                                            <input type="hidden" name="decision" value="no">
+                                            <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500 text-white transition hover:bg-rose-600" title="Tolak">
+                                                <i data-lucide="x" class="h-4 w-4"></i>
+                                            </button>
+                                        </form>
                                     @endif
                                     @if(
                                         $publicShowRoute
@@ -88,9 +86,10 @@
                                             href="{{ $publicShowRouteKey ? route($publicShowRoute, data_get($item, $publicShowRouteKey)) : route($publicShowRoute) }}"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600"
+                                            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600"
+                                            title="Pratinjau"
                                         >
-                                            Preview
+                                            <i data-lucide="external-link" class="h-4 w-4"></i>
                                         </a>
                                     @endif
 
@@ -101,13 +100,19 @@
                                                 $phone = '62' . substr($phone, 1);
                                             }
                                         @endphp
-                                        <a href="https://wa.me/{{ $phone }}" target="_blank" class="inline-flex h-9 items-center rounded-lg bg-emerald-500 px-3 text-xs font-bold text-white transition hover:bg-emerald-600">Hubungi WA</a>
+                                        <a href="https://wa.me/{{ $phone }}" target="_blank" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500 text-white transition hover:bg-emerald-600" title="Hubungi WA">
+                                            <i data-lucide="message-square" class="h-4 w-4"></i>
+                                        </a>
                                     @endif
-                                    <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">Edit</a>
+                                    <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit">
+                                        <i data-lucide="pencil" class="h-4 w-4"></i>
+                                    </a>
                                     <form method="POST" action="{{ route($routePrefix.'.destroy', $item->id) }}" onsubmit="return confirm('Hapus data ini?')" style="display: contents;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-rose-500 transition hover:border-rose-200 hover:bg-rose-50">Hapus</button>
+                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus">
+                                            <i data-lucide="trash-2" class="h-4 w-4"></i>
+                                        </button>
                                     </form>
                                 </div>
                             </td>

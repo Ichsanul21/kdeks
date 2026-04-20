@@ -57,6 +57,17 @@ class SehatiRegistrationController extends BaseCrudController
             ['name' => 'business_name', 'label' => 'Nama UMKM', 'type' => 'text', 'required' => true],
             ['name' => 'product_name', 'label' => 'Nama Produk', 'type' => 'text', 'required' => true],
             ['name' => 'phone', 'label' => 'Nomor HP / WA', 'type' => 'text', 'required' => true],
+
+            ['name' => 'provinsi', 'label' => 'Provinsi', 'type' => 'select', 'id' => 'select-provinsi', 'options' => []],
+            ['name' => 'kab_kota', 'label' => 'Kota / Kabupaten', 'type' => 'select', 'id' => 'select-kab-kota', 'options' => []],
+            ['name' => 'kecamatan', 'label' => 'Kecamatan', 'type' => 'select', 'id' => 'select-kecamatan', 'options' => []],
+            ['name' => 'kelurahan_desa', 'label' => 'Kelurahan / Desa', 'type' => 'select', 'id' => 'select-kelurahan', 'options' => []],
+            ['name' => 'alamat', 'label' => 'Alamat Lengkap', 'type' => 'textarea', 'id' => 'location-address'],
+
+            ['name' => 'location_picker', 'label' => 'Pilih Titik Peta', 'type' => 'map-picker', 'latitude_target' => 'location-latitude', 'longitude_target' => 'location-longitude', 'address_target' => 'location-address'],
+            ['name' => 'latitude', 'label' => 'Latitude', 'type' => 'number', 'step' => '0.0000001', 'id' => 'location-latitude'],
+            ['name' => 'longitude', 'label' => 'Longitude', 'type' => 'number', 'step' => '0.0000001', 'id' => 'location-longitude'],
+
             ['name' => 'description', 'label' => 'Deskripsi', 'type' => 'textarea'],
             ['name' => 'status', 'label' => 'Status', 'type' => 'select', 'options' => [
                 'baru' => 'Baru',

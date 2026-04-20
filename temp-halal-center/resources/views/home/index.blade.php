@@ -13,22 +13,26 @@
 
     @php
         $sehatiErrors = $errors->sehatiRegistration;
+        $totalSertifikatTerbit = ($statistics['certificates_total'] ?? 0) + ($statistics['products_total'] ?? 0);
     @endphp
 
-    <section id="hero" class="relative flex min-h-screen items-center overflow-hidden pb-12 pt-24">
+    {{-- ===== HERO SECTION ===== --}}
+    <section id="hero" class="relative flex items-center overflow-hidden pb-8 pt-24 lg:pb-16 lg:pt-32">
         <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
         <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
 
         <div class="relative z-10 mx-auto max-w-7xl px-6">
-            <div class="grid items-center gap-16 lg:grid-cols-2">
-                <div class="flex max-w-2xl flex-col gap-6">
-                    <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 md:text-5xl lg:text-7xl">
+            {{-- Grid 70:30 --}}
+            <div class="grid items-center gap-10 lg:grid-cols-[7fr_3fr] lg:gap-14">
+                {{-- Kiri: Teks + CTA --}}
+                <div class="flex flex-col gap-6">
+                    <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-7xl xl:leading-[1.2]">
                         Komite Daerah
                         <span class="text-gradient md:block">Keuangan dan Ekonomi</span>
                         Syariah Kaltim
                     </h1>
 
-                    <div class="text-base font-medium leading-relaxed text-slate-500 sm:text-lg [&_p]:inline [&_p]:m-0">
+                    <div class="max-w-xl text-base font-medium leading-relaxed text-slate-500 lg:max-w-2xl xl:max-w-none sm:text-lg [&_p]:inline [&_p]:m-0">
                         {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
                     </div>
 
@@ -44,36 +48,73 @@
                     </div>
                 </div>
 
-                <div class="relative flex min-h-[450px] w-full items-center justify-center md:aspect-video md:min-h-0 lg:aspect-square">
-                    <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
-                    <div class="relative flex w-full max-w-md flex-col gap-5 animate-float">
-                        <div class="rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                            <div class="mb-2 flex items-center justify-between">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
-                                    <i data-lucide="award" class="h-5 w-5"></i>
-                                </div>
-                                <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-600">Tumbuh Pesat</span>
-                            </div>
-                            <h3 class="font-heading text-4xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span></h3>
-                            <p class="mt-1 text-sm font-semibold text-slate-500">UMKM Halal Kaltim</p>
-                        </div>
-
-                        <div class="flex flex-col gap-5 sm:flex-row">
-                            <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                                <h3 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900"><span class="counter" data-target="{{ $statistics['products_total'] }}">0</span></h3>
-                                <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Produk Terdaftar</p>
-                            </div>
-                            <div class="flex-1 rounded-[1.75rem] border border-white bg-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                                <h3 class="font-heading text-3xl font-extrabold tracking-tight text-cyan-500"><span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span></h3>
-                                <p class="mt-1 text-xs font-semibold leading-tight text-slate-500">Lembaga Pendamping Aktif</p>
-                            </div>
-                        </div>
+                {{-- Kanan: Foto Hero --}}
+                <div class="relative hidden lg:block">
+                    <div class="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
+                    <div class="relative overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-white/60">
+                        <img
+                            src="{{ asset('assets/img/hero.png') }}"
+                            alt="KDEKS Kalimantan Timur"
+                            class="block h-full min-h-[420px] w-full object-cover"
+                        >
                     </div>
                 </div>
             </div>
 
+            {{-- Statistik Sertifikasi Halal --}}
+            {{-- <div class="mt-8 mb-4 md:mt-10">
+                <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Statistik Sertifikasi Halal</h2>
+            </div> --}}
+
+            <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
+                {{-- UMKM Halal Kaltim --}}
+                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                        <i data-lucide="award" class="h-5 w-5"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                        <span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span>
+                    </h3>
+                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
+                </div>
+
+                {{-- Produk Terdaftar --}}
+                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
+                        <i data-lucide="package" class="h-5 w-5"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                        <span class="counter" data-target="{{ $statistics['products_total'] }}">0</span>
+                    </h3>
+                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
+                </div>
+
+                {{-- Sertifikat Halal Terbit --}}
+                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                        <i data-lucide="badge-check" class="h-5 w-5"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                        <span class="counter" data-target="{{ $totalSertifikatTerbit }}">0</span>
+                    </h3>
+                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
+                </div>
+
+                {{-- Lembaga Pendamping Aktif --}}
+                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
+                        <i data-lucide="users" class="h-5 w-5"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-cyan-500 md:text-3xl">
+                        <span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span>
+                    </h3>
+                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Lembaga Pendamping Aktif</p>
+                </div>
+            </div>
+
+            {{-- Program Unggulan --}}
             @if($slides->isNotEmpty())
-                <div class="mt-12 mb-4">
+                <div class="mt-8 mb-4 md:mt-10">
                     <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
                 </div>
                 <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
@@ -89,7 +130,8 @@
         </div>
     </section>
 
-<section id="sektor" class="bg-white py-24 border-b border-slate-100">
+    {{-- ===== SEKTOR EKONOMI SYARIAH ===== --}}
+    <section id="sektor" class="bg-white py-24 border-b border-slate-100">
         <div class="mx-auto max-w-7xl px-6">
             <div>
                 <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
@@ -106,10 +148,10 @@
                 </div>
             </div>
         </div>
-    
     </section>
 
-<section id="webgis" class="relative z-10 py-24">
+    {{-- ===== PETA SEBARAN HALAL ===== --}}
+    <section id="webgis" class="relative z-10 py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                 <div>
@@ -140,7 +182,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="pointer-events-auto flex gap-2">
+                        {{-- Baris Kecamatan & Kelurahan — akan di-hide via JS jika mode kota saja --}}
+                        <div id="mapSubDistrictFilters" class="pointer-events-auto flex gap-2">
                             <select id="mapKecamatanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
                                 <option value="">Kecamatan</option>
                             </select>
@@ -186,10 +229,10 @@
         </div>
     </section>
 
-<section id="direktori" class="border-t border-slate-100 bg-white py-24">
+    {{-- ===== DIREKTORI ===== --}}
+    <section id="direktori" class="border-t border-slate-100 bg-white py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="grid gap-16 lg:grid-cols-2">
-
                 {{-- Data Produk --}}
                 <div class="flex h-full flex-col">
                     <div class="mb-8 flex items-end justify-between">
@@ -249,28 +292,12 @@
                         @endforeach
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-<section id="potensi" class="border-y border-slate-100 bg-white py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="mb-20">
-                <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Potensi Pengembangan Ekonomi Syariah Kalimantan Timur</h2>
-                <div class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-5">
-                    @foreach($potentialItems as $item)
-                        <div class="group cursor-pointer rounded-2xl border border-slate-100 bg-slate-50 p-5 text-center transition hover:bg-emerald-50">
-                            <i data-lucide="{{ $item->icon_key }}" class="mx-auto mb-3 h-6 w-6 text-slate-400 transition group-hover:text-emerald-500"></i>
-                            <h4 class="text-xs font-bold text-slate-800">{{ $item->title }}</h4>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-                </section>
-
-<section id="sehati" class="relative z-10 py-20">
+    {{-- ===== SEHATI CTA ===== --}}
+    <section id="sehati" class="relative z-10 py-20">
         <div class="mx-auto max-w-7xl px-6">
             <div class="relative flex flex-col items-center justify-between gap-10 overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:flex-row md:p-16">
                 <div class="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-[100px]"></div>
@@ -298,7 +325,8 @@
         </div>
     </section>
 
-<section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
+    {{-- ===== BERITA & PUBLIKASI ===== --}}
+    <section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-10 flex items-end justify-between">
                 <div>
@@ -324,7 +352,8 @@
         </div>
     </section>
 
-<section id="faq" class="border-t border-slate-100 bg-white py-24">
+    {{-- ===== FAQ ===== --}}
+    <section id="faq" class="border-t border-slate-100 bg-white py-24">
         <div class="mx-auto max-w-5xl px-6">
             <div class="mb-10 text-center">
                 <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Pertanyaan Umum</h2>
@@ -341,12 +370,34 @@
         </div>
     </section>
 
-
+    {{-- ===== MAP SCRIPT ===== --}}
     <script>
         (() => {
+            /* ============================================================
+             *  MODE FILTER PETA SEBARAN HALAL
+             *  ─────────────────────────────────
+             *  Untuk presentasi, aktifkan SALAH SATU mode di bawah ini
+             *  dengan menghapus komentar (//) di depan barisnya.
+             *
+             *  [MODE A] Filter KOTA SAJA
+             *    → Hanya tampilkan dropdown Kota & LP3H/LPH
+             *    → Kecamatan & Kelurahan disembunyikan otomatis
+             *
+             *  [MODE B] Filter KOTA + KECAMATAN + KELURAHAN
+             *    → Tampilkan semua dropdown (default)
+             *    → Kecamatan aktif setelah pilih Kota
+             *    → Kelurahan aktif setelah pilih Kecamatan
+             * ============================================================ */
+
+            // [MODE A] — Hapus komentar baris ini untuk filter KOTA SAJA
+            const MAP_FILTER_MODE = 'city-only';
+
+            // [MODE B] — Komentari baris ini saat menggunakan MODE A
+            // const MAP_FILTER_MODE = 'full';
+
+
             const escapeHtml = (value) => {
                 if (value === null || value === undefined) return '';
-
                 return String(value)
                     .replaceAll('&', '&amp;')
                     .replaceAll('<', '&lt;')
@@ -360,7 +411,6 @@
             const normalizeCollection = (value) => {
                 if (Array.isArray(value)) return value;
                 if (Array.isArray(value?.data)) return value.data;
-
                 return [];
             };
 
@@ -371,7 +421,6 @@
                 if (!currentMapElement) return;
 
                 let mapElement = currentMapElement;
-
                 if (mapElement.dataset.mapBooted === 'true') return;
 
                 if (mapElement._leaflet_id) {
@@ -397,7 +446,6 @@
                             const name = f.properties.Propinsi || f.properties.NAME_1 || f.properties.name || f.properties.PROVINSI || '';
                             return name.toUpperCase() === 'KALIMANTAN TIMUR';
                         });
-
                         if (kaltim) {
                             L.geoJSON(kaltim, {
                                 style: {
@@ -410,9 +458,7 @@
                                 }
                             }).addTo(map);
                         }
-                    } catch (e) {
-                        // Silent fail
-                    }
+                    } catch (e) {}
                 };
                 highlightKaltim();
 
@@ -439,6 +485,12 @@
                 const zoomButtons = document.querySelectorAll('[data-map-zoom]');
                 const markersLayer = L.layerGroup().addTo(map);
 
+                // Sembunyikan filter kecamatan & kelurahan jika mode kota saja
+                if (MAP_FILTER_MODE === 'city-only') {
+                    const subFilters = document.getElementById('mapSubDistrictFilters');
+                    if (subFilters) subFilters.style.display = 'none';
+                }
+
                 const state = {
                     category: '',
                     city: '',
@@ -463,7 +515,7 @@
                     try {
                         const response = await fetch(`${mapElement.dataset.mapUrl}?${query.toString()}`);
                         const result = await response.json();
-                        
+
                         if (result?.data?.filters) {
                             updateFilters(result.data.filters);
                         }
@@ -475,9 +527,7 @@
                         markersLayer.clearLayers();
 
                         regions.forEach((region) => {
-                            if (!Number.isFinite(Number(region.latitude)) || !Number.isFinite(Number(region.longitude))) {
-                                return;
-                            }
+                            if (!Number.isFinite(Number(region.latitude)) || !Number.isFinite(Number(region.longitude))) return;
 
                             const regionLocations = locations.filter((location) => location.region?.id === region.id);
                             if (!regionLocations.length) return;
@@ -527,12 +577,10 @@
                                     <h4 class="font-heading mb-0.5 text-sm font-extrabold leading-tight text-slate-900">${escapeHtml(location.name)}</h4>
                                     <p class="mb-0 text-[10px] font-medium text-slate-500">Pemilik: ${escapeHtml(location.nama_pemilik && location.nama_pemilik !== '-' ? location.nama_pemilik : 'Tidak diketahui')}</p>
                                     ${descHtml}
-
                                     <div class="mt-2 mb-2 border-l-2 border-slate-200 pl-2">
                                         <p class="text-[9px] font-bold text-slate-600">${escapeHtml(location.address ?? location.city_name ?? '')}</p>
                                         <p class="mt-0.5 text-[9px] font-medium text-slate-400">Mitra: ${escapeHtml(location.lph_partner?.name ?? '-')}</p>
                                     </div>
-
                                     <div class="mt-3 flex gap-2">
                                         ${waHtml}
                                         ${navHtml}
@@ -560,23 +608,25 @@
                     state.city = cityFilter.value;
                     state.kecamatan = '';
                     state.kelurahan = '';
-                    
                     kecamatanFilter.innerHTML = '<option value="">Kecamatan</option>';
                     kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
                     kelurahanFilter.disabled = true;
-                    
-                    if (state.city && filterData[state.city]) {
-                        kecamatanFilter.disabled = false;
-                        Object.keys(filterData[state.city]).sort().forEach(kec => {
-                            const opt = document.createElement('option');
-                            opt.value = kec;
-                            opt.textContent = kec;
-                            kecamatanFilter.appendChild(opt);
-                        });
-                    } else {
-                        kecamatanFilter.disabled = true;
+
+                    // [MODE B] Isi dropdown kecamatan berdasarkan kota yang dipilih
+                    if (MAP_FILTER_MODE === 'full') {
+                        if (state.city && filterData[state.city]) {
+                            kecamatanFilter.disabled = false;
+                            Object.keys(filterData[state.city]).sort().forEach(kec => {
+                                const opt = document.createElement('option');
+                                opt.value = kec;
+                                opt.textContent = kec;
+                                kecamatanFilter.appendChild(opt);
+                            });
+                        } else {
+                            kecamatanFilter.disabled = true;
+                        }
                     }
-                    
+
                     renderMap();
                 });
 
@@ -585,36 +635,36 @@
                     renderMap();
                 });
 
-                kecamatanFilter?.addEventListener('change', () => {
-                    state.kecamatan = kecamatanFilter.value;
-                    state.kelurahan = '';
-                    
-                    kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
-                    
-                    if (state.city && state.kecamatan && filterData[state.city]?.[state.kecamatan]) {
-                        kelurahanFilter.disabled = false;
-                        filterData[state.city][state.kecamatan].forEach(kel => {
-                            const opt = document.createElement('option');
-                            opt.value = kel;
-                            opt.textContent = kel;
-                            kelurahanFilter.appendChild(opt);
-                        });
-                    } else {
-                        kelurahanFilter.disabled = true;
-                    }
-                    
-                    renderMap();
-                });
+                // [MODE B] Event listener kecamatan — hanya aktif di mode full
+                if (MAP_FILTER_MODE === 'full') {
+                    kecamatanFilter?.addEventListener('change', () => {
+                        state.kecamatan = kecamatanFilter.value;
+                        state.kelurahan = '';
+                        kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
 
-                kelurahanFilter?.addEventListener('change', () => {
-                    state.kelurahan = kelurahanFilter.value;
-                    renderMap();
-                });
+                        if (state.city && state.kecamatan && filterData[state.city]?.[state.kecamatan]) {
+                            kelurahanFilter.disabled = false;
+                            filterData[state.city][state.kecamatan].forEach(kel => {
+                                const opt = document.createElement('option');
+                                opt.value = kel;
+                                opt.textContent = kel;
+                                kelurahanFilter.appendChild(opt);
+                            });
+                        } else {
+                            kelurahanFilter.disabled = true;
+                        }
+                        renderMap();
+                    });
+
+                    kelurahanFilter?.addEventListener('change', () => {
+                        state.kelurahan = kelurahanFilter.value;
+                        renderMap();
+                    });
+                }
 
                 let searchTimer = null;
                 searchInput?.addEventListener('input', () => {
                     if (searchTimer) window.clearTimeout(searchTimer);
-
                     searchTimer = window.setTimeout(() => {
                         state.keyword = searchInput.value.trim();
                         renderMap();

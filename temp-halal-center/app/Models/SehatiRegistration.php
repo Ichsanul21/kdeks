@@ -16,6 +16,13 @@ class SehatiRegistration extends Model
         'description',
         'status',
         'izin_status',
+        'provinsi',
+        'kab_kota',
+        'kecamatan',
+        'kelurahan_desa',
+        'alamat',
+        'latitude',
+        'longitude',
     ];
 
     public function lphPartner(): BelongsTo

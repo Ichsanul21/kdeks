@@ -42,6 +42,7 @@ Route::get('/articles/{slug}', [PublicContentController::class, 'articleShow'])-
 Route::get('/gallery', [PublicContentController::class, 'galleryIndex'])->name('gallery.index');
 Route::get('/products', [PublicContentController::class, 'productsIndex'])->name('products.index');
 Route::get('/products/{slug}', [PublicContentController::class, 'productShow'])->name('products.show');
+Route::get('/data', [PublicContentController::class, 'dataIndex'])->name('data.index');
 Route::get('/locations/{slug}', [PublicContentController::class, 'locationShow'])->name('locations.show');
 Route::get('/resources', [PublicContentController::class, 'resourcesIndex'])->name('resources.index');
 Route::get('/resources/{slug}', [PublicContentController::class, 'resourceShow'])->name('resources.show');
@@ -58,9 +59,12 @@ Route::get('/siaran-pers', function () {
     return view('public.siaran-pers-placeholder');
 })->name('siaran-pers');
 
-Route::get('/halaman/tentang-kami', function () {
+Route::get('/profile/tentang-kami', function () {
     return view('public.about');
 })->name('about');
+
+Route::get('/profile/struktur-organisasi', [PublicContentController::class, 'organizationStructure'])->name('profile.organization');
+Route::get('/profile/anggota/{id}', [PublicContentController::class, 'memberShow'])->name('profile.member');
 
 Route::get('/halaman/{slug}', function ($slug) {
     $titles = [

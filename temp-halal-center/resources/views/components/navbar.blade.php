@@ -9,7 +9,7 @@
                 Beranda
                 <span class="absolute bottom-0 left-0 h-0.5 w-0 bg-emerald-600 transition-all duration-300 group-hover:w-full {{ request()->routeIs('home') ? 'w-full' : '' }}"></span>
             </a>
-            
+
             <!-- Profil Dropdown -->
             <div class="group relative py-1">
                 <button class="flex items-center gap-1 text-sm font-semibold text-slate-500 transition-colors hover:text-emerald-600">
@@ -20,7 +20,7 @@
                 <div class="absolute left-0 top-full pt-4 w-56 transform origin-top scale-y-0 opacity-0 transition-all duration-300 group-hover:scale-y-100 group-hover:opacity-100">
                     <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl backdrop-blur-xl">
                         <a href="{{ route('about') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Tentang Kami</a>
-                        <a href="{{ route('page.placeholder', 'struktur-organisasi') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Struktur Organisasi</a>
+                        <a href="{{ route('profile.organization') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Struktur Organisasi</a>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
 
             @foreach ([
                 route('home').'#webgis' => 'Pemetaan',
-                route('products.index') => 'Direktori',
+                route('data.index') => 'Data',
                 route('contact') => 'Kontak',
             ] as $href => $label)
                 <a href="{{ $href }}" class="group relative py-1 text-sm font-semibold {{ request()->fullUrl() === $href ? 'text-emerald-600' : 'text-slate-500' }} transition-colors hover:text-emerald-600">
@@ -91,7 +91,7 @@
             </button>
             <div class="h-4 w-px bg-slate-300"></div>
             <button onclick="openModal('sehatiModal')" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:bg-emerald-400 active:scale-95">
-                Daftar SEHATI
+                Daftar Sertifikasi Halal
             </button>
         </div>
 
@@ -112,11 +112,11 @@
     </div>
     <div class="flex flex-col gap-4 overflow-y-auto p-6">
         <a href="{{ route('home') }}" onclick="toggleMobileMenu()" class="text-base font-bold text-slate-800">Beranda</a>
-        
+
         <div class="flex flex-col gap-2">
             <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Profil</p>
             <a href="{{ route('about') }}" onclick="toggleMobileMenu()" class="pl-2 text-sm font-semibold text-slate-600">Tentang Kami</a>
-            <a href="{{ route('page.placeholder', 'struktur-organisasi') }}" onclick="toggleMobileMenu()" class="pl-2 text-sm font-semibold text-slate-600">Struktur Organisasi</a>
+            <a href="{{ route('profile.organization') }}" onclick="toggleMobileMenu()" class="pl-2 text-sm font-semibold text-slate-600">Struktur Organisasi</a>
         </div>
 
         <div class="flex flex-col gap-2">
@@ -142,7 +142,7 @@
 
         @foreach ([
             route('home').'#webgis' => 'Pemetaan',
-            route('products.index') => 'Direktori',
+            route('data.index') => 'Data',
             route('contact') => 'Kontak',
         ] as $href => $label)
             <a href="{{ $href }}" onclick="toggleMobileMenu()" class="text-base font-bold text-slate-800">{{ $label }}</a>

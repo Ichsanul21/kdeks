@@ -182,4 +182,21 @@ class PublicContentController extends Controller
                 ->get(),
         ]);
     }
+
+    public function dataIndex(Request $request): View
+    {
+
+        return view('public.data.index');
+    }
+
+    public function organizationStructure(): View
+    {
+        return view('public.profile.organization');
+    }
+
+    public function memberShow(string $id): View
+    {
+        // For dummy purposes, we just return the view
+        return view('public.profile.member_detail', ['id' => $id]);
+    }
 }

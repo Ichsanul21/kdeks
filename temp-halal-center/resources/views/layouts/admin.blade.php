@@ -41,7 +41,7 @@
         $adminNavigation = [
             'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard'],
             'admin.sehati-registrations.index' => ['label' => 'Pengajuan SEHATI', 'icon' => 'file-check-2'],
-            'admin.halal-products.index' => ['label' => 'Direktori Produk', 'icon' => 'package'],
+            // 'admin.halal-products.index' => ['label' => 'Direktori Produk', 'icon' => 'package'],
             'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin'],
             'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open'],
             'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper'],
