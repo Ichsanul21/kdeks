@@ -45,6 +45,11 @@ class Region extends Model
         return $this->hasMany(Mentor::class);
     }
 
+    public function umkms(): HasMany
+    {
+        return $this->hasMany(Umkm::class);
+    }
+
     public function sluggable(): array
     {
         return [

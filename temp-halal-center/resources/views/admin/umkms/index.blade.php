@@ -18,10 +18,10 @@
                     Lihat Publik
                 </a>
             @endif
-            <button type="button" onclick="openIframeModal('{{ route($routePrefix.'.create') }}', 'Tambah UMKM Baru')" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-400">
+            <a href="{{ route($routePrefix.'.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-400">
                 <i data-lucide="plus" class="h-4 w-4"></i>
                 Tambah UMKM
-            </button>
+            </a>
         </div>
     </div>
 
@@ -269,7 +269,7 @@
                         <th class="pb-4 pr-4">Kategori</th>
                         <th class="pb-4 px-2 text-center">Total Product</th>
                         <th class="pb-4 px-2 text-center">Status</th>
-                        <th class="pb-4 pl-4 text-right">Aksi</th>
+                        <th class="pb-4 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -334,18 +334,18 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="py-4 text-right">
-                                <div class="flex justify-end gap-1.5">
-                                    <button type="button" data-umkm-view-detail class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600" title="Detail UMKM">
+                            <td class="py-4">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <button type="button" data-umkm-view-detail class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600" title="Detail UMKM">
                                         <i data-lucide="eye" class="h-4 w-4"></i>
                                     </button>
-                                    <button type="button" onclick="openIframeModal('{{ route($routePrefix.'.edit', $item->id) }}', 'Edit UMKM')" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit UMKM">
+                                    <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit UMKM">
                                         <i data-lucide="pencil" class="h-4 w-4"></i>
-                                    </button>
-                                    <button type="button" onclick="confirmDeleteAlert({{ $item->id }})" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus UMKM">
+                                    </a>
+                                    <button type="button" onclick="confirmDeleteAlert({{ $item->id }})" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus UMKM">
                                         <i data-lucide="trash-2" class="h-4 w-4"></i>
                                     </button>
-                                    <form id="delete-form-{{ $item->id }}" action="{{ route($routePrefix.'.destroy', $item->id) }}" method="POST" style="display: none;">
+                                    <form id="delete-form-{{ $item->id }}" action="{{ route($routePrefix.'.destroy', $item->id) }}" method="POST" style="display: contents;">
                                         @csrf
                                         @method('DELETE')
                                     </form>
@@ -513,59 +513,10 @@
         </div>
     </div>
 
-    {{-- Iframe Modal for Create & Edit --}}
-    <div id="umkmIframeModal" class="fixed inset-0 z-[110] hidden">
-        <div id="umkmIframeBackdrop" class="absolute inset-0 bg-slate-900/60 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('umkmIframeModal')"></div>
-        <div class="pointer-events-none absolute inset-0 flex items-start justify-center overflow-hidden px-4 pb-10 pt-16">
-            <div id="umkmIframeContent" class="pointer-events-auto flex h-full w-full max-w-5xl scale-95 flex-col rounded-3xl bg-white opacity-0 shadow-2xl transition-all">
-                <div class="flex shrink-0 items-center justify-between rounded-t-3xl border-b border-slate-100 bg-slate-50 p-5">
-                    <div>
-                        <h3 id="umkmIframeTitle" class="font-heading text-lg font-extrabold tracking-tight text-slate-900">Form UMKM</h3>
-                    </div>
-                    <button type="button" onclick="closeModal('umkmIframeModal')" class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-100 hover:text-slate-900">
-                        <i data-lucide="x" class="h-4 w-4"></i>
-                    </button>
-                </div>
-                <div class="relative flex-1 overflow-hidden bg-slate-50/50">
-                    <div id="umkmIframeLoader" class="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-sm">
-                        <i data-lucide="loader-2" class="h-8 w-8 animate-spin text-emerald-500"></i>
-                    </div>
-                    <iframe id="umkmIframe" src="" class="h-full w-full border-none opacity-0 transition-opacity duration-300"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <script>
-        function openIframeModal(url, title) {
-            document.getElementById('umkmIframeTitle').innerText = title;
-            const iframe = document.getElementById('umkmIframe');
-            const loader = document.getElementById('umkmIframeLoader');
-            
-            iframe.style.opacity = '0';
-            loader.style.display = 'flex';
-            
-            iframe.onload = function() {
-                loader.style.display = 'none';
-                iframe.style.opacity = '1';
-                
-                try {
-                    // Check if iframe redirected back to index (success save)
-                    const path = iframe.contentWindow.location.pathname;
-                    if (path === '{{ route('admin.umkms.index', [], false) }}') {
-                        window.location.reload();
-                    }
-                } catch(e) {
-                    // Cross-origin issues shouldn't happen here, but if so, ignore
-                }
-            };
-            
-            // Append is_iframe to hide layout inside iframe
-            const finalUrl = url + (url.includes('?') ? '&' : '?') + 'is_iframe=1';
-            iframe.src = finalUrl;
-            
-            openModal('umkmIframeModal');
-        }
+
         // Flawless AJAX Live Search & Pagination
         const fetchTableData = async (url) => {
             const container = document.getElementById('umkmDataContainer');

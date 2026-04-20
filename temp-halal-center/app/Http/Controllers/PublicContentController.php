@@ -9,6 +9,7 @@ use App\Models\HalalLocation;
 use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
 use App\Models\Regulation;
+use App\Models\SectorItem;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -162,6 +163,23 @@ class PublicContentController extends Controller
 
         return view('public.events.show', [
             'event' => $event,
+        ]);
+    }
+
+    public function direktoratShow(string $slug): View
+    {
+        $sector = SectorItem::query()
+            ->where('is_active', true)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        return view('public.direktorat.show', [
+            'sector' => $sector,
+            'otherSectors' => SectorItem::query()
+                ->where('is_active', true)
+                ->whereKeyNot($sector->id)
+                ->orderBy('sort_order')
+                ->get(),
         ]);
     }
 }

@@ -14,6 +14,7 @@ class SectorItem extends Model
         'slug',
         'icon_key',
         'summary',
+        'content',
         'sort_order',
         'is_active',
     ];

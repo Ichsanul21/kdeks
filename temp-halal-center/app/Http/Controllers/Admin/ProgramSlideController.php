@@ -8,7 +8,7 @@ use App\Models\ProgramSlide;
 class ProgramSlideController extends BaseCrudController
 {
     protected string $modelClass = ProgramSlide::class;
-    protected string $pageTitle = 'Hero Slider';
+    protected string $pageTitle = 'Program Unggulan';
     protected string $routePrefix = 'admin.program-slides';
     protected string $requestClass = ProgramSlideRequest::class;
     protected array $searchColumns = ['title', 'subtitle', 'status'];

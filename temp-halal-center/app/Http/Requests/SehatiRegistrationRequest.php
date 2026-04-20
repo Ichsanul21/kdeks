@@ -7,7 +7,8 @@ class SehatiRegistrationRequest extends SehatiRegistrationStoreRequest
     public function rules(): array
     {
         return parent::rules() + [
-            'status' => ['required', 'in:new,reviewed,processed,closed'],
+            'status' => ['required', 'in:baru,ditinjau,diproses,selesai'],
+            'izin_status' => ['nullable', 'string'],
         ];
     }
 }

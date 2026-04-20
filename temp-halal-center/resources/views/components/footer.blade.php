@@ -6,7 +6,7 @@
                     <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" alt="{{ data_get($setting, 'institution_name', 'KDEKS Kalimantan Timur') }}" class="h-10 w-auto object-contain">
                 </div>
                 <p class="mb-4 text-xs font-medium leading-relaxed text-slate-500">
-                    {{ data_get($setting, 'address', 'Pusat Pemerintahan Provinsi Kalimantan Timur') }}
+                    {{ data_get($setting, 'address', 'Jl. Gajah Mada No.2, RW.01, Jawa, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75242') }}
                 </p>
             </div>
             <div>
@@ -20,9 +20,9 @@
             <div>
                 <h4 class="mb-4 text-sm font-extrabold text-slate-900">Informasi</h4>
                 <ul class="space-y-2 text-xs font-medium text-slate-500">
-                    <li><a href="{{ route('articles.index') }}" class="transition hover:text-emerald-600">Artikel & Publikasi</a></li>
+                    <li><a href="{{ route('articles.index') }}" class="transition hover:text-emerald-600">Berita & Publikasi</a></li>
                     <li><a href="{{ route('resources.index') }}" class="transition hover:text-emerald-600">Dokumen & Regulasi</a></li>
-                    <li><a href="{{ route('gallery.index') }}" class="transition hover:text-emerald-600">Galeri Kegiatan</a></li>
+
                 </ul>
             </div>
             <div>

@@ -159,7 +159,7 @@ class UmkmController extends BaseCrudController
             ['name' => 'latitude', 'label' => 'Latitude', 'type' => 'number', 'step' => '0.0000001', 'id' => 'location-latitude'],
             ['name' => 'longitude', 'label' => 'Longitude', 'type' => 'number', 'step' => '0.0000001', 'id' => 'location-longitude'],
             ['name' => 'nomor_wa', 'label' => 'Nomor WhatsApp', 'type' => 'text'],
-            ['name' => 'link_pembelian', 'label' => 'Link Pembelian', 'type' => 'url'],
+            ['name' => 'link_pembelian', 'label' => 'Link Pembelian', 'type' => 'text'],
             ['name' => 'deskripsi', 'label' => 'Deskripsi', 'type' => 'richtext'],
             ['name' => 'foto_url', 'label' => 'URL Foto Eksternal', 'type' => 'url'],
             ['name' => 'jumlah_produk', 'label' => 'Jumlah Produk', 'type' => 'number'],

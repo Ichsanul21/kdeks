@@ -159,6 +159,11 @@ abstract class BaseCrudController extends Controller
         return $validated;
     }
 
+    protected function storageDirectory(): string
+    {
+        return str_replace('.', '/', $this->routePrefix);
+    }
+
     protected function syncFiles(Model $model): void
     {
         foreach ($this->publicFileFields as $field) {
@@ -167,7 +172,7 @@ abstract class BaseCrudController extends Controller
                     $model->{$field},
                     request()->file($field),
                     'public',
-                    $this->routePrefix
+                    $this->storageDirectory()
                 );
             }
         }
@@ -178,7 +183,7 @@ abstract class BaseCrudController extends Controller
                     $model->{$field},
                     request()->file($field),
                     'private',
-                    $this->routePrefix
+                    $this->storageDirectory()
                 );
             }
         }

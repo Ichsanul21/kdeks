@@ -35,7 +35,7 @@
                         @foreach($tableColumns as $column)
                             <th class="pb-4">{{ $column['label'] }}</th>
                         @endforeach
-                        <th class="pb-4 text-right">Aksi</th>
+                        <th class="pb-4 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,11 +43,42 @@
                         <tr class="border-t border-slate-100 transition hover:bg-slate-50">
                             @foreach($tableColumns as $column)
                                 <td class="py-4">
-                                    <span class="font-medium text-slate-700">{{ data_get($item, $column['key']) }}</span>
+                                    @php
+                                        $val = data_get($item, $column['key']);
+                                        $isIzinStatus = ($column['key'] === 'izin_status');
+                                        if (isset($column['options']) && isset($column['options'][$val])) {
+                                            $val = $column['options'][$val];
+                                        }
+                                    @endphp
+                                    @if($isIzinStatus && filled($val))
+                                        <span class="inline-flex items-center rounded-full @if(data_get($item, 'izin_status') === 'disetujui') bg-emerald-50 text-emerald-600 @else bg-rose-50 text-rose-600 @endif px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
+                                            {{ $val }}
+                                        </span>
+                                    @else
+                                        <span class="font-medium text-slate-700">{{ $val }}</span>
+                                    @endif
                                 </td>
                             @endforeach
                             <td class="py-4">
-                                <div class="flex justify-end gap-3">
+                                <div class="flex items-center justify-center gap-2">
+                                    @if($routePrefix === 'admin.sehati-registrations' && $item->status === 'diproses')
+                                        <div class="flex items-center gap-2">
+                                            <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
+                                                @csrf
+                                                <input type="hidden" name="decision" value="yes">
+                                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500 text-white transition hover:bg-emerald-600" title="Setujui">
+                                                    <i data-lucide="check" class="h-4 w-4"></i>
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('admin.sehati-registrations.approve', $item->id) }}" style="display: contents;">
+                                                @csrf
+                                                <input type="hidden" name="decision" value="no">
+                                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500 text-white transition hover:bg-rose-600" title="Tolak">
+                                                    <i data-lucide="x" class="h-4 w-4"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
                                     @if(
                                         $publicShowRoute
                                         && ($publicShowRouteKey === null || filled(data_get($item, $publicShowRouteKey)))
@@ -57,16 +88,26 @@
                                             href="{{ $publicShowRouteKey ? route($publicShowRoute, data_get($item, $publicShowRouteKey)) : route($publicShowRoute) }}"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600"
+                                            class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-600 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-600"
                                         >
                                             Preview
                                         </a>
                                     @endif
-                                    <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">Edit</a>
-                                    <form method="POST" action="{{ route($routePrefix.'.destroy', $item->id) }}" onsubmit="return confirm('Hapus data ini?')">
+
+                                    @if($routePrefix === 'admin.consultation-requests' && filled($item->phone))
+                                        @php
+                                            $phone = preg_replace('/[^0-9]/', '', $item->phone);
+                                            if (str_starts_with($phone, '0')) {
+                                                $phone = '62' . substr($phone, 1);
+                                            }
+                                        @endphp
+                                        <a href="https://wa.me/{{ $phone }}" target="_blank" class="inline-flex h-9 items-center rounded-lg bg-emerald-500 px-3 text-xs font-bold text-white transition hover:bg-emerald-600">Hubungi WA</a>
+                                    @endif
+                                    <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">Edit</a>
+                                    <form method="POST" action="{{ route($routePrefix.'.destroy', $item->id) }}" onsubmit="return confirm('Hapus data ini?')" style="display: contents;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-rose-500 transition hover:border-rose-200 hover:bg-rose-50">Hapus</button>
+                                        <button type="submit" class="inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-rose-500 transition hover:border-rose-200 hover:bg-rose-50">Hapus</button>
                                     </form>
                                 </div>
                             </td>

@@ -73,8 +73,11 @@
             </div>
 
             @if($slides->isNotEmpty())
-                <div class="mt-12 grid max-w-2xl gap-3 sm:grid-cols-2">
-                    @foreach($slides->take(2) as $slide)
+                <div class="mt-12 mb-4">
+                    <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
+                </div>
+                <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
+                    @foreach($slides->take(4) as $slide)
                         <div class="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
                             <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.28em]">{{ $slide->subtitle }}</p>
                             <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
@@ -86,7 +89,27 @@
         </div>
     </section>
 
-    <section id="webgis" class="relative z-10 py-24">
+<section id="sektor" class="bg-white py-24 border-b border-slate-100">
+        <div class="mx-auto max-w-7xl px-6">
+            <div>
+                <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
+                <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-5">
+                    @foreach($sectorItems as $item)
+                        <a href="{{ route('direktorat.show', $item->slug) }}" class="group block rounded-[1.75rem] border border-slate-100 p-6 transition hover:shadow-md hover:border-emerald-200">
+                            <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                                <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5"></i>
+                            </div>
+                            <h4 class="mb-1 text-base font-bold text-slate-900 transition-colors group-hover:text-emerald-700">{{ $item->title }}</h4>
+                            <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    
+    </section>
+
+<section id="webgis" class="relative z-10 py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                 <div>
@@ -103,18 +126,26 @@
                             <i data-lucide="search" class="ml-2 h-4 w-4 shrink-0 text-slate-400"></i>
                             <input id="mapSearchInput" type="text" placeholder="Cari kota atau usaha..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
                         </div>
-                        <div class="pointer-events-auto flex flex-col gap-2 sm:flex-row">
-                            <select id="mapCityFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-4 py-2.5 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                        <div class="pointer-events-auto flex gap-2">
+                            <select id="mapCityFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
                                 <option value="">Semua Kota</option>
                                 @foreach($mapCities as $city)
                                     <option value="{{ $city }}">{{ $city }}</option>
                                 @endforeach
                             </select>
-                            <select id="mapPartnerFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-4 py-2.5 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                            <select id="mapPartnerFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
                                 <option value="">LP3H / LPH</option>
                                 @foreach($lphPartners as $partner)
                                     <option value="{{ $partner->id }}">{{ $partner->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="pointer-events-auto flex gap-2">
+                            <select id="mapKecamatanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                <option value="">Kecamatan</option>
+                            </select>
+                            <select id="mapKelurahanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                <option value="">Kelurahan</option>
                             </select>
                         </div>
                     </div>
@@ -155,7 +186,75 @@
         </div>
     </section>
 
-    <section id="potensi" class="border-y border-slate-100 bg-white py-24">
+<section id="direktori" class="border-t border-slate-100 bg-white py-24">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="grid gap-16 lg:grid-cols-2">
+
+                {{-- Data Produk --}}
+                <div class="flex h-full flex-col">
+                    <div class="mb-8 flex items-end justify-between">
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
+                        <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+                    </div>
+                    <div class="flex flex-1 flex-col gap-4">
+                        @foreach($featuredProducts->take(4) as $product)
+                            <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
+                                    <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-center">
+                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
+                                    <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
+                                </div>
+                                <span class="self-center rounded bg-emerald-50 px-2.5 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Dokumen & Regulasi --}}
+                <div id="data" class="flex h-full flex-col">
+                    <div class="mb-8 flex items-end justify-between">
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
+                        <div class="flex gap-4">
+                            <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
+                            <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
+                        </div>
+                    </div>
+                    <div class="flex flex-1 flex-col gap-4">
+                        @foreach($resources->take(2) as $resource)
+                            <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
+                                    <i data-lucide="file-text" class="h-5 w-5"></i>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-center">
+                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $resource->title }}</h4>
+                                    <p class="mt-1 text-[11px] font-medium text-slate-500">Dokumen &bull; {{ optional($resource->published_at)->translatedFormat('M Y') }}</p>
+                                </div>
+                                <i data-lucide="download" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
+                            </a>
+                        @endforeach
+
+                        @foreach($regulations->take(2) as $regulation)
+                            <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
+                                    <i data-lucide="scale" class="h-5 w-5"></i>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-center">
+                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $regulation->title }}</h4>
+                                    <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $regulation->regulation_number }}</p>
+                                </div>
+                                <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<section id="potensi" class="border-y border-slate-100 bg-white py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-20">
                 <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Potensi Pengembangan Ekonomi Syariah Kalimantan Timur</h2>
@@ -169,24 +268,9 @@
                 </div>
             </div>
 
-            <div>
-                <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
-                <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-4">
-                    @foreach($sectorItems as $item)
-                        <div class="rounded-[1.75rem] border border-slate-100 p-6 transition hover:shadow-md">
-                            <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50">
-                                <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5 text-slate-700"></i>
-                            </div>
-                            <h4 class="mb-1 text-base font-bold text-slate-900">{{ $item->title }}</h4>
-                            <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
+                </section>
 
-    <section id="sehati" class="relative z-10 py-20">
+<section id="sehati" class="relative z-10 py-20">
         <div class="mx-auto max-w-7xl px-6">
             <div class="relative flex flex-col items-center justify-between gap-10 overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:flex-row md:p-16">
                 <div class="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-[100px]"></div>
@@ -214,80 +298,12 @@
         </div>
     </section>
 
-    <section id="direktori" class="border-t border-slate-100 bg-white py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="grid gap-16 lg:grid-cols-2">
-                <div>
-                    <div class="mb-8 flex items-end justify-between">
-                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Direktori Produk</h2>
-                        <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-                    </div>
-                    <div class="space-y-4">
-                        @foreach($featuredProducts->take(4) as $product)
-                            <a href="#" class="group flex cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
-                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
-                                    <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
-                                    <p class="text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
-                                </div>
-                                <span class="rounded bg-emerald-50 px-2 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div id="data">
-                    <div class="mb-8 flex items-end justify-between">
-                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
-                        <div class="flex gap-4">
-                            <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
-                            <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        @foreach($resources->take(2) as $resource)
-                            <a href="{{ route('resources.show', $resource->slug) }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
-                                <div class="flex items-center gap-4">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500">
-                                        <i data-lucide="file-text" class="h-4 w-4"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $resource->title }}</h4>
-                                        <p class="text-[11px] font-medium text-slate-500">Dokumen • {{ optional($resource->published_at)->translatedFormat('M Y') }}</p>
-                                    </div>
-                                </div>
-                                <i data-lucide="download" class="h-4 w-4 text-slate-400 transition group-hover:text-emerald-600"></i>
-                            </a>
-                        @endforeach
-
-                        @foreach($regulations->take(2) as $regulation)
-                            <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200">
-                                <div class="flex items-center gap-4">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-500">
-                                        <i data-lucide="scale" class="h-4 w-4"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $regulation->title }}</h4>
-                                        <p class="text-[11px] font-medium text-slate-500">{{ $regulation->regulation_number }}</p>
-                                    </div>
-                                </div>
-                                <i data-lucide="arrow-up-right" class="h-4 w-4 text-slate-400 transition group-hover:text-emerald-600"></i>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
+<section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-10 flex items-end justify-between">
                 <div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Artikel & Publikasi</h2>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Update berita, publikasi, dan riset terbaru KDEKS Kaltim.</p>
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Berita & Publikasi</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Update berita, siaran pers, dan riset terbaru KDEKS Kaltim.</p>
                 </div>
                 <a href="{{ route('articles.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
             </div>
@@ -308,55 +324,7 @@
         </div>
     </section>
 
-    <section id="agenda" class="border-t border-slate-100 bg-white py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="mb-10 flex items-end justify-between">
-                <div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Agenda Kegiatan</h2>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Kegiatan dan agenda resmi yang bisa diikuti masyarakat serta pelaku usaha.</p>
-                </div>
-                <a href="{{ route('events.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-            </div>
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @foreach($events->take(4) as $event)
-                    <a href="{{ route('events.show', $event->slug) }}" class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ optional($event->starts_at)->translatedFormat('d M Y') }}</p>
-                        <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $event->title }}</h3>
-                        <p class="mt-3 text-sm leading-7 text-slate-500">{{ $event->summary }}</p>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery" class="border-t border-slate-100 bg-slate-50 py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="mb-10 flex items-end justify-between">
-                <div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Galeri Dokumentasi</h2>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Dokumentasi visual kegiatan, workshop, dan publikasi KDEKS Kaltim.</p>
-                </div>
-                <a href="{{ route('gallery.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-            </div>
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @foreach($galleryItems->take(4) as $item)
-                    <a href="{{ route('gallery.index') }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        @if($item->media_type === 'image' && $item->media_path)
-                            <img src="{{ asset('storage/'.$item->media_path) }}" alt="{{ $item->title }}" class="h-56 w-full object-cover">
-                        @else
-                            <div class="flex h-56 items-center justify-center bg-slate-900 text-sm font-bold text-white">Media Video</div>
-                        @endif
-                        <div class="p-5">
-                            <h3 class="text-base font-extrabold text-slate-900">{{ $item->title }}</h3>
-                            <p class="mt-3 text-sm leading-7 text-slate-500">{{ $item->caption ?: 'Dokumentasi resmi KDEKS Kaltim.' }}</p>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="border-t border-slate-100 bg-white py-24">
+<section id="faq" class="border-t border-slate-100 bg-white py-24">
         <div class="mx-auto max-w-5xl px-6">
             <div class="mb-10 text-center">
                 <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Pertanyaan Umum</h2>
@@ -373,100 +341,6 @@
         </div>
     </section>
 
-    <div id="sehatiModal" class="fixed inset-0 z-[100] hidden" @if($sehatiErrors->any()) data-open-on-load="true" @endif>
-        <div id="sehatiBackdrop" class="absolute inset-0 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('sehatiModal')"></div>
-        <div class="pointer-events-none absolute inset-0 flex items-start justify-center overflow-y-auto px-4 pb-10 pt-20">
-            <div id="sehatiContent" class="pointer-events-auto w-full max-w-2xl scale-95 rounded-3xl bg-white opacity-0 shadow-2xl transition-all">
-                <div class="flex items-center justify-between rounded-t-3xl border-b border-slate-100 bg-slate-50 p-6">
-                    <div>
-                        <h3 class="font-heading text-xl font-extrabold tracking-tight text-slate-900">Formulir SEHATI</h3>
-                        <p class="text-xs font-medium text-slate-500">Pengajuan Sertifikasi Halal Gratis</p>
-                    </div>
-                    <button onclick="closeModal('sehatiModal')" class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-100 hover:text-slate-900">
-                        <i data-lucide="x" class="h-4 w-4"></i>
-                    </button>
-                </div>
-                <div class="p-6 md:p-8">
-                    <form method="POST" action="{{ route('sehati.store') }}" class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                        @csrf
-                        <div class="md:col-span-2">
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Lembaga Pendamping (LP3H)</label>
-                            <select name="lph_partner_id" class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white">
-                                <option value="">-- Pilih Lembaga Pendamping --</option>
-                                @foreach($lphPartners as $partner)
-                                    @if($partner->partner_type === 'lp3h')
-                                        <option value="{{ $partner->id }}" @selected(old('lph_partner_id') == $partner->id)>{{ $partner->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @if($sehatiErrors->has('lph_partner_id'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('lph_partner_id') }}</p>
-                            @endif
-                        </div>
-
-                        <div>
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Nama Pemilik UMKM</label>
-                            <input type="text" name="owner_name" value="{{ old('owner_name') }}" placeholder="Sesuai KTP" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white" required>
-                            @if($sehatiErrors->has('owner_name'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('owner_name') }}</p>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Nama UMKM</label>
-                            <input type="text" name="business_name" value="{{ old('business_name') }}" placeholder="Contoh: Kedai Mubarok" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white" required>
-                            @if($sehatiErrors->has('business_name'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('business_name') }}</p>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Nama Produk yang Diajukan</label>
-                            <input type="text" name="product_name" value="{{ old('product_name') }}" placeholder="Jenis/Nama Produk" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white" required>
-                            @if($sehatiErrors->has('product_name'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('product_name') }}</p>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Nomor HP / WA</label>
-                            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="08xx-xxxx-xxxx" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white" required>
-                            @if($sehatiErrors->has('phone'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('phone') }}</p>
-                            @endif
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="mb-1.5 block text-[10px] font-extrabold uppercase tracking-[0.24em] text-slate-500">Deskripsi Singkat Usaha</label>
-                            <textarea name="description" rows="3" placeholder="Jelaskan secara singkat..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 outline-none transition-all focus:border-emerald-500/50 focus:bg-white">{{ old('description') }}</textarea>
-                            @if($sehatiErrors->has('description'))
-                                <p class="mt-2 text-sm text-rose-500">{{ $sehatiErrors->first('description') }}</p>
-                            @endif
-                        </div>
-                        <div class="md:col-span-2 pt-2">
-                            <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3.5 text-sm font-extrabold text-white shadow-md transition-colors hover:bg-emerald-400">
-                                Ajukan Pendaftaran
-                                <i data-lucide="send" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="searchModal" class="fixed inset-0 z-[100] hidden">
-        <div id="searchBackdrop" class="absolute inset-0 bg-white/95 opacity-0 backdrop-blur-md transition-opacity" onclick="closeModal('searchModal')"></div>
-        <div id="searchContent" class="absolute left-1/2 top-20 w-full max-w-2xl -translate-x-1/2 scale-95 px-4 opacity-0 transition-all sm:top-24">
-            <div class="relative">
-                <i data-lucide="search" class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 sm:left-5 sm:h-6 sm:w-6"></i>
-                <input id="globalSearchInput" type="text" placeholder="Ketik kata kunci..." class="w-full rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-16 text-base font-bold text-slate-900 shadow-xl focus:border-emerald-500/50 focus:outline-none sm:py-5 sm:pl-16 sm:text-lg">
-                <button onclick="closeModal('searchModal')" class="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-400 hover:text-slate-900 sm:right-5 sm:text-xs">ESC</button>
-            </div>
-            <div class="mt-4 flex flex-wrap justify-center gap-2">
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">Alur Sertifikasi</span>
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">LPH Samarinda</span>
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">Produk Halal</span>
-            </div>
-            <div id="searchResults" class="mt-5 grid gap-3 sm:grid-cols-2"></div>
-        </div>
-    </div>
 
     <script>
         (() => {
@@ -509,7 +383,7 @@
 
                 mapElement.dataset.mapBooted = 'true';
 
-                const map = L.map(mapElement, { zoomControl: false }).setView([0.706, 116.426], 8);
+                const map = L.map(mapElement, { zoomControl: false }).setView([0.706, 116.426], 7);
 
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -517,7 +391,6 @@
 
                 const highlightKaltim = async () => {
                     try {
-                        // Using a more up-to-date GeoJSON source that separates Kaltara from Kaltim
                         const response = await fetch('https://raw.githubusercontent.com/fahadh4ilyas/indonesia-geojson-archive/master/Indonesia_provinces.geojson');
                         const data = await response.json();
                         const kaltim = data.features.find(f => {
@@ -559,6 +432,8 @@
 
                 const cityFilter = document.getElementById('mapCityFilter');
                 const partnerFilter = document.getElementById('mapPartnerFilter');
+                const kecamatanFilter = document.getElementById('mapKecamatanFilter');
+                const kelurahanFilter = document.getElementById('mapKelurahanFilter');
                 const searchInput = document.getElementById('mapSearchInput');
                 const categoryFilter = document.getElementById('mapCategoryFilter');
                 const zoomButtons = document.querySelectorAll('[data-map-zoom]');
@@ -569,6 +444,14 @@
                     city: '',
                     lph_partner_id: '',
                     keyword: '',
+                    kecamatan: '',
+                    kelurahan: '',
+                };
+
+                let filterData = {};
+
+                const updateFilters = (filters) => {
+                    filterData = filters;
                 };
 
                 const renderMap = async () => {
@@ -580,6 +463,11 @@
                     try {
                         const response = await fetch(`${mapElement.dataset.mapUrl}?${query.toString()}`);
                         const result = await response.json();
+                        
+                        if (result?.data?.filters) {
+                            updateFilters(result.data.filters);
+                        }
+
                         const regions = normalizeCollection(result?.data?.regions);
                         const locations = normalizeCollection(result?.data?.locations)
                             .filter((location) => Number.isFinite(Number(location.latitude)) && Number.isFinite(Number(location.longitude)));
@@ -661,7 +549,7 @@
                             const bounds = L.latLngBounds(locations.map((location) => [Number(location.latitude), Number(location.longitude)]));
                             map.fitBounds(bounds.pad(0.12));
                         } else {
-                            map.setView([0.706, 116.426], 8);
+                            map.setView([0.706, 116.426], 7);
                         }
                     } catch (error) {
                         markersLayer.clearLayers();
@@ -670,11 +558,56 @@
 
                 cityFilter?.addEventListener('change', () => {
                     state.city = cityFilter.value;
+                    state.kecamatan = '';
+                    state.kelurahan = '';
+                    
+                    kecamatanFilter.innerHTML = '<option value="">Kecamatan</option>';
+                    kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
+                    kelurahanFilter.disabled = true;
+                    
+                    if (state.city && filterData[state.city]) {
+                        kecamatanFilter.disabled = false;
+                        Object.keys(filterData[state.city]).sort().forEach(kec => {
+                            const opt = document.createElement('option');
+                            opt.value = kec;
+                            opt.textContent = kec;
+                            kecamatanFilter.appendChild(opt);
+                        });
+                    } else {
+                        kecamatanFilter.disabled = true;
+                    }
+                    
                     renderMap();
                 });
 
                 partnerFilter?.addEventListener('change', () => {
                     state.lph_partner_id = partnerFilter.value;
+                    renderMap();
+                });
+
+                kecamatanFilter?.addEventListener('change', () => {
+                    state.kecamatan = kecamatanFilter.value;
+                    state.kelurahan = '';
+                    
+                    kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
+                    
+                    if (state.city && state.kecamatan && filterData[state.city]?.[state.kecamatan]) {
+                        kelurahanFilter.disabled = false;
+                        filterData[state.city][state.kecamatan].forEach(kel => {
+                            const opt = document.createElement('option');
+                            opt.value = kel;
+                            opt.textContent = kel;
+                            kelurahanFilter.appendChild(opt);
+                        });
+                    } else {
+                        kelurahanFilter.disabled = true;
+                    }
+                    
+                    renderMap();
+                });
+
+                kelurahanFilter?.addEventListener('change', () => {
+                    state.kelurahan = kelurahanFilter.value;
                     renderMap();
                 });
 

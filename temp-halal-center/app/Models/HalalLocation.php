@@ -18,6 +18,8 @@ class HalalLocation extends Model
         'location_type',
         'category',
         'city_name',
+        'kecamatan',
+        'kelurahan',
         'business_scale',
         'owner_name',
         'brand_name',

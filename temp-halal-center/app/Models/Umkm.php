@@ -10,6 +10,34 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Umkm extends Model
 {
     use Sluggable;
+    
+    protected static function booted()
+    {
+        static::saved(function ($umkm) {
+            if ($umkm->isDirty('region_id') || $umkm->wasRecentlyCreated) {
+                if ($umkm->getOriginal('region_id')) {
+                    self::syncRegionCount($umkm->getOriginal('region_id'));
+                }
+                if ($umkm->region_id) {
+                    self::syncRegionCount($umkm->region_id);
+                }
+            }
+        });
+
+        static::deleted(function ($umkm) {
+            if ($umkm->region_id) {
+                self::syncRegionCount($umkm->region_id);
+            }
+        });
+    }
+
+    protected static function syncRegionCount($regionId)
+    {
+        $region = Region::find($regionId);
+        if ($region) {
+            $region->update(['halal_msmes_count' => $region->umkms()->count()]);
+        }
+    }
 
     protected $fillable = [
         'source_id',
@@ -23,6 +51,8 @@ class Umkm extends Model
         'kategori',
         'provinsi',
         'kab_kota',
+        'kecamatan',
+        'kelurahan',
         'alamat',
         'detail_url',
         'edit_url',

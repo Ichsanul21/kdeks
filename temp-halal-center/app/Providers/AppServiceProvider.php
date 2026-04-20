@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view): void {
             $view->with('locale', session('site_locale', 'id'));
             $view->with('setting', Schema::hasTable('site_settings') ? SiteSetting::query()->first() : null);
+            $view->with('lphPartners', Schema::hasTable('lph_partners') ? \App\Models\LphPartner::where('is_active', true)->orderBy('sort_order')->get() : collect());
             $view->with(
                 'adminNewSehatiCount',
                 Schema::hasTable('sehati_registrations')

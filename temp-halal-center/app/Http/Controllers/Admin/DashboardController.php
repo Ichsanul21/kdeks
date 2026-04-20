@@ -24,11 +24,20 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $newSehatiRegistrations = SehatiRegistration::query()
+        $latestSehatiRegistrations = SehatiRegistration::query()
             ->with('lphPartner')
-            ->where('status', 'new')
             ->latest()
-            ->limit(6)
+            ->limit(5)
+            ->get();
+
+        $latestConsultations = ConsultationRequest::query()
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        $topRegions = Region::query()
+            ->orderByDesc('halal_msmes_count')
+            ->limit(5)
             ->get();
 
         return view('admin.dashboard.index', [
@@ -36,7 +45,7 @@ class DashboardController extends Controller
                 'slides' => ProgramSlide::count(),
                 'articles' => Article::count(),
                 'regions' => Region::count(),
-                'locations' => Umkm::count(),
+                'umkms' => Umkm::count(),
                 'products' => UmkmProduk::count(),
                 'mentors' => Mentor::count(),
                 'lph_partners' => LphPartner::count(),
@@ -46,11 +55,12 @@ class DashboardController extends Controller
                 'regulations' => Regulation::count(),
                 'events' => Event::count(),
                 'sehati' => SehatiRegistration::count(),
-                'sehati_pending' => SehatiRegistration::query()->where('status', 'new')->count(),
+                'sehati_pending' => SehatiRegistration::query()->where('status', 'baru')->count(),
                 'consultations' => ConsultationRequest::count(),
             ],
-            'latestSehatiRegistrations' => $newSehatiRegistrations,
-            'latestConsultations' => ConsultationRequest::latest()->limit(6)->get(),
+            'latestSehatiRegistrations' => $latestSehatiRegistrations,
+            'latestConsultations' => $latestConsultations,
+            'topRegions' => $topRegions,
             'siteSetting' => SiteSetting::first(),
         ]);
     }

@@ -15,6 +15,7 @@ class SehatiRegistration extends Model
         'phone',
         'description',
         'status',
+        'izin_status',
     ];
 
     public function lphPartner(): BelongsTo

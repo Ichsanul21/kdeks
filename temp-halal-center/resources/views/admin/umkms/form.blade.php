@@ -43,6 +43,7 @@
                         <div class="grid gap-3 md:grid-cols-[1fr,auto,auto]">
                             <input type="text" data-map-search class="admin-input" placeholder="Cari alamat atau nama tempat...">
                             <button type="button" data-map-search-button class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700">Cari Lokasi</button>
+                            <button type="button" data-map-fetch-address class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">Gunakan Alamat di Atas</button>
                             <button type="button" data-map-reverse-button class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700">Isi Alamat dari Titik</button>
                         </div>
                         <div data-map-canvas class="h-[360px] overflow-hidden rounded-[1.25rem] border border-slate-200"></div>
@@ -111,74 +112,4 @@
         </div>
     </form>
 
-    {{-- Product Management (only in edit mode) --}}
-    @if($mode === 'edit')
-        <div class="mt-8 admin-card rounded-[1.75rem] p-8">
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h3 class="font-heading text-2xl font-extrabold text-slate-900">Produk UMKM</h3>
-                    <p class="mt-1 text-sm text-slate-500">Daftar produk milik {{ $item->nama_umkm }}</p>
-                </div>
-                <a href="{{ route('admin.umkms.produks.create', $item->id) }}" class="inline-flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-cyan-500/30 transition hover:bg-cyan-400">
-                    <i data-lucide="plus" class="h-4 w-4"></i>
-                    Tambah Produk
-                </a>
-            </div>
-
-            @if($item->produks && $item->produks->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="admin-table min-w-full text-left text-sm">
-                        <thead>
-                            <tr>
-                                <th class="pb-4 pr-4">Foto</th>
-                                <th class="pb-4">Nama Produk</th>
-                                <th class="pb-4">Nomor</th>
-                                <th class="pb-4">Harga</th>
-                                <th class="pb-4">Akta Halal</th>
-                                <th class="pb-4">LPH/LP3H</th>
-                                <th class="pb-4">Tahun</th>
-                                <th class="pb-4 text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($item->produks as $produk)
-                                <tr class="border-t border-slate-100 transition hover:bg-slate-50">
-                                    <td class="py-3 pr-4">
-                                        @if($produk->display_image)
-                                            <img src="{{ $produk->display_image }}" alt="" class="h-10 w-10 rounded-lg object-cover" loading="lazy">
-                                        @else
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-400">
-                                                <i data-lucide="package" class="h-5 w-5"></i>
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 font-medium text-slate-700">{{ $produk->nama_produk }}</td>
-                                    <td class="py-3 text-slate-500">{{ $produk->nomor ?: '-' }}</td>
-                                    <td class="py-3 text-slate-500">{{ $produk->harga ?: '-' }}</td>
-                                    <td class="py-3 text-slate-500 text-xs">{{ $produk->akta_halal ?: '-' }}</td>
-                                    <td class="py-3 text-slate-500 text-xs">{{ $produk->lph_lp3h ?: '-' }}</td>
-                                    <td class="py-3 text-slate-500">{{ $produk->tahun_terbit ?: '-' }}</td>
-                                    <td class="py-3">
-                                        <div class="flex justify-end gap-2">
-                                            <a href="{{ route('admin.umkms.produks.edit', [$item->id, $produk->id]) }}" class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600">Edit</a>
-                                            <form method="POST" action="{{ route('admin.umkms.produks.destroy', [$item->id, $produk->id]) }}" onsubmit="return confirm('Hapus produk ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-rose-500 transition hover:border-rose-200 hover:bg-rose-50">Hapus</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="rounded-2xl border border-dashed border-slate-200 py-12 text-center">
-                    <i data-lucide="package-open" class="mx-auto h-10 w-10 text-slate-300"></i>
-                    <p class="mt-3 text-sm font-medium text-slate-400">Belum ada produk untuk UMKM ini.</p>
-                </div>
-            @endif
-        </div>
-    @endif
 @endsection

@@ -209,7 +209,7 @@ const initSearchModal = () => {
 
 const initMap = () => {
     const mapElement = document.getElementById('leafletKaltim');
-    if (!mapElement) return;
+    if (!mapElement || mapElement._leaflet_id) return;
 
     const normalizeResourceCollection = (value) => {
         if (Array.isArray(value)) return value;
@@ -374,10 +374,11 @@ const initAdminMapPickers = () => {
         const searchInput = picker.querySelector('[data-map-search]');
         const searchButton = picker.querySelector('[data-map-search-button]');
         const reverseButton = picker.querySelector('[data-map-reverse-button]');
+        const fetchAddressButton = picker.querySelector('[data-map-fetch-address]');
         const status = picker.querySelector('[data-map-status]');
         const canvas = picker.querySelector('[data-map-canvas]');
 
-        if (!latInput || !lngInput || !canvas) return;
+        if (!latInput || !lngInput || !canvas || canvas._leaflet_id) return;
 
         const defaultLat = Number.parseFloat(latInput.value || '-0.502106');
         const defaultLng = Number.parseFloat(lngInput.value || '117.153709');
@@ -393,8 +394,14 @@ const initAdminMapPickers = () => {
             latInput.value = Number(lat).toFixed(7);
             lngInput.value = Number(lng).toFixed(7);
             marker.setLatLng([lat, lng]);
+            
+            const suspicious = lat < -4.5 || lat > 5.5 || lng < 113 || lng > 120;
+
             if (status) {
-                status.textContent = `Koordinat terpilih: ${Number(lat).toFixed(7)}, ${Number(lng).toFixed(7)}`;
+                status.innerHTML = `Koordinat terpilih: <span class="font-bold">${Number(lat).toFixed(7)}, ${Number(lng).toFixed(7)}</span>`;
+                if (suspicious) {
+                    status.innerHTML += ` <span class="bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full text-[10px] font-bold">Peringatan: Di luar Kaltim</span>`;
+                }
             }
         };
 
@@ -445,22 +452,42 @@ const initAdminMapPickers = () => {
         });
 
         searchButton?.addEventListener('click', async () => {
-            const keyword = searchInput?.value?.trim();
+            let keyword = searchInput?.value?.trim();
 
             if (!keyword) {
                 if (status) status.textContent = 'Masukkan alamat atau nama tempat yang ingin dicari.';
                 return;
             }
 
+            // Append Kaltim to improve accuracy
+            if (!keyword.toLowerCase().includes('kalimantan')) {
+                keyword += ', Kalimantan Timur';
+            }
+
             if (status) status.textContent = 'Mencari lokasi...';
 
             try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(keyword)}&limit=1`);
+                // Use Kaltim bounding box: 113.5, -2.5 to 119.5, 4.0
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(keyword)}&limit=1&bounded=1&viewbox=113.0,-3.5,120.0,5.5`);
                 const payload = await response.json();
                 const firstResult = payload?.[0];
 
                 if (!firstResult) {
-                    if (status) status.textContent = 'Lokasi tidak ditemukan.';
+                    // Try again without bounding box if first search fails
+                    const secondary = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(keyword)}&limit=1`);
+                    const secondaryPayload = await secondary.json();
+                    const secondResult = secondaryPayload?.[0];
+
+                    if (!secondResult) {
+                        if (status) status.textContent = 'Lokasi tidak ditemukan.';
+                        return;
+                    }
+                    
+                    const lat = Number.parseFloat(secondResult.lat);
+                    const lng = Number.parseFloat(secondResult.lon);
+                    updateFields(lat, lng);
+                    map.setView([lat, lng], 15);
+                    if (addressInput) addressInput.value = secondResult.display_name || addressInput.value;
                     return;
                 }
 
@@ -475,6 +502,15 @@ const initAdminMapPickers = () => {
                 }
             } catch (error) {
                 if (status) status.textContent = 'Gagal mencari lokasi.';
+            }
+        });
+
+        fetchAddressButton?.addEventListener('click', () => {
+            if (addressInput && addressInput.value.trim()) {
+                searchInput.value = addressInput.value;
+                searchButton.click();
+            } else {
+                if (status) status.textContent = 'Alamat kosong. Isi alamat terlebih dahulu.';
             }
         });
 

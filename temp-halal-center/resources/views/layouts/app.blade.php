@@ -28,6 +28,7 @@
                 @yield('content')
             </main>
             @include('components.footer', ['setting' => $setting])
+            @include('components.shared-modals')
         </div>
     </div>
 </body>

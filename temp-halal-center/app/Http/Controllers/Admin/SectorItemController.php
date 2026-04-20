@@ -8,7 +8,7 @@ use App\Models\SectorItem;
 class SectorItemController extends BaseCrudController
 {
     protected string $modelClass = SectorItem::class;
-    protected string $pageTitle = 'Sektor Ekonomi Syariah';
+    protected string $pageTitle = 'Manajemen Direktorat';
     protected string $routePrefix = 'admin.sector-items';
     protected string $requestClass = SectorItemRequest::class;
     protected array $searchColumns = ['title', 'summary', 'icon_key'];
@@ -20,8 +20,11 @@ class SectorItemController extends BaseCrudController
     protected array $formFields = [
         ['name' => 'title', 'label' => 'Judul', 'type' => 'text', 'required' => true],
         ['name' => 'icon_key', 'label' => 'Kunci Ikon Lucide', 'type' => 'text', 'required' => true],
-        ['name' => 'summary', 'label' => 'Ringkasan', 'type' => 'textarea'],
+        ['name' => 'summary', 'label' => 'Ringkasan di Kartu', 'type' => 'textarea'],
+        ['name' => 'content', 'label' => 'Konten Detail (Detail Page)', 'type' => 'richtext'],
         ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number', 'required' => true],
         ['name' => 'is_active', 'label' => 'Aktif', 'type' => 'checkbox'],
     ];
+
+    protected ?string $publicShowRoute = 'direktorat.show';
 }

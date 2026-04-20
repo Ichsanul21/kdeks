@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\FrequentlyAskedQuestion;
 use App\Models\GalleryItem;
 use App\Models\KnowledgeResource;
+use App\Models\HalalLocation;
 use App\Models\LphPartner;
 use App\Models\Mentor;
 use App\Models\OrganizationMember;
@@ -25,10 +26,29 @@ class LandingPageService
 {
     public function getHomepageData(): array
     {
-        $mapLocations = Umkm::query()
+        $locations = Umkm::query()
             ->with(['region', 'lphPartner'])
             ->where('status', 'published')
             ->get();
+
+        $halalLocations = HalalLocation::query()
+            ->with(['region', 'lphPartner'])
+            ->where('status', 'published')
+            ->get();
+
+        $mapLocations = $locations->concat($halalLocations->map(function ($loc) {
+            $u = new Umkm([
+                'nama_umkm' => $loc->name,
+                'kategori' => $loc->category,
+                'kab_kota' => $loc->city_name,
+                'kecamatan' => $loc->kecamatan,
+                'kelurahan' => $loc->kelurahan,
+                'lph_partner_id' => $loc->lph_partner_id,
+            ]);
+            $u->setRelation('region', $loc->region);
+            $u->setRelation('lphPartner', $loc->lphPartner);
+            return $u;
+        }));
 
         return [
             'setting' => SiteSetting::query()->first(),
@@ -56,6 +76,18 @@ class LandingPageService
                 ->values(),
             'mapCategories' => $mapLocations
                 ->pluck('kategori')
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values(),
+            'mapKecamatans' => $mapLocations
+                ->pluck('kecamatan')
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values(),
+            'mapKelurahans' => $mapLocations
+                ->pluck('kelurahan')
                 ->filter()
                 ->unique()
                 ->sort()

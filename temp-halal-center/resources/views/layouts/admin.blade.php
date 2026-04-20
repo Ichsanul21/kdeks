@@ -6,6 +6,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Prevent FOUC for sidebar mini state
         if (localStorage.getItem('sidebarMini') === 'true') {
@@ -13,6 +15,16 @@
         }
     </script>
     <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:block { display: block !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:hidden { display: none !important; }
         .sidebar-mini .lg\:\[\.sidebar-mini_\&\]\:w-20 { width: 5rem !important; }
@@ -33,16 +45,15 @@
             'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin'],
             'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open'],
             'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper'],
-            'admin.events.index' => ['label' => 'Agenda', 'icon' => 'calendar-days'],
-            'admin.gallery-items.index' => ['label' => 'Galeri', 'icon' => 'images'],
+            'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation'],
             'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2'],
             'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users'],
             'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map'],
             'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles'],
-            'admin.sector-items.index' => ['label' => 'Sektor', 'icon' => 'briefcase-business'],
+            'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business'],
             'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
             'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
-            'admin.consultation-requests.index' => ['label' => 'Konsultasi', 'icon' => 'messages-square'],
+            'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square'],
         ];
 
         if (auth()->user()?->hasRole('developer')) {
@@ -143,9 +154,9 @@
             @endif
 
             <main class="flex-1 overflow-y-auto p-6 md:p-8">
-                @if(session('status'))
-                    <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700 shadow-sm">
-                        {{ session('status') }}
+                @if(session('error'))
+                    <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-semibold text-rose-700 shadow-sm">
+                        {{ session('error') }}
                     </div>
                 @endif
 
@@ -166,7 +177,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script>
-        document.querySelectorAll('[data-richtext]').forEach((element) => {
+        document.querySelectorAll('[data-richtext]:not([data-quill-initialized])').forEach((element) => {
+            element.dataset.quillInitialized = 'true';
             const input = document.getElementById(element.dataset.input);
             const quill = new Quill(element, {
                 theme: 'snow',
@@ -220,5 +232,43 @@
             });
         })();
     </script>
+
+    @if(session('status'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('status') }}",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            background: '#ffffff',
+            customClass: {
+                popup: 'rounded-3xl border-none shadow-2xl',
+                title: 'font-heading text-slate-900',
+                htmlContainer: 'text-slate-600 font-medium'
+            }
+        });
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Ups!',
+            text: "{{ session('error') }}",
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#10b981',
+            background: '#ffffff',
+            customClass: {
+                popup: 'rounded-3xl border-none shadow-2xl',
+                title: 'font-heading text-slate-900',
+                htmlContainer: 'text-slate-600 font-medium',
+                confirmButton: 'rounded-xl px-6 py-3 font-bold'
+            }
+        });
+    </script>
+    @endif
 </body>
 </html>

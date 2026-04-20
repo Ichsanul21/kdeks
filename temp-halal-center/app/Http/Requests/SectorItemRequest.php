@@ -17,6 +17,7 @@ class SectorItemRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'icon_key' => ['required', 'string', 'max:100'],
             'summary' => ['nullable', 'string'],
+            'content' => ['nullable', 'string'],
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ];

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\Admin\UmkmProdukController;
 use App\Http\Controllers\Admin\WatermarkSettingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController as UserProfileController;
 use App\Http\Controllers\PublicContentController;
 use App\Http\Controllers\SearchController;
@@ -48,6 +49,31 @@ Route::get('/regulations', [PublicContentController::class, 'regulationsIndex'])
 Route::get('/regulations/{slug}', [PublicContentController::class, 'regulationShow'])->name('regulations.show');
 Route::get('/events', [PublicContentController::class, 'eventsIndex'])->name('events.index');
 Route::get('/events/{slug}', [PublicContentController::class, 'eventShow'])->name('events.show');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/direktorat/{slug}', [PublicContentController::class, 'direktoratShow'])->name('direktorat.show');
+
+Route::get('/siaran-pers', function () {
+    return view('public.siaran-pers-placeholder');
+})->name('siaran-pers');
+
+Route::get('/halaman/tentang-kami', function () {
+    return view('public.about');
+})->name('about');
+
+Route::get('/halaman/{slug}', function ($slug) {
+    $titles = [
+        'struktur-organisasi' => 'Struktur Organisasi',
+        'industri-produk-halal' => 'Industri Produk Halal',
+        'jasa-keuangan-syariah' => 'Jasa Keuangan Syariah',
+        'keuangan-sosial-syariah' => 'Keuangan Sosial Syariah',
+        'bisnis-kewirausahaan-syariah' => 'Bisnis dan Kewirausahaan Syariah',
+        'infrastruktur-ekosistem-syariah' => 'Infrastruktur Ekosistem Syariah',
+    ];
+    $title = $titles[$slug] ?? ucwords(str_replace('-', ' ', $slug));
+    return view('public.placeholder', compact('title'));
+})->name('page.placeholder');
 
 Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -69,6 +95,7 @@ Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as(
     Route::resource('gallery-items', GalleryItemController::class)->except(['show']);
     Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
     Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
+    Route::post('sehati-registrations/{sehati_registration}/approve', [SehatiRegistrationController::class, 'approve'])->name('sehati-registrations.approve');
     Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
     Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');
     Route::get('umkms/export', [UmkmController::class, 'export'])->name('umkms.export');

@@ -43,6 +43,7 @@
                         <div class="grid gap-3 md:grid-cols-[1fr,auto,auto]">
                             <input type="text" data-map-search class="admin-input" placeholder="Cari alamat atau nama tempat...">
                             <button type="button" data-map-search-button class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700">Cari Lokasi</button>
+                            <button type="button" data-map-fetch-address class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">Gunakan Alamat di Atas</button>
                             <button type="button" data-map-reverse-button class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700">Isi Alamat dari Titik</button>
                         </div>
                         <div data-map-canvas class="h-[360px] overflow-hidden rounded-[1.25rem] border border-slate-200"></div>
