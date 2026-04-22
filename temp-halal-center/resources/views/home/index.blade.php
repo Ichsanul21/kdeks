@@ -17,7 +17,7 @@
     @endphp
 
     {{-- ===== HERO SECTION ===== --}}
-    <section id="hero" class="relative flex items-center overflow-hidden pb-8 pt-24 lg:pb-16 lg:pt-32">
+    <section id="hero" class="relative flex flex-col overflow-hidden pb-8 pt-24 lg:pb-16 lg:pt-32">
         <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
         <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
 
@@ -60,7 +60,28 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        {{-- ===== SEHATI CTA ===== --}}
+        <div id="sehati" class="relative z-10 mt-10 flex flex-col items-center justify-center overflow-hidden bg-slate-900 px-6 py-20 md:mt-14 md:px-16 md:py-12">
+            <div class="pointer-events-none absolute -left-20 top-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-[120px]"></div>
+            <div class="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]"></div>
+
+            <div class="relative z-10 mx-auto max-w-5xl text-center">
+                <i data-lucide="quote" class="mx-auto mb-8 h-10 w-10 text-emerald-500/40 md:h-14 md:w-14"></i>
+
+                <blockquote class="font-heading text-2xl font-extrabold leading-snug tracking-tight text-white md:text-3xl lg:text-4xl lg:leading-tight">
+                    <span class="text-emerald-400">Menjadikan Indonesia</span> yang Mandiri, Makmur & Madani
+                    <br class="hidden sm:block">
+                    dengan Menjadi
+                    <span class="text-emerald-400">Pusat Ekonomi Syariah Terkemuka Dunia</span>
+                </blockquote>
+
+                <div class="mx-auto mt-10 h-px w-24 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+            </div>
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-7xl px-6">
             {{-- Statistik Sertifikasi Halal --}}
             {{-- <div class="mt-8 mb-4 md:mt-10">
                 <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Statistik Sertifikasi Halal</h2>
@@ -291,35 +312,6 @@
                             </a>
                         @endforeach
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ===== SEHATI CTA ===== --}}
-    <section id="sehati" class="relative z-10 py-20">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="relative flex flex-col items-center justify-between gap-10 overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:flex-row md:p-16">
-                <div class="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-[100px]"></div>
-                <div class="relative z-10 max-w-xl">
-                    <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.1em] text-white sm:text-[10px] sm:tracking-[0.28em]">
-                        100% Subsidi Pemerintah
-                    </div>
-                    <h2 class="mb-4 font-heading text-3xl font-extrabold tracking-tight text-white md:text-5xl">Program Sertifikasi <span class="text-emerald-400">SEHATI</span></h2>
-                    <p class="mb-6 font-medium leading-relaxed text-slate-300">
-                        Fasilitasi pembiayaan sertifikasi halal gratis untuk pelaku usaha mikro dan kecil melalui alur yang lebih ringan dan pendampingan yang terarah.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <span class="flex items-center gap-2 text-xs font-bold text-white"><i data-lucide="check-circle-2" class="h-4 w-4 text-emerald-400"></i> Proses Mudah</span>
-                        <span class="flex items-center gap-2 text-xs font-bold text-white"><i data-lucide="check-circle-2" class="h-4 w-4 text-emerald-400"></i> Didampingi LP3H</span>
-                    </div>
-                </div>
-
-                <div class="relative z-10 shrink-0">
-                    <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-2xl bg-emerald-500 px-8 py-4 font-extrabold text-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:-translate-y-1 hover:bg-emerald-400">
-                        Mulai Pendaftaran
-                        <i data-lucide="arrow-right" class="h-5 w-5"></i>
-                    </button>
                 </div>
             </div>
         </div>

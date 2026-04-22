@@ -11,235 +11,403 @@
         <div class="absolute -bottom-32 left-[30%] h-[400px] w-[400px] rounded-full bg-amber-100/10 blur-[120px]"></div>
     </div>
 
-    <div class="relative z-10 mx-auto max-w-6xl px-6">
+    <div class="relative z-10 mx-auto max-w-7xl px-6">
 
         {{-- ===== HEADER ===== --}}
-        <div class="mb-24 text-center">
+        <div class="mb-12 text-center">
             <h1 class="font-heading text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
                 Struktur <span class="text-gradient">Organisasi</span>
             </h1>
             <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-500">
-                Susunan kepengurusan Komite Daerah Ekonomi dan Keuangan Syariah Kalimantan Timur
+                Susunan kepengurusan Komite Nasional Ekonomi dan Keuangan Syariah serta Komite Daerah Ekonomi dan Keuangan Syariah Kalimantan Timur
             </p>
         </div>
 
         {{-- =========================================== --}}
-        {{--  SECTION 1 : MANAJEMEN EKSEKUTIF            --}}
+        {{--  GAMBAR THUMBNAIL KESELURUHAN              --}}
         {{-- =========================================== --}}
-        <div class="org-section mb-28">
-            <div class="mb-12 mt-8 text-center">
-                <h2 class="text-lg font-bold tracking-tight text-slate-900">Manajemen Eksekutif</h2>
+        <div class="mb-14 anim-up" style="animation-delay:.15s">
+            <div class="relative mx-auto max-w-4xl">
+                <div class="pointer-events-none absolute -inset-3 z-0 rounded-3xl">
+                    <div class="absolute left-0 top-0 h-8 w-8 rounded-tl-3xl border-l-2 border-t-2 border-emerald-200/60"></div>
+                    <div class="absolute right-0 top-0 h-8 w-8 rounded-tr-3xl border-r-2 border-t-2 border-emerald-200/60"></div>
+                    <div class="absolute bottom-0 left-0 h-8 w-8 rounded-bl-3xl border-b-2 border-l-2 border-emerald-200/60"></div>
+                    <div class="absolute bottom-0 right-0 h-8 w-8 rounded-br-3xl border-b-2 border-r-2 border-emerald-200/60"></div>
+                </div>
+                <div class="relative z-10 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-lg shadow-slate-200/40 md:p-5">
+                    <div class="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-emerald-50/40 to-transparent"></div>
+                    <img
+                        src="{{ asset('assets/img/struktur_organisasi.png') }}"
+                        alt="Struktur Organisasi KNEKS & KDEKS"
+                        class="relative w-full rounded-lg object-contain"
+                        loading="lazy"
+                    >
+                </div>
+                <div class="mt-4 flex items-center justify-center gap-2">
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Gambaran Struktur Keseluruhan</p>
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
+                </div>
+            </div>
+        </div>
+
+        {{-- DIVIDER 1 --}}
+        <div class="relative mb-14 flex items-center justify-center">
+            <div class="h-px w-full max-w-xs bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+            <div class="absolute flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 bg-white shadow-sm">
+                <i data-lucide="chevrons-down" class="h-4 w-4 text-slate-300"></i>
+            </div>
+        </div>
+
+        {{-- =========================================== --}}
+        {{--  KNEKS NASIONAL — Struktur Kartu            --}}
+        {{-- =========================================== --}}
+        <div class="org-section mb-14">
+            <div class="mb-10 text-center">
+                <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 px-4 py-1.5">
+                    <div class="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100">
+                        <i data-lucide="landmark" class="h-3 w-3 text-emerald-600"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">Nasional</span>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KNEKS</span></h2>
+                <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Nasional Ekonomi dan Keuangan Syariah</p>
             </div>
 
             <div class="org-tree relative">
-                {{-- SVG Connector Overlay --}}
                 <div class="org-connector absolute inset-0 pointer-events-none z-0"
                      data-line="#e2e8f0" data-dot="#94a3b8">
                     <svg class="w-full h-full"></svg>
                 </div>
 
-                {{-- Dirut --}}
+                {{-- Direktur Eksekutif --}}
                 <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
-                    <a href="{{ route('profile.member', 'dirut') }}" class="parent-link org-parent-card group block">
+                    <a href="{{ route('profile.member', 'sholahudin-al-aiyub') }}" class="parent-link org-parent-card group block">
                         <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
                             <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
                                 <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
                             </div>
-                            {{-- Badge lencana kiri atas --}}
                             <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
                                 <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
                             </div>
-                            {{-- Placeholder foto profil --}}
-                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 ring-4 ring-emerald-50/80 transition-all duration-400 group-hover:ring-emerald-100/80">
-                                <i data-lucide="user" class="h-7 w-7 text-slate-300 transition-transform duration-300 group-hover:scale-110"></i>
+                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
                             </div>
                             <div class="mt-3 text-center">
-                                <h3 class="text-sm font-bold text-slate-800">Nama Lengkap</h3>
-                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur Utama</p>
+                                <h3 class="text-sm font-bold text-slate-800">Sholahudin Al Aiyub</h3>
+                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur Eksekutif</p>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                {{-- Directors Grid --}}
-                <div class="org-grid mt-14 anim-fade relative z-10" style="animation-delay:.3s">
+                {{-- Direktorat Grid --}}
+                <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
                     @php
-                        $directors = [
-                            ['title' => 'Industri Produk Halal',   'icon' => 'package',          'color' => 'emerald'],
-                            ['title' => 'Jasa Keuangan Syariah',   'icon' => 'landmark',         'color' => 'blue'],
-                            ['title' => 'Keuangan Sosial Syariah', 'icon' => 'heart-handshake',  'color' => 'rose'],
-                            ['title' => 'Bisnis & Kewirausahaan Syariah',  'icon' => 'briefcase',        'color' => 'amber'],
-                            ['title' => 'Infrastruktur Ekosistem Syariah', 'icon' => 'server',           'color' => 'indigo'],
+                        $kneksDirs = [
+                            [
+                                'title' => 'Industri Produk Halal',
+                                'icon' => 'package',
+                                'color' => 'emerald',
+                                'name' => '',
+                                'vacant' => true,
+                                'subs' => [
+                                    ['title' => 'Deputi Infrastruktur Industri Halal / Plt. Deputi Pengembangan HAS', 'name' => 'Binsar Agung Hartanto Sitompul'],
+                                    ['title' => 'Deputi Rantai Nilai Produk Halal', 'name' => 'Umar Aditiawarman, Ph.D.'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Jasa Keuangan Syariah',
+                                'icon' => 'landmark',
+                                'color' => 'blue',
+                                'name' => '',
+                                'vacant' => true,
+                                'subs' => [],
+                            ],
+                            [
+                                'title' => 'Keuangan Sosial Syariah',
+                                'icon' => 'heart-handshake',
+                                'color' => 'rose',
+                                'name' => 'Dr. Dwi Irianti Hadiningdyah, S.H., M.A.',
+                                'plt' => 'Plt. Dir. Jasa Keuangan Syariah',
+                                'subs' => [
+                                    ['title' => 'Deputi Inklusi Keuangan Syariah / Plt. Deputi Perbankan Syariah', 'name' => 'Eka Jati Rahayu Firmansyah, S.H.I., M.E.I.'],
+                                    ['title' => 'Deputi LKMS / Plt. Deputi Dana Sosial Syariah', 'name' => 'Bagus Aryo, Ph.D'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Bisnis & Kewirausahaan Syariah',
+                                'icon' => 'briefcase',
+                                'color' => 'amber',
+                                'name' => 'Ir. H. Putu Rahwidhiyasa, MBA',
+                                'plt' => 'Plt. Dir. Industri Produk Halal',
+                                'subs' => [
+                                    ['title' => 'Deputi Kemitraan dan Akselerasi Usaha Syariah', 'name' => 'Achmad Iqbal, SP., M.E.'],
+                                    ['title' => 'Deputi Bisnis Digital dan Pusat Data Ekonomi Syariah', 'name' => 'Dedi Wibowo, S.E., M.M., Ph.D., CCRM.'],
+                                    ['title' => 'Deputi Inkubasi Bisnis Syariah', 'name' => 'Helma Agustiawan'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Infrastruktur Ekosistem Syariah',
+                                'icon' => 'server',
+                                'color' => 'indigo',
+                                'name' => 'Sutan Emir Hidayat, M.B.A., Ph.D.',
+                                'subs' => [
+                                    ['title' => 'Deputi Hukum Pengembangan Ekonomi Syariah', 'name' => 'Dr. Dece Kurniadi, SH., MM.'],
+                                    ['title' => 'Deputi Pengembangan SDM Ekonomi Syariah / Plt. Deputi Riset Ekonomi Syariah', 'name' => 'Mohamad Soleh Nurzaman, Ph.D'],
+                                    ['title' => 'Deputi Promosi dan Kerja Sama Strategis', 'name' => 'Drs. Inza Putra, MM'],
+                                ],
+                            ],
                         ];
                     @endphp
-                    @foreach($directors as $i => $d)
+                    @foreach($kneksDirs as $i => $d)
+                        @php
+                            $c = $d['color'];
+                            $hasSubs = !empty($d['subs']) && count(array_filter($d['subs'], fn($s) => !empty($s['name']))) > 0;
+                        @endphp
                         <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
                             {{-- Director Card --}}
-                            <a href="{{ route('profile.member', 'dir-'.$i) }}" class="child-card group block">
-                                <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $d['color'] }}-100/40 hover:border-{{ $d['color'] }}-200/80">
-                                    <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
-                                        <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $d['color'] }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                            @if(!empty($d['vacant']))
+                                <div class="child-card relative flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/30 px-3 py-5 opacity-50">
+                                    <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/60">
+                                        <i data-lucide="user-x" class="h-6 w-6 text-slate-300"></i>
                                     </div>
-                                    {{-- Badge lencana kiri atas --}}
-                                    <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $d['color'] }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                        <i data-lucide="{{ $d['icon'] }}" class="h-4 w-4 text-{{ $d['color'] }}-500"></i>
-                                    </div>
-                                    {{-- Placeholder foto profil --}}
-                                    <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 ring-4 ring-{{ $d['color'] }}-50/80 transition-all duration-400 group-hover:ring-{{ $d['color'] }}-100/80">
-                                        <i data-lucide="user" class="h-7 w-7 text-slate-300 transition-transform duration-300 group-hover:scale-110"></i>
-                                    </div>
-                                    <div class="mt-3 text-center">
-                                        <h3 class="text-sm font-bold text-slate-800">Nama Lengkap</h3>
-                                        <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
-                                        <p class="mt-2 line-clamp-2 text-[10px] font-semibold leading-snug text-{{ $d['color'] }}-500 uppercase tracking-tight">{{ $d['title'] }}</p>
+                                    <div class="mt-2.5 text-center">
+                                        <h3 class="text-xs font-semibold text-slate-400 leading-tight">Belum Ditentukan</h3>
+                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-300">Direktur</p>
+                                        <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-slate-400 uppercase tracking-tight">{{ $d['title'] }}</p>
                                     </div>
                                 </div>
-                            </a>
-
-                            {{-- Connector: Director → Deputy --}}
-                            <div class="relative flex justify-center h-5">
-                                <div class="w-px h-full bg-{{ $d['color'] }}-100"></div>
-                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-{{ $d['color'] }}-200 ring-1 ring-white"></div>
-                            </div>
-
-                            {{-- Deputy Card --}}
-                            <a href="{{ route('profile.member', 'wakil-dir-'.$i) }}" class="group block">
-                                <div class="flex flex-col items-center rounded-xl border border-slate-200/80 bg-slate-50/50 px-3 py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:border-{{ $d['color'] }}-200/60">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-white ring-1 ring-{{ $d['color'] }}-100/50">
-                                        <i data-lucide="user" class="h-3.5 w-3.5 text-{{ $d['color'] }}-300"></i>
+                            @else
+                                <a href="{{ route('profile.member', Str::slug($d['name'])) }}" class="child-card group block">
+                                    <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
+                                        <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
+                                            <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                                        </div>
+                                        <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                            <i data-lucide="{{ $d['icon'] }}" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
+                                        </div>
+                                        <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                            <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
+                                        </div>
+                                        <div class="mt-2.5 text-center">
+                                            <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $d['name'] }}</h3>
+                                            <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
+                                            <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ $d['title'] }}</p>
+                                            @if(!empty($d['plt']))
+                                                <div class="mt-1.5 inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200/60 px-1.5 py-0.5">
+                                                    <i data-lucide="arrow-right-left" class="h-2.5 w-2.5 text-amber-500"></i>
+                                                    <span class="text-[6px] font-bold uppercase tracking-wider text-amber-600">{{ $d['plt'] }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="mt-1.5 text-center">
-                                        <h3 class="text-[10px] font-semibold text-slate-600">Nama Lengkap</h3>
-                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.12em] text-slate-400">Wakil Direktur</p>
-                                    </div>
+                                </a>
+                            @endif
+
+                            {{-- Deputi Timeline --}}
+                            @if($hasSubs)
+                                <div class="relative mt-3 pl-4">
+                                    <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
+                                    @foreach($d['subs'] as $sub)
+                                        @if(!empty($sub['name']))
+                                            <div class="relative py-2">
+                                                <div class="absolute -left-[11px] top-1/2 -translate-y-1/2 h-[5px] w-[5px] rounded-full border-2 border-white bg-{{ $c }}-300"></div>
+                                                <a href="{{ route('profile.member', Str::slug($sub['name'])) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
+                                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-{{ $c }}-50">
+                                                        <i data-lucide="user" class="h-4 w-4 text-{{ $c }}-400"></i>
+                                                    </div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub['name'] }}</p>
+                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub['title'] }}</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
-                            </a>
+                            @endif
                         </div>
                     @endforeach
                 </div>
             </div>
+
+            <div class="mt-8 flex items-center justify-center gap-2">
+                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+                <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KNEKS</p>
+                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
+            </div>
+        </div>
+
+        {{-- DIVIDER 2 --}}
+        <div class="relative mb-14 flex items-center justify-center">
+            <div class="h-px w-full max-w-xs bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+            <div class="absolute flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 bg-white shadow-sm">
+                <i data-lucide="chevrons-down" class="h-4 w-4 text-slate-300"></i>
+            </div>
         </div>
 
         {{-- =========================================== --}}
-        {{--  SECTION 2 : SEKRETARIAT                     --}}
+        {{--  KDEKS DAERAH — Struktur Kartu              --}}
         {{-- =========================================== --}}
-        <div class="org-section">
-            <div class="mb-12 mt-8 text-center">
-                <h2 class="text-lg font-bold tracking-tight text-slate-900">Sekretariat</h2>
+        <div class="org-section mb-14">
+            <div class="mb-10 text-center">
+                <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-cyan-200/60 bg-cyan-50/70 px-4 py-1.5">
+                    <div class="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-100">
+                        <i data-lucide="map-pin" class="h-3 w-3 text-cyan-600"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-700">Daerah</span>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KDEKS</span></h2>
+                <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Daerah Ekonomi dan Keuangan Syariah Kalimantan Timur</p>
             </div>
 
             <div class="org-tree relative">
-                {{-- SVG Connector Overlay --}}
                 <div class="org-connector absolute inset-0 pointer-events-none z-0"
                      data-line="#e2e8f0" data-dot="#94a3b8">
                     <svg class="w-full h-full"></svg>
                 </div>
 
-                {{-- Ketua Sekretariat --}}
-                <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.7s">
-                    <a href="{{ route('profile.member', 'sekre-ketua') }}" class="parent-link org-parent-card group block">
-                        <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-cyan-100/40 hover:border-cyan-200/80">
+                {{-- Direktur Eksekutif --}}
+                <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
+                    <a href="{{ route('profile.member', 'muhammad-edwin') }}" class="parent-link org-parent-card group block">
+                        <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
                             <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
-                                <div class="h-full w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                                <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
                             </div>
-                            {{-- Badge lencana kiri atas --}}
-                            <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-cyan-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                <i data-lucide="stamp" class="h-4 w-4 text-cyan-500"></i>
+                            <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
                             </div>
-                            {{-- Placeholder foto profil --}}
-                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 ring-4 ring-cyan-50/80 transition-all duration-400 group-hover:ring-cyan-100/80">
-                                <i data-lucide="user" class="h-7 w-7 text-slate-300 transition-transform duration-300 group-hover:scale-110"></i>
+                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
                             </div>
                             <div class="mt-3 text-center">
-                                <h3 class="text-sm font-bold text-slate-800">Nama Lengkap</h3>
-                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Ketua Sekretariat</p>
+                                <h3 class="text-sm font-bold text-slate-800">Muhammad Edwin, S.Kom, MM</h3>
+                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur Eksekutif</p>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                {{-- Sub-units Grid --}}
-                <div class="org-grid mt-14 anim-fade relative z-10" style="animation-delay:.9s">
+                {{-- Direktorat Grid --}}
+                <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
                     @php
-                        $subUnits = [
-                            ['title' => 'Tata Usaha & Administrasi', 'icon' => 'file-text',    'color' => 'cyan'],
-                            ['title' => 'Keuangan & Perencanaan',     'icon' => 'calculator',   'color' => 'teal'],
-                            ['title' => 'Sumber Daya Manusia',        'icon' => 'users-round',  'color' => 'sky'],
+                        $directors = [
+                            [
+                                'title' => 'Industri Produk Halal',
+                                'icon' => 'package',
+                                'color' => 'emerald',
+                                'name' => 'drh. H. Marsongko',
+                                'subs' => [
+                                    ['title' => 'Kepala Divisi Pengembangan Halal Assurance System', 'name' => 'DR. Aswita'],
+                                    ['title' => 'Kepala Divisi Infrastruktur Industri Halal', 'name' => 'drh. Siti Saniatun Saadah, M.Si.'],
+                                    ['title' => 'Kepala Divisi Rantai Nilai Produk Halal', 'name' => 'Fitria Rahmah, S.E.I., M.A'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Jasa Keuangan Syariah',
+                                'icon' => 'landmark',
+                                'color' => 'blue',
+                                'name' => 'Denny Irfani, SE',
+                                'subs' => [
+                                    ['title' => 'Kepala Divisi Perbankan Syariah', 'name' => 'Bagus Sulistyo'],
+                                    ['title' => 'Kepala Divisi Jasa Keuangan Non-Bank Syariah', 'name' => 'Andika Dwi Prasetyo'],
+                                    ['title' => 'Kepala Divisi Pasar Modal Syariah', 'name' => 'Isna Yuningsih, SE, MM.'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Keuangan Sosial Syariah',
+                                'icon' => 'heart-handshake',
+                                'color' => 'rose',
+                                'name' => 'Sumadi Buton, S.Hut, ME.',
+                                'subs' => [
+                                    ['title' => 'Kepala Divisi Dana Sosial Syariah & LKMS', 'name' => 'Muhammad Iswadi, MSI'],
+                                    ['title' => 'Kepala Divisi Inklusi Keuangan Sosial Syariah', 'name' => 'Dr. Hj. Sri Wahyuni, SE,. M.Si'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Bisnis & Kewirausahaan Syariah',
+                                'icon' => 'briefcase',
+                                'color' => 'amber',
+                                'name' => 'Roni Suhendar, ST.',
+                                'subs' => [
+                                    ['title' => 'Kepala Divisi Kemitraan, Akselerasi Usaha & Inkubasi Bisnis Syariah', 'name' => "Naf'an"],
+                                    ['title' => 'Kepala Divisi Bisnis Digital & Pusat Data Ekonomi Syariah', 'name' => 'Ike Purnamasari, SE., M.M., Ph.D.'],
+                                ],
+                            ],
+                            [
+                                'title' => 'Infrastruktur Ekosistem Syariah',
+                                'icon' => 'server',
+                                'color' => 'indigo',
+                                'name' => 'Prof. DR. Bambang Iswanto, S.Ag., MH.',
+                                'subs' => [
+                                    ['title' => 'Kepala Divisi Hukum Pengembangan Ekonomi Syariah', 'name' => 'Akhmad Nur Zaroni, M.Ag.'],
+                                    ['title' => 'Kepala Divisi Promosi & Kerjasama Strategis', 'name' => 'Deni Dwi Arifendi'],
+                                    ['title' => 'Kepala Divisi Pengembangan SDM Ekonomi Syariah & Riset Ekonomi Syariah', 'name' => 'Dharma Yanti, SE., M.Si.'],
+                                ],
+                            ],
                         ];
                     @endphp
-                    @foreach($subUnits as $i => $s)
-                        <div class="anim-up" style="animation-delay:{{ ($i+10)*.08 }}s">
-                            {{-- Kepala Bidang Card --}}
-                            <a href="{{ route('profile.member', 'sekre-'.$i) }}" class="child-card group block">
-                                <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $s['color'] }}-100/40 hover:border-{{ $s['color'] }}-200/80">
-                                    <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
-                                        <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $s['color'] }}-300 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                    @foreach($directors as $i => $d)
+                        @php
+                            $c = $d['color'];
+                            $hasSubs = !empty($d['subs']) && count(array_filter($d['subs'], fn($s) => !empty($s['name']))) > 0;
+                        @endphp
+                        <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
+                            {{-- Director Card --}}
+                            <a href="{{ route('profile.member', Str::slug($d['name'])) }}" class="child-card group block">
+                                <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
+                                    <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
+                                        <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
                                     </div>
-                                    {{-- Badge lencana kiri atas --}}
-                                    <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $s['color'] }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                        <i data-lucide="{{ $s['icon'] }}" class="h-4 w-4 text-{{ $s['color'] }}-500"></i>
+                                    <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                        <i data-lucide="{{ $d['icon'] }}" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
                                     </div>
-                                    {{-- Placeholder foto profil --}}
-                                    <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 ring-4 ring-{{ $s['color'] }}-50/80 transition-all duration-400 group-hover:ring-{{ $s['color'] }}-100/80">
-                                        <i data-lucide="user" class="h-7 w-7 text-slate-300 transition-transform duration-300 group-hover:scale-110"></i>
+                                    <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                        <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
                                     </div>
-                                    <div class="mt-3 text-center">
-                                        <h3 class="text-sm font-bold text-slate-800">Nama Lengkap</h3>
-                                        <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Kepala Bidang</p>
-                                        <p class="mt-2 line-clamp-2 text-[10px] font-semibold leading-snug text-{{ $s['color'] }}-500 uppercase tracking-tight">{{ $s['title'] }}</p>
+                                    <div class="mt-2.5 text-center">
+                                        <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $d['name'] }}</h3>
+                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
+                                        <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ $d['title'] }}</p>
                                     </div>
                                 </div>
                             </a>
 
-                            {{-- Connector: Kepala Bidang → Wakil --}}
-                            <div class="relative flex justify-center h-5">
-                                <div class="w-px h-full bg-{{ $s['color'] }}-100"></div>
-                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-{{ $s['color'] }}-200 ring-1 ring-white"></div>
-                            </div>
-
-                            {{-- Wakil Kepala Bidang Card --}}
-                            <a href="{{ route('profile.member', 'wakil-sekre-'.$i) }}" class="group block">
-                                <div class="flex flex-col items-center rounded-xl border border-slate-200/80 bg-slate-50/50 px-3 py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:border-{{ $s['color'] }}-200/60">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-white ring-1 ring-{{ $s['color'] }}-100/50">
-                                        <i data-lucide="user" class="h-3.5 w-3.5 text-{{ $s['color'] }}-300"></i>
-                                    </div>
-                                    <div class="mt-1.5 text-center">
-                                        <h3 class="text-[10px] font-semibold text-slate-600">Nama Lengkap</h3>
-                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.12em] text-slate-400">Wakil Kepala Bidang</p>
-                                    </div>
+                            {{-- Kepala Divisi Timeline --}}
+                            @if($hasSubs)
+                                <div class="relative mt-3 pl-4">
+                                    <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
+                                    @foreach($d['subs'] as $sub)
+                                        @if(!empty($sub['name']))
+                                            <div class="relative py-2">
+                                                <div class="absolute -left-[11px] top-1/2 -translate-y-1/2 h-[5px] w-[5px] rounded-full border-2 border-white bg-{{ $c }}-300"></div>
+                                                <a href="{{ route('profile.member', Str::slug($sub['name'])) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
+                                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-{{ $c }}-50">
+                                                        <i data-lucide="user" class="h-4 w-4 text-{{ $c }}-400"></i>
+                                                    </div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub['name'] }}</p>
+                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub['title'] }}</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
-                            </a>
+                            @endif
                         </div>
                     @endforeach
                 </div>
             </div>
-        </div>
 
-        {{-- ===== LEGEND ===== --}}
-        <div class="mt-16 flex flex-col items-center gap-3">
-            <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5">
-                <span class="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-300">Eksekutif</span>
-                @foreach($directors as $d)
-                    <div class="flex items-center gap-1.5">
-                        <div class="h-1.5 w-1.5 rounded-full bg-{{ $d['color'] }}-400"></div>
-                        <span class="text-[9px] font-medium text-slate-400">{{ $d['title'] }}</span>
-                    </div>
-                @endforeach
-            </div>
-            <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5">
-                <span class="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-300">Sekretariat</span>
-                @foreach($subUnits as $s)
-                    <div class="flex items-center gap-1.5">
-                        <div class="h-1.5 w-1.5 rounded-full bg-{{ $s['color'] }}-300"></div>
-                        <span class="text-[9px] font-medium text-slate-400">{{ $s['title'] }}</span>
-                    </div>
-                @endforeach
+            <div class="mt-8 flex items-center justify-center gap-2">
+                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+                <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KDEKS Kalimantan Timur</p>
+                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
             </div>
         </div>
 
-        <p class="mt-8 text-center text-[10px] font-medium tracking-wide text-slate-300">
-            Dokumen ini bersifat resmi dan diterbitkan oleh KDEKS Kalimantan Timur
-        </p>
     </div>
 </div>
 
@@ -293,7 +461,6 @@ function drawConnectors() {
         rows.push(cur);
 
         var html = '';
-
         html += '<circle cx="' + px + '" cy="' + parentBot + '" r="3.5" fill="' + dotClr + '" stroke="#fff" stroke-width="2"/>';
 
         var primaryBarY = rows[0][0].top - 32;
@@ -320,11 +487,8 @@ function drawConnectors() {
         @apply bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent;
     }
 
-    /* Ukuran card — digunakan bersama oleh parent card & grid items */
-    .org-parent-card,
-    .org-grid > * {
-        width: calc(33.333% - 1rem);
-        min-width: 190px;
+    .org-parent-card {
+        width: 220px;
     }
 
     .org-grid {
@@ -333,14 +497,44 @@ function drawConnectors() {
         justify-content: center;
         gap: 1.5rem;
     }
-
-    @media (max-width: 767px) {
-        .org-parent-card,
-        .org-grid > * { width: calc(50% - 0.75rem); }
+    .org-grid > * {
+        width: calc(33.333% - 1rem);
+        min-width: 190px;
     }
-    @media (max-width: 480px) {
-        .org-parent-card,
-        .org-grid > * { width: 100%; }
+
+    .org-grid-5 {
+        gap: 0.75rem;
+    }
+    .org-grid-5 > * {
+        width: calc(20% - 0.6rem);
+        min-width: 160px;
+    }
+
+    @media (max-width: 1023px) {
+        .org-grid-5 {
+            gap: 1rem;
+        }
+        .org-grid-5 > * {
+            width: calc(33.333% - 0.67rem);
+            min-width: 170px;
+        }
+    }
+    @media (max-width: 639px) {
+        .org-parent-card {
+            width: 180px;
+        }
+        .org-grid > *,
+        .org-grid-5 > * {
+            width: calc(50% - 0.75rem);
+            min-width: 150px;
+        }
+    }
+    @media (max-width: 374px) {
+        .org-grid > *,
+        .org-grid-5 > * {
+            width: 100%;
+            min-width: 0;
+        }
     }
 
     .anim-up   { animation: slideUp .7s cubic-bezier(.16,1,.3,1) both; }
