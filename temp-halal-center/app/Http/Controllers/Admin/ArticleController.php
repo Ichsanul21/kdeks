@@ -25,11 +25,8 @@ class ArticleController extends BaseCrudController
     protected array $formFields = [
         ['name' => 'type', 'label' => 'Tipe Konten', 'type' => 'select', 'options' => ['news' => 'Berita', 'publication' => 'Publikasi', 'research' => 'Riset']],
         ['name' => 'title', 'label' => 'Judul', 'type' => 'text', 'required' => true],
-        ['name' => 'title_en', 'label' => 'Judul EN', 'type' => 'text'],
         ['name' => 'excerpt', 'label' => 'Ringkasan', 'type' => 'textarea'],
-        ['name' => 'excerpt_en', 'label' => 'Ringkasan EN', 'type' => 'textarea'],
         ['name' => 'body', 'label' => 'Isi Konten', 'type' => 'richtext', 'required' => true],
-        ['name' => 'body_en', 'label' => 'Isi Konten EN', 'type' => 'richtext'],
         ['name' => 'author_name', 'label' => 'Penulis', 'type' => 'text'],
         ['name' => 'status', 'label' => 'Status', 'type' => 'select', 'options' => ['published' => 'Published', 'draft' => 'Draft']],
         ['name' => 'is_featured', 'label' => 'Featured', 'type' => 'checkbox'],

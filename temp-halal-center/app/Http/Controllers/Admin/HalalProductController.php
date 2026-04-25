@@ -36,7 +36,6 @@ class HalalProductController extends BaseCrudController
             ['name' => 'certificate_issued_at', 'label' => 'Terbit', 'type' => 'date'],
             ['name' => 'certificate_expires_at', 'label' => 'Expired', 'type' => 'date'],
             ['name' => 'description', 'label' => 'Deskripsi', 'type' => 'richtext'],
-            ['name' => 'description_en', 'label' => 'Deskripsi EN', 'type' => 'richtext'],
             ['name' => 'product_url', 'label' => 'URL Produk', 'type' => 'url'],
             ['name' => 'status', 'label' => 'Status', 'type' => 'select', 'options' => ['published' => 'Published', 'draft' => 'Draft']],
             ['name' => 'is_featured', 'label' => 'Featured', 'type' => 'checkbox'],

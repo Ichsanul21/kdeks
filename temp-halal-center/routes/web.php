@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CertificationPathController;
 use App\Http\Controllers\Admin\ConsultationRequestController as AdminConsultationRequestController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -82,6 +83,7 @@ Route::get('/halaman/{slug}', function ($slug) {
 Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('site-settings', SiteSettingController::class)->except(['show']);
+    Route::resource('banners', BannerController::class)->except(['show']);
     Route::resource('regions', RegionController::class)->except(['show']);
     Route::resource('lph-partners', LphPartnerController::class)->except(['show']);
     Route::resource('program-slides', ProgramSlideController::class)->except(['show']);

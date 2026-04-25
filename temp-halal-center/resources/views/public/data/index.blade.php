@@ -682,11 +682,12 @@
                                     Komunitas</button>
                                 <button data-nas-view="sdm-pendidikan"
                                     class="nas-sub-nav-btn w-full text-left px-11 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition-colors hover:text-emerald-600">SDM
-                                    & Pendidikan</button>
-                                <button data-nas-view="kelembagaan-daerah"
-                                    class="nas-sub-nav-btn w-full text-left px-11 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition-colors hover:text-emerald-600">Kelembagaan
-                                    Daerah</button>
-                            </div>
+                                    Ekonomi Syariah</button>
+                                <button data-nas-view="sosialisasi-brand"
+                                    class="nas-sub-nav-btn w-full text-left px-11 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition-colors hover:text-emerald-600">Sosialisasi Brand</button>
+                                <button data-nas-view="kdeks"
+                                    class="nas-sub-nav-btn w-full text-left px-11 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition-colors hover:text-emerald-600">KDEKS</button>
+
                         </div>
                     </div>
                 </aside>
@@ -4101,6 +4102,291 @@
                                 <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-5">
                                     <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Perkembangan Transaksi</p>
                                     <div class="h-[300px]"><canvas id="chartNasAgenMasjidTrans"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 7.4 SDM Ekonomi Syariah --}}
+                    <div id="nasView-sdm-pendidikan" class="hidden nas-view-content space-y-10">
+                        {{-- Header --}}
+                        <div>
+                            <div class="mb-4 flex items-center gap-3">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                    <i data-lucide="book-open" class="h-4 w-4"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">SDM Unggul Sektor Ekonomi dan Keuangan Syariah</h2>
+                                    <p class="text-[10px] text-slate-400 sm:text-xs">Data Sekolah, Kurikulum Industri Halal, PKS/MoU, dan Akreditasi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Sekolah Pelopor --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Sekolah Pelopor Ekonomi Syariah</h3>
+                                <div class="grid grid-cols-3 gap-4 mb-6">
+                                    <div class="rounded-xl bg-slate-50 p-4 border border-slate-100">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Sekolah</p>
+                                        <p id="sdmTotalSekolah" class="mt-1 text-2xl font-extrabold text-emerald-600">0</p>
+                                    </div>
+                                    <div class="rounded-xl bg-slate-50 p-4 border border-slate-100">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total SMA</p>
+                                        <p id="sdmTotalSma" class="mt-1 text-2xl font-extrabold text-blue-600">0</p>
+                                    </div>
+                                    <div class="rounded-xl bg-slate-50 p-4 border border-slate-100">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total SMK</p>
+                                        <p id="sdmTotalSmk" class="mt-1 text-2xl font-extrabold text-amber-600">0</p>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Sebaran Provinsi (SMA & SMK)</p>
+                                        <div class="h-[280px]"><canvas id="chartSdmSekolahProv"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Pertumbuhan Sekolah</p>
+                                        <div class="h-[280px]"><canvas id="chartSdmSekolahTrend"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Kampus Kurikulum Industri Halal --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Kampus Dengan Implementasi Kurikulum Industri Halal</h3>
+                                <div class="grid gap-4 md:grid-cols-3">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Instansi PKS per Tahun</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihPksTrend"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Direktorat Bekerja Sama (PKS)</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihPksDir"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Kategori Instansi (PKS)</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihPksKat"></canvas></div>
+                                    </div>
+                                </div>
+                                <hr class="my-6 border-slate-100">
+                                <div class="grid gap-4 md:grid-cols-3">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Instansi MoU per Tahun</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihMouTrend"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Direktorat Bekerja Sama (MoU)</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihMouDir"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Kategori Instansi (MoU)</p>
+                                        <div class="h-[220px]"><canvas id="chartSdmKihMouKat"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- PKS dan MoU Perguruan Tinggi --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">PKS Perguruan Tinggi</h3>
+                                <div class="grid gap-4 md:grid-cols-2 mb-6">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Jumlah PKS (2019-2025)</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmPksTahun"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Instansi dengan PKS Terbanyak</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmPksInstansi"></canvas></div>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">PKS berdasarkan Direktorat</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmPksDirAll"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">PKS berdasarkan Kategori</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmPksKatAll"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">MoU Perguruan Tinggi</h3>
+                                <div class="grid gap-4 md:grid-cols-2 mb-6">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Jumlah MoU (2020-2025)</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmMouTahun"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Instansi dengan MoU Terbanyak</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmMouInstansi"></canvas></div>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">MoU berdasarkan Direktorat</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmMouDirAll"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">MoU berdasarkan Kategori</p>
+                                        <div class="h-[240px]"><canvas id="chartSdmMouKatAll"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Data Akreditasi PT --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Data Akreditasi Perguruan Tinggi</h3>
+                                <div class="grid gap-4 md:grid-cols-3 mb-6">
+                                    <div class="rounded-xl bg-emerald-50 p-4 border border-emerald-100 flex flex-col justify-center items-center">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-2">Total Prodi</p>
+                                        <p id="sdmTotalProdi" class="text-4xl font-extrabold text-emerald-700">0</p>
+                                    </div>
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Distribusi Akreditasi</p>
+                                        <div class="h-[180px]"><canvas id="chartSdmAkreDist"></canvas></div>
+                                    </div>
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Akreditasi Dosen (%)</p>
+                                        <div class="h-[180px]"><canvas id="chartSdmAkreDosen"></canvas></div>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 md:grid-cols-3">
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Instansi Pembina</p>
+                                        <div class="h-[280px]"><canvas id="chartSdmAkrePembina"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">PTKIN vs NON PTKIN</p>
+                                        <div class="h-[280px]"><canvas id="chartSdmAkrePtkin"></canvas></div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">Akreditasi per Jenjang</p>
+                                        <div class="h-[280px]"><canvas id="chartSdmAkreJenjang"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 7.5 Sosialisasi Brand --}}
+                    <div id="nasView-sosialisasi-brand" class="hidden nas-view-content space-y-10">
+                        {{-- Header --}}
+                        <div>
+                            <div class="mb-4 flex items-center gap-3">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                    <i data-lucide="award" class="h-4 w-4"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Sosialisasi Lanjutan Brand Ekonomi Syariah</h2>
+                                    <p class="text-[10px] text-slate-400 sm:text-xs">Awareness Brand Ekonomi Syariah dan Anugerah Adinata Syariah</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Awareness Brand --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Awareness Brand Ekonomi Syariah</h3>
+                                <div class="h-[300px]"><canvas id="chartNasSosialisasiAwareness"></canvas></div>
+                            </div>
+                        </div>
+
+                        {{-- Anugerah Adinata Syariah --}}
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="font-heading text-sm font-bold text-slate-800">Juara Anugerah Adinata Syariah</h3>
+                                    <div class="flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-2 border border-emerald-100">
+                                        <i data-lucide="trophy" class="h-4 w-4 text-emerald-600"></i>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Juara Umum: <span id="sosialisasiJuaraUmum" class="text-emerald-900 ml-1"></span></span>
+                                    </div>
+                                </div>
+                                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                                    <table class="w-full text-left text-sm text-slate-500">
+                                        <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-700">
+                                            <tr>
+                                                <th class="px-4 py-3">Kategori</th>
+                                                <th class="px-4 py-3">Juara 1</th>
+                                                <th class="px-4 py-3">Juara 2</th>
+                                                <th class="px-4 py-3">Juara 3</th>
+                                                <th class="px-4 py-3">Juara 4</th>
+                                                <th class="px-4 py-3">Juara 5</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableNasSosialisasiAdinata" class="divide-y divide-slate-100 bg-white">
+                                            <!-- Data disisipkan via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 7.6 KDEKS --}}
+                    <div id="nasView-kdeks" class="hidden nas-view-content space-y-10">
+                        {{-- Header --}}
+                        <div>
+                            <div class="mb-4 flex items-center gap-3">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                    <i data-lucide="map-pin" class="h-4 w-4"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Kelembagaan Ekonomi dan Keuangan Syariah Daerah</h2>
+                                    <p class="text-[10px] text-slate-400 sm:text-xs">Data dan Sebaran Komite Daerah Ekonomi dan Keuangan Syariah</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-4 flex flex-col justify-center">
+                                <h3 class="mb-2 font-heading text-sm font-bold text-slate-800 text-center">Jumlah KDEKS</h3>
+                                <p id="kdeksTotalCount" class="text-6xl font-extrabold text-emerald-600 text-center">0</p>
+                                <p class="text-center text-xs text-slate-400 mt-2 font-medium uppercase tracking-wide">Tersebar di Indonesia</p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-8">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Pertumbuhan KDEKS</h3>
+                                <div class="h-[220px]"><canvas id="chartNasKdeksTrend"></canvas></div>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Sebaran KDEKS di Indonesia</h3>
+                                <div class="h-[400px] overflow-hidden rounded-xl border border-slate-200 relative">
+                                    <div id="nasMapKdeksFallback" class="hidden absolute inset-0 flex items-center justify-center bg-slate-50">
+                                        <p class="text-sm text-slate-500 font-medium">Peta tidak dapat dimuat (Leaflet JS hilang)</p>
+                                    </div>
+                                    <div id="nasKdeksMap" class="h-full w-full bg-slate-50 z-0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-12">
+                            <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
+                                <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">Daftar KDEKS</h3>
+                                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                                    <table class="w-full text-left text-sm text-slate-500">
+                                        <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-700">
+                                            <tr>
+                                                <th class="px-4 py-3">Provinsi</th>
+                                                <th class="px-4 py-3">Nomor SK</th>
+                                                <th class="px-4 py-3">Tanggal SK</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableNasKdeks" class="divide-y divide-slate-100 bg-white">
+                                            <!-- Data disisipkan via JS -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

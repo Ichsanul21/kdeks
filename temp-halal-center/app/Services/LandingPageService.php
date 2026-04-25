@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use App\Models\Banner;
 use App\Models\CertificationPath;
 use App\Models\Event;
 use App\Models\FrequentlyAskedQuestion;
@@ -52,6 +53,7 @@ class LandingPageService
 
         return [
             'setting' => SiteSetting::query()->first(),
+            'banners' => Banner::query()->where('is_active', true)->orderBy('sort_order')->get(),
             'slides' => ProgramSlide::query()->where('status', 'published')->orderBy('sort_order')->get(),
             'regions' => Region::query()->orderBy('sort_order')->get(),
             'lphPartners' => LphPartner::query()->where('is_active', true)->orderBy('sort_order')->get(),

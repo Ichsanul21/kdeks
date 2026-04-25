@@ -9,7 +9,6 @@ class OrganizationMember extends Model
     protected $fillable = [
         'name',
         'role_title',
-        'role_title_en',
         'bio',
         'photo_path',
         'email',
@@ -17,7 +16,19 @@ class OrganizationMember extends Model
         'expertise',
         'sort_order',
         'is_board_member',
+        'category',
+        'parent_id',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(OrganizationMember::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(OrganizationMember::class, 'parent_id')->orderBy('sort_order');
+    }
 
     protected function casts(): array
     {

@@ -18,16 +18,26 @@ class OrganizationMemberController extends BaseCrudController
         ['key' => 'expertise', 'label' => 'Keahlian'],
     ];
     protected array $publicFileFields = ['photo_path'];
-    protected array $formFields = [
-        ['name' => 'name', 'label' => 'Nama', 'type' => 'text', 'required' => true],
-        ['name' => 'role_title', 'label' => 'Jabatan', 'type' => 'text', 'required' => true],
-        ['name' => 'role_title_en', 'label' => 'Jabatan EN', 'type' => 'text'],
-        ['name' => 'bio', 'label' => 'Bio', 'type' => 'richtext'],
-        ['name' => 'email', 'label' => 'Email', 'type' => 'email'],
-        ['name' => 'phone', 'label' => 'Telepon', 'type' => 'text'],
-        ['name' => 'expertise', 'label' => 'Keahlian', 'type' => 'text'],
-        ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number'],
-        ['name' => 'is_board_member', 'label' => 'Dewan Pakar', 'type' => 'checkbox'],
-        ['name' => 'photo_path', 'label' => 'Foto', 'type' => 'image'],
-    ];
+
+    protected function resolvedFields(): array
+    {
+        $members = OrganizationMember::query()
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->all();
+
+        return [
+            ['name' => 'category', 'label' => 'Kategori', 'type' => 'select', 'options' => ['kneks' => 'KNEKS', 'kdeks' => 'KDEKS']],
+            ['name' => 'parent_id', 'label' => 'Atasan (Parent)', 'type' => 'select', 'options' => $members],
+            ['name' => 'name', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'role_title', 'label' => 'Jabatan', 'type' => 'text', 'required' => true],
+            ['name' => 'bio', 'label' => 'Bio', 'type' => 'richtext'],
+            ['name' => 'email', 'label' => 'Email', 'type' => 'email'],
+            ['name' => 'phone', 'label' => 'Telepon', 'type' => 'text'],
+            ['name' => 'expertise', 'label' => 'Keahlian', 'type' => 'text'],
+            ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number'],
+            ['name' => 'is_board_member', 'label' => 'Dewan Pakar', 'type' => 'checkbox'],
+            ['name' => 'photo_path', 'label' => 'Foto', 'type' => 'image'],
+        ];
+    }
 }

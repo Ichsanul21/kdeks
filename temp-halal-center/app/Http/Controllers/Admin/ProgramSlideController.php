@@ -20,11 +20,8 @@ class ProgramSlideController extends BaseCrudController
     protected array $publicFileFields = ['image_path'];
     protected array $formFields = [
         ['name' => 'title', 'label' => 'Judul', 'type' => 'text', 'required' => true],
-        ['name' => 'title_en', 'label' => 'Judul EN', 'type' => 'text'],
         ['name' => 'subtitle', 'label' => 'Subjudul', 'type' => 'text'],
-        ['name' => 'subtitle_en', 'label' => 'Subjudul EN', 'type' => 'text'],
         ['name' => 'description', 'label' => 'Deskripsi', 'type' => 'richtext'],
-        ['name' => 'description_en', 'label' => 'Deskripsi EN', 'type' => 'richtext'],
         ['name' => 'cta_label', 'label' => 'Label Tombol', 'type' => 'text'],
         ['name' => 'cta_url', 'label' => 'URL Tombol', 'type' => 'url'],
         ['name' => 'status', 'label' => 'Status', 'type' => 'select', 'options' => ['published' => 'Published', 'draft' => 'Draft']],

@@ -36,12 +36,18 @@
                 </div>
                 <div class="relative z-10 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-lg shadow-slate-200/40 md:p-5">
                     <div class="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-emerald-50/40 to-transparent"></div>
-                    <img
-                        src="{{ asset('assets/img/struktur_organisasi.png') }}"
-                        alt="Struktur Organisasi KNEKS & KDEKS"
-                        class="relative w-full rounded-lg object-contain"
-                        loading="lazy"
-                    >
+                    @if($setting?->organization_structure_image_path)
+                        <img
+                            src="{{ asset('storage/'.$setting->organization_structure_image_path) }}"
+                            alt="Struktur Organisasi KNEKS & KDEKS"
+                            class="relative w-full rounded-lg object-contain"
+                            loading="lazy"
+                        >
+                    @else
+                        <div class="flex items-center justify-center py-20 bg-slate-50 rounded-lg border-2 border-dashed border-slate-200">
+                            <p class="text-slate-400 font-bold uppercase tracking-widest">Gambar struktur belum tersedia</p>
+                        </div>
+                    @endif
                 </div>
                 <div class="mt-4 flex items-center justify-center gap-2">
                     <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
@@ -62,182 +68,127 @@
         {{-- =========================================== --}}
         {{--  KNEKS NASIONAL — Struktur Kartu            --}}
         {{-- =========================================== --}}
-        <div class="org-section mb-14">
-            <div class="mb-10 text-center">
-                <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 px-4 py-1.5">
-                    <div class="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100">
-                        <i data-lucide="landmark" class="h-3 w-3 text-emerald-600"></i>
-                    </div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">Nasional</span>
-                </div>
-                <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KNEKS</span></h2>
-                <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Nasional Ekonomi dan Keuangan Syariah</p>
-            </div>
-
-            <div class="org-tree relative">
-                <div class="org-connector absolute inset-0 pointer-events-none z-0"
-                     data-line="#e2e8f0" data-dot="#94a3b8">
-                    <svg class="w-full h-full"></svg>
-                </div>
-
-                {{-- Direktur Eksekutif --}}
-                <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
-                    <a href="{{ route('profile.member', 'sholahudin-al-aiyub') }}" class="parent-link org-parent-card group block">
-                        <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
-                            <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
-                                <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
-                            </div>
-                            <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
-                            </div>
-                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
-                                <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
-                            </div>
-                            <div class="mt-3 text-center">
-                                <h3 class="text-sm font-bold text-slate-800">Sholahudin Al Aiyub</h3>
-                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur Eksekutif</p>
-                            </div>
+        @if($kneksExecutive)
+            <div class="org-section mb-14">
+                <div class="mb-10 text-center">
+                    <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 px-4 py-1.5">
+                        <div class="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100">
+                            <i data-lucide="landmark" class="h-3 w-3 text-emerald-600"></i>
                         </div>
-                    </a>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">Nasional</span>
+                    </div>
+                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KNEKS</span></h2>
+                    <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Nasional Ekonomi dan Keuangan Syariah</p>
                 </div>
 
-                {{-- Direktorat Grid --}}
-                <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
-                    @php
-                        $kneksDirs = [
-                            [
-                                'title' => 'Industri Produk Halal',
-                                'icon' => 'package',
-                                'color' => 'emerald',
-                                'name' => '',
-                                'vacant' => true,
-                                'subs' => [
-                                    ['title' => 'Deputi Infrastruktur Industri Halal / Plt. Deputi Pengembangan HAS', 'name' => 'Binsar Agung Hartanto Sitompul'],
-                                    ['title' => 'Deputi Rantai Nilai Produk Halal', 'name' => 'Umar Aditiawarman, Ph.D.'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Jasa Keuangan Syariah',
-                                'icon' => 'landmark',
-                                'color' => 'blue',
-                                'name' => '',
-                                'vacant' => true,
-                                'subs' => [],
-                            ],
-                            [
-                                'title' => 'Keuangan Sosial Syariah',
-                                'icon' => 'heart-handshake',
-                                'color' => 'rose',
-                                'name' => 'Dr. Dwi Irianti Hadiningdyah, S.H., M.A.',
-                                'plt' => 'Plt. Dir. Jasa Keuangan Syariah',
-                                'subs' => [
-                                    ['title' => 'Deputi Inklusi Keuangan Syariah / Plt. Deputi Perbankan Syariah', 'name' => 'Eka Jati Rahayu Firmansyah, S.H.I., M.E.I.'],
-                                    ['title' => 'Deputi LKMS / Plt. Deputi Dana Sosial Syariah', 'name' => 'Bagus Aryo, Ph.D'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Bisnis & Kewirausahaan Syariah',
-                                'icon' => 'briefcase',
-                                'color' => 'amber',
-                                'name' => 'Ir. H. Putu Rahwidhiyasa, MBA',
-                                'plt' => 'Plt. Dir. Industri Produk Halal',
-                                'subs' => [
-                                    ['title' => 'Deputi Kemitraan dan Akselerasi Usaha Syariah', 'name' => 'Achmad Iqbal, SP., M.E.'],
-                                    ['title' => 'Deputi Bisnis Digital dan Pusat Data Ekonomi Syariah', 'name' => 'Dedi Wibowo, S.E., M.M., Ph.D., CCRM.'],
-                                    ['title' => 'Deputi Inkubasi Bisnis Syariah', 'name' => 'Helma Agustiawan'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Infrastruktur Ekosistem Syariah',
-                                'icon' => 'server',
-                                'color' => 'indigo',
-                                'name' => 'Sutan Emir Hidayat, M.B.A., Ph.D.',
-                                'subs' => [
-                                    ['title' => 'Deputi Hukum Pengembangan Ekonomi Syariah', 'name' => 'Dr. Dece Kurniadi, SH., MM.'],
-                                    ['title' => 'Deputi Pengembangan SDM Ekonomi Syariah / Plt. Deputi Riset Ekonomi Syariah', 'name' => 'Mohamad Soleh Nurzaman, Ph.D'],
-                                    ['title' => 'Deputi Promosi dan Kerja Sama Strategis', 'name' => 'Drs. Inza Putra, MM'],
-                                ],
-                            ],
-                        ];
-                    @endphp
-                    @foreach($kneksDirs as $i => $d)
-                        @php
-                            $c = $d['color'];
-                            $hasSubs = !empty($d['subs']) && count(array_filter($d['subs'], fn($s) => !empty($s['name']))) > 0;
-                        @endphp
-                        <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
-                            {{-- Director Card --}}
-                            @if(!empty($d['vacant']))
-                                <div class="child-card relative flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/30 px-3 py-5 opacity-50">
-                                    <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/60">
-                                        <i data-lucide="user-x" class="h-6 w-6 text-slate-300"></i>
-                                    </div>
-                                    <div class="mt-2.5 text-center">
-                                        <h3 class="text-xs font-semibold text-slate-400 leading-tight">Belum Ditentukan</h3>
-                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-300">Direktur</p>
-                                        <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-slate-400 uppercase tracking-tight">{{ $d['title'] }}</p>
-                                    </div>
+                <div class="org-tree relative">
+                    <div class="org-connector absolute inset-0 pointer-events-none z-0"
+                         data-line="#e2e8f0" data-dot="#94a3b8">
+                        <svg class="w-full h-full"></svg>
+                    </div>
+
+                    {{-- Executive Card --}}
+                    <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
+                        <a href="{{ route('profile.member', $kneksExecutive->id) }}" class="parent-link org-parent-card group block">
+                            <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
+                                <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
+                                    <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
                                 </div>
-                            @else
-                                <a href="{{ route('profile.member', Str::slug($d['name'])) }}" class="child-card group block">
-                                    <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
-                                        <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
-                                            <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
-                                        </div>
-                                        <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                            <i data-lucide="{{ $d['icon'] }}" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
-                                        </div>
-                                        <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
-                                            <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
+                                <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                    <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
+                                </div>
+                                <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                    @if($kneksExecutive->photo_path)
+                                        <img src="{{ asset('storage/'.$kneksExecutive->photo_path) }}" class="h-full w-full rounded-full object-cover">
+                                    @else
+                                        <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
+                                    @endif
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <h3 class="text-sm font-bold text-slate-800">{{ $kneksExecutive->name }}</h3>
+                                    <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">{{ $kneksExecutive->role_title }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    {{-- Children Grid --}}
+                    <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
+                        @foreach($kneksExecutive->children as $i => $child)
+                            @php
+                                $colors = ['emerald', 'blue', 'rose', 'amber', 'indigo'];
+                                $c = $colors[$i % 5];
+                            @endphp
+                            <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
+                                {{-- Director Card --}}
+                                @if($child->name === 'Belum Ditentukan')
+                                    <div class="child-card relative flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/30 px-3 py-5 opacity-50">
+                                        <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/60">
+                                            <i data-lucide="user-x" class="h-6 w-6 text-slate-300"></i>
                                         </div>
                                         <div class="mt-2.5 text-center">
-                                            <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $d['name'] }}</h3>
-                                            <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
-                                            <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ $d['title'] }}</p>
-                                            @if(!empty($d['plt']))
-                                                <div class="mt-1.5 inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200/60 px-1.5 py-0.5">
-                                                    <i data-lucide="arrow-right-left" class="h-2.5 w-2.5 text-amber-500"></i>
-                                                    <span class="text-[6px] font-bold uppercase tracking-wider text-amber-600">{{ $d['plt'] }}</span>
-                                                </div>
-                                            @endif
+                                            <h3 class="text-xs font-semibold text-slate-400 leading-tight">Belum Ditentukan</h3>
+                                            <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-300">Direktur</p>
+                                            <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-slate-400 uppercase tracking-tight">{{ str_replace('Direktur ', '', $child->role_title) }}</p>
                                         </div>
                                     </div>
-                                </a>
-                            @endif
+                                @else
+                                    <a href="{{ route('profile.member', $child->id) }}" class="child-card group block">
+                                        <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
+                                            <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
+                                                <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                                            </div>
+                                            <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                                <i data-lucide="user" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
+                                            </div>
+                                            <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                                @if($child->photo_path)
+                                                    <img src="{{ asset('storage/'.$child->photo_path) }}" class="h-full w-full rounded-full object-cover">
+                                                @else
+                                                    <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
+                                                @endif
+                                            </div>
+                                            <div class="mt-2.5 text-center">
+                                                <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $child->name }}</h3>
+                                                <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
+                                                <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ str_replace('Direktur ', '', $child->role_title) }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endif
 
-                            {{-- Deputi Timeline --}}
-                            @if($hasSubs)
-                                <div class="relative mt-3 pl-4">
-                                    <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
-                                    @foreach($d['subs'] as $sub)
-                                        @if(!empty($sub['name']))
+                                {{-- Subs Timeline --}}
+                                @if($child->children->isNotEmpty())
+                                    <div class="relative mt-3 pl-4">
+                                        <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
+                                        @foreach($child->children as $sub)
                                             <div class="relative py-2">
                                                 <div class="absolute -left-[11px] top-1/2 -translate-y-1/2 h-[5px] w-[5px] rounded-full border-2 border-white bg-{{ $c }}-300"></div>
-                                                <a href="{{ route('profile.member', Str::slug($sub['name'])) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
+                                                <a href="{{ route('profile.member', $sub->id) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
                                                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-{{ $c }}-50">
                                                         <i data-lucide="user" class="h-4 w-4 text-{{ $c }}-400"></i>
                                                     </div>
                                                     <div class="min-w-0">
-                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub['name'] }}</p>
-                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub['title'] }}</p>
+                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub->name }}</p>
+                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub->role_title }}</p>
                                                     </div>
                                                 </a>
                                             </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center justify-center gap-2">
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KNEKS</p>
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
                 </div>
             </div>
-
-            <div class="mt-8 flex items-center justify-center gap-2">
-                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
-                <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KNEKS</p>
-                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
-            </div>
-        </div>
+        @endif
 
         {{-- DIVIDER 2 --}}
         <div class="relative mb-14 flex items-center justify-center">
@@ -250,163 +201,114 @@
         {{-- =========================================== --}}
         {{--  KDEKS DAERAH — Struktur Kartu              --}}
         {{-- =========================================== --}}
-        <div class="org-section mb-14">
-            <div class="mb-10 text-center">
-                <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-cyan-200/60 bg-cyan-50/70 px-4 py-1.5">
-                    <div class="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-100">
-                        <i data-lucide="map-pin" class="h-3 w-3 text-cyan-600"></i>
-                    </div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-700">Daerah</span>
-                </div>
-                <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KDEKS</span></h2>
-                <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Daerah Ekonomi dan Keuangan Syariah Kalimantan Timur</p>
-            </div>
-
-            <div class="org-tree relative">
-                <div class="org-connector absolute inset-0 pointer-events-none z-0"
-                     data-line="#e2e8f0" data-dot="#94a3b8">
-                    <svg class="w-full h-full"></svg>
-                </div>
-
-                {{-- Direktur Eksekutif --}}
-                <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
-                    <a href="{{ route('profile.member', 'muhammad-edwin') }}" class="parent-link org-parent-card group block">
-                        <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
-                            <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
-                                <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
-                            </div>
-                            <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
-                            </div>
-                            <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
-                                <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
-                            </div>
-                            <div class="mt-3 text-center">
-                                <h3 class="text-sm font-bold text-slate-800">Muhammad Edwin, S.Kom, MM</h3>
-                                <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur Eksekutif</p>
-                            </div>
+        @if($kdeksExecutive)
+            <div class="org-section mb-14">
+                <div class="mb-10 text-center">
+                    <div class="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-cyan-200/60 bg-cyan-50/70 px-4 py-1.5">
+                        <div class="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-100">
+                            <i data-lucide="map-pin" class="h-3 w-3 text-cyan-600"></i>
                         </div>
-                    </a>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-700">Daerah</span>
+                    </div>
+                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Struktur Organisasi <span class="text-gradient">KDEKS</span></h2>
+                    <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-400">Komite Daerah Ekonomi dan Keuangan Syariah Kalimantan Timur</p>
                 </div>
 
-                {{-- Direktorat Grid --}}
-                <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
-                    @php
-                        $directors = [
-                            [
-                                'title' => 'Industri Produk Halal',
-                                'icon' => 'package',
-                                'color' => 'emerald',
-                                'name' => 'drh. H. Marsongko',
-                                'subs' => [
-                                    ['title' => 'Kepala Divisi Pengembangan Halal Assurance System', 'name' => 'DR. Aswita'],
-                                    ['title' => 'Kepala Divisi Infrastruktur Industri Halal', 'name' => 'drh. Siti Saniatun Saadah, M.Si.'],
-                                    ['title' => 'Kepala Divisi Rantai Nilai Produk Halal', 'name' => 'Fitria Rahmah, S.E.I., M.A'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Jasa Keuangan Syariah',
-                                'icon' => 'landmark',
-                                'color' => 'blue',
-                                'name' => 'Denny Irfani, SE',
-                                'subs' => [
-                                    ['title' => 'Kepala Divisi Perbankan Syariah', 'name' => 'Bagus Sulistyo'],
-                                    ['title' => 'Kepala Divisi Jasa Keuangan Non-Bank Syariah', 'name' => 'Andika Dwi Prasetyo'],
-                                    ['title' => 'Kepala Divisi Pasar Modal Syariah', 'name' => 'Isna Yuningsih, SE, MM.'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Keuangan Sosial Syariah',
-                                'icon' => 'heart-handshake',
-                                'color' => 'rose',
-                                'name' => 'Sumadi Buton, S.Hut, ME.',
-                                'subs' => [
-                                    ['title' => 'Kepala Divisi Dana Sosial Syariah & LKMS', 'name' => 'Muhammad Iswadi, MSI'],
-                                    ['title' => 'Kepala Divisi Inklusi Keuangan Sosial Syariah', 'name' => 'Dr. Hj. Sri Wahyuni, SE,. M.Si'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Bisnis & Kewirausahaan Syariah',
-                                'icon' => 'briefcase',
-                                'color' => 'amber',
-                                'name' => 'Roni Suhendar, ST.',
-                                'subs' => [
-                                    ['title' => 'Kepala Divisi Kemitraan, Akselerasi Usaha & Inkubasi Bisnis Syariah', 'name' => "Naf'an"],
-                                    ['title' => 'Kepala Divisi Bisnis Digital & Pusat Data Ekonomi Syariah', 'name' => 'Ike Purnamasari, SE., M.M., Ph.D.'],
-                                ],
-                            ],
-                            [
-                                'title' => 'Infrastruktur Ekosistem Syariah',
-                                'icon' => 'server',
-                                'color' => 'indigo',
-                                'name' => 'Prof. DR. Bambang Iswanto, S.Ag., MH.',
-                                'subs' => [
-                                    ['title' => 'Kepala Divisi Hukum Pengembangan Ekonomi Syariah', 'name' => 'Akhmad Nur Zaroni, M.Ag.'],
-                                    ['title' => 'Kepala Divisi Promosi & Kerjasama Strategis', 'name' => 'Deni Dwi Arifendi'],
-                                    ['title' => 'Kepala Divisi Pengembangan SDM Ekonomi Syariah & Riset Ekonomi Syariah', 'name' => 'Dharma Yanti, SE., M.Si.'],
-                                ],
-                            ],
-                        ];
-                    @endphp
-                    @foreach($directors as $i => $d)
-                        @php
-                            $c = $d['color'];
-                            $hasSubs = !empty($d['subs']) && count(array_filter($d['subs'], fn($s) => !empty($s['name']))) > 0;
-                        @endphp
-                        <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
-                            {{-- Director Card --}}
-                            <a href="{{ route('profile.member', Str::slug($d['name'])) }}" class="child-card group block">
-                                <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
-                                    <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
-                                        <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
-                                    </div>
-                                    <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
-                                        <i data-lucide="{{ $d['icon'] }}" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
-                                    </div>
-                                    <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
-                                        <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
-                                    </div>
-                                    <div class="mt-2.5 text-center">
-                                        <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $d['name'] }}</h3>
-                                        <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
-                                        <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ $d['title'] }}</p>
-                                    </div>
-                                </div>
-                            </a>
+                <div class="org-tree relative">
+                    <div class="org-connector absolute inset-0 pointer-events-none z-0"
+                         data-line="#e2e8f0" data-dot="#94a3b8">
+                        <svg class="w-full h-full"></svg>
+                    </div>
 
-                            {{-- Kepala Divisi Timeline --}}
-                            @if($hasSubs)
-                                <div class="relative mt-3 pl-4">
-                                    <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
-                                    @foreach($d['subs'] as $sub)
-                                        @if(!empty($sub['name']))
+                    {{-- Executive Card --}}
+                    <div class="relative z-10 flex justify-center anim-up" style="animation-delay:.1s">
+                        <a href="{{ route('profile.member', $kdeksExecutive->id) }}" class="parent-link org-parent-card group block">
+                            <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-4 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-emerald-100/40 hover:border-emerald-200/80">
+                                <div class="absolute -top-px left-8 right-8 h-px overflow-hidden rounded-full">
+                                    <div class="h-full w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                                </div>
+                                <div class="absolute -top-2.5 -left-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-xl border-[2.5px] border-white bg-emerald-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                    <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
+                                </div>
+                                <div class="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                    @if($kdeksExecutive->photo_path)
+                                        <img src="{{ asset('storage/'.$kdeksExecutive->photo_path) }}" class="h-full w-full rounded-full object-cover">
+                                    @else
+                                        <i data-lucide="user" class="h-7 w-7 text-slate-300"></i>
+                                    @endif
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <h3 class="text-sm font-bold text-slate-800">{{ $kdeksExecutive->name }}</h3>
+                                    <p class="mt-1 text-[8px] font-bold uppercase tracking-[0.15em] text-slate-400">{{ $kdeksExecutive->role_title }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    {{-- Children Grid --}}
+                    <div class="org-grid org-grid-5 mt-14 anim-fade relative z-10" style="animation-delay:.3s">
+                        @foreach($kdeksExecutive->children as $i => $child)
+                            @php
+                                $colors = ['emerald', 'blue', 'rose', 'amber', 'indigo'];
+                                $c = $colors[$i % 5];
+                            @endphp
+                            <div class="anim-up" style="animation-delay:{{ ($i+4)*.08 }}s">
+                                {{-- Director Card --}}
+                                <a href="{{ route('profile.member', $child->id) }}" class="child-card group block">
+                                    <div class="relative flex flex-col items-center rounded-2xl border border-slate-100 bg-white px-3 py-5 shadow-sm transition-all duration-400 hover:-translate-y-1.5 hover:shadow-md hover:shadow-{{ $c }}-100/40 hover:border-{{ $c }}-200/80">
+                                        <div class="absolute -top-px left-6 right-6 h-px overflow-hidden rounded-full">
+                                            <div class="h-full w-full bg-gradient-to-r from-transparent via-{{ $c }}-400 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-60"></div>
+                                        </div>
+                                        <div class="absolute -top-2.5 -left-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-xl border-[2.5px] border-white bg-{{ $c }}-50 shadow-lg shadow-slate-200/50 transition-transform duration-400 group-hover:rotate-[-6deg]">
+                                            <i data-lucide="user" class="h-3.5 w-3.5 text-{{ $c }}-500"></i>
+                                        </div>
+                                        <div class="mt-1 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100/80 transition-all duration-300 group-hover:scale-110">
+                                            @if($child->photo_path)
+                                                <img src="{{ asset('storage/'.$child->photo_path) }}" class="h-full w-full rounded-full object-cover">
+                                            @else
+                                                <i data-lucide="user" class="h-6 w-6 text-slate-300"></i>
+                                            @endif
+                                        </div>
+                                        <div class="mt-2.5 text-center">
+                                            <h3 class="text-xs font-bold text-slate-800 leading-tight">{{ $child->name }}</h3>
+                                            <p class="mt-0.5 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400">Direktur</p>
+                                            <p class="mt-2 line-clamp-2 text-[9px] font-semibold leading-snug text-{{ $c }}-500 uppercase tracking-tight">{{ str_replace('Direktur ', '', $child->role_title) }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                {{-- Subs Timeline --}}
+                                @if($child->children->isNotEmpty())
+                                    <div class="relative mt-3 pl-4">
+                                        <div class="absolute left-[5px] top-1 bottom-1 w-px bg-{{ $c }}-100"></div>
+                                        @foreach($child->children as $sub)
                                             <div class="relative py-2">
                                                 <div class="absolute -left-[11px] top-1/2 -translate-y-1/2 h-[5px] w-[5px] rounded-full border-2 border-white bg-{{ $c }}-300"></div>
-                                                <a href="{{ route('profile.member', Str::slug($sub['name'])) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
+                                                <a href="{{ route('profile.member', $sub->id) }}" class="group/sub flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white/60 px-3 py-3 transition-all hover:border-{{ $c }}-200/60 hover:shadow-sm hover:bg-white">
                                                     <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-{{ $c }}-50">
                                                         <i data-lucide="user" class="h-4 w-4 text-{{ $c }}-400"></i>
                                                     </div>
                                                     <div class="min-w-0">
-                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub['name'] }}</p>
-                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub['title'] }}</p>
+                                                        <p class="text-[10px] font-semibold text-slate-700 leading-snug">{{ $sub->name }}</p>
+                                                        <p class="mt-0.5 text-[8px] font-medium text-slate-400 leading-snug line-clamp-2">{{ $sub->role_title }}</p>
                                                     </div>
                                                 </a>
                                             </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center justify-center gap-2">
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KDEKS Kalimantan Timur</p>
+                    <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
                 </div>
             </div>
-
-            <div class="mt-8 flex items-center justify-center gap-2">
-                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
-                <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-slate-300">Struktur Organisasi KDEKS Kalimantan Timur</p>
-                <div class="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
-            </div>
-        </div>
+        @endif</div>
 
     </div>
 </div>

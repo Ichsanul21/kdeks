@@ -8,8 +8,10 @@ use App\Models\GalleryItem;
 use App\Models\HalalLocation;
 use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
+use App\Models\OrganizationMember;
 use App\Models\Regulation;
 use App\Models\SectorItem;
+use App\Models\SiteSetting;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -191,7 +193,21 @@ class PublicContentController extends Controller
 
     public function organizationStructure(): View
     {
-        return view('public.profile.organization');
+        $setting = SiteSetting::query()->first();
+        
+        $kneksExecutive = OrganizationMember::where('category', 'kneks')
+            ->whereNull('parent_id')
+            ->first();
+            
+        $kdeksExecutive = OrganizationMember::where('category', 'kdeks')
+            ->whereNull('parent_id')
+            ->first();
+
+        return view('public.profile.organization', [
+            'setting' => $setting,
+            'kneksExecutive' => $kneksExecutive,
+            'kdeksExecutive' => $kdeksExecutive,
+        ]);
     }
 
     public function memberShow(string $id): View

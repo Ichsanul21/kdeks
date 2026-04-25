@@ -7,6 +7,7 @@ use App\Models\SehatiRegistration;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('developer') ? true : null;
+        });
+
         View::composer('*', function ($view): void {
             $view->with('locale', session('site_locale', 'id'));
             $view->with('setting', Schema::hasTable('site_settings') ? SiteSetting::query()->first() : null);

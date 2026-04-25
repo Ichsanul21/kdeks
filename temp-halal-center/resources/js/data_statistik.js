@@ -43,6 +43,19 @@ const DataStatistik = (() => {
     function barLegendCfg() {
         return { position:'bottom', labels:{ boxWidth:10, boxHeight:10, borderRadius:3, useBorderRadius:true, padding:mob()?12:20, font:{weight:'600',size:mob()?10:11} }};
     }
+    function pieTooltipCfg(extra) {
+        return Object.assign({
+            backgroundColor:'#0f172a', padding:12, cornerRadius:10, titleFont:{weight:'700'},
+            callbacks: {
+                label: function(ctx) {
+                    let total = ctx.dataset.data.reduce((a,b) => a + b, 0);
+                    let val = ctx.raw;
+                    let pct = total > 0 ? ((val / total) * 100).toFixed(1) + '%' : '0%';
+                    return ` ${ctx.label}: ${val} (${pct})`;
+                }
+            }
+        }, extra);
+    }
     function lineScale(unit) {
         return {
             x: { grid: { display: false } },
@@ -71,6 +84,34 @@ const DataStatistik = (() => {
         if (dashed) { ds.borderDash=[6,4]; ds.pointRadius=4; ds.pointHoverRadius=6; }
         else { ds.pointRadius=mob()?3:4; ds.pointHoverRadius=6; }
         return ds;
+    }
+
+    if (window.Chart) {
+        Chart.register({
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                if (chart.config.type !== 'doughnut' && chart.config.type !== 'pie') return;
+                if (!chart.config.options.plugins.centerText) return;
+                const ctx = chart.ctx;
+                const width = chart.chartArea.right - chart.chartArea.left;
+                const height = chart.chartArea.bottom - chart.chartArea.top;
+                const text = chart.config.options.plugins.centerText.text || '';
+                const color = chart.config.options.plugins.centerText.color || '#334155';
+                ctx.restore();
+                
+                // Reduce font size slightly to fit long numbers
+                const fontSize = (height / 120).toFixed(2);
+                ctx.font = '900 ' + fontSize + 'em sans-serif';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = color;
+                
+                const textX = chart.chartArea.left + Math.round((width - ctx.measureText(text).width) / 2);
+                const textY = chart.chartArea.top + height / 2;
+                
+                ctx.fillText(text, textX, textY);
+                ctx.save();
+            }
+        });
     }
 
     // ── DATA NASIONAL (SGIE 2025 & LAINNYA) ───────
@@ -1010,6 +1051,198 @@ const DataStatistik = (() => {
                     volume: [0.59, 1.01] // Dalam Miliar
                 }
             }
+        },
+        sdm_pendidikan: {
+            sekolah_pelopor: {
+                total_sekolah: 117,
+                total_sma: 79,
+                total_smk: 38,
+                provinsi: {
+                    labels: ["DI Yogyakarta", "Jawa Barat", "Riau", "Sulawesi Selatan", "Sulawesi Tengah", "Sumatera Barat", "Sumatera Selatan"],
+                    sma: [29, 16, 2, 24, 1, 1, 6],
+                    smk: [17, 11, 2, 0, 2, 0, 6]
+                },
+                pertumbuhan_sma: {
+                    labels: ["Aug 22", "Jun 23", "Oct 23", "Nov 23", "Aug 24", "Sep 24", "Jul 25"],
+                    data: [1, 3, 9, 33, 62, 63, 79]
+                },
+                pertumbuhan_smk: {
+                    labels: ["Aug 22", "Jun 23", "Oct 23", "Nov 23", "Aug 24", "Sep 24", "Jul 25"],
+                    data: [1, 3, 9, 33, 62, 63, 79] // Provided identically by user
+                }
+            },
+            kampus_kih: {
+                direktorat_pks: {
+                    labels: ["INSIS"], data: [29]
+                },
+                direktorat_mou: {
+                    labels: ["BIWIS", "IPH", "Lainnya"], data: [1, 1, 1]
+                },
+                implementasi_pks: {
+                    labels: [2023, 2024], data: [26, 3]
+                },
+                implementasi_mou: {
+                    labels: [2021, 2025], data: [2, 1]
+                },
+                kategori_pks: {
+                    labels: ["Perguruan Tinggi", "Asosiasi"], data: [27, 1]
+                },
+                kategori_mou: {
+                    labels: ["BUMN", "Perusahaan", "Perus. & Lembaga"], data: [1, 1, 1]
+                }
+            },
+            pks_mou_pt: {
+                pks_tahun: {
+                    labels: [2019, 2020, 2021, 2022, 2023, 2024, 2025], data: [16, 90, 40, 27, 31, 8, 9]
+                },
+                pks_instansi: {
+                    labels: ["BSI", "FEB UIN JKT", "FEM IPB", "PKN STAN", "FEB IAIN LHOKSEUMAWE", "FEB IAIN BUKITTINGGI", "FEB IAIN BONE", "FEB UIN SUNAN AMPEL", "FEB AHMAD DAHLAN", "UPI"],
+                    data: [5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+                },
+                pks_direktorat: {
+                    labels: ["INSIS", "RISET DAN PENDIDIKAN", "BIWIS", "IPH", "BKS", "KSS", "PROMOSI", "INSIS DIVISI HUKUM", "INSIS DAN PSDM", "KEUANGAN SOSIAL SYARIAH", "BKS/BAZARI", "JKS", "Lainnya"],
+                    data: [162, 23, 8, 6, 5, 3, 3, 3, 1, 1, 1, 1, 4]
+                },
+                pks_kategori: {
+                    labels: ["Perguruan Tinggi", "Asosiasi", "Badan Hukum", "Lembaga", "Pemerintah", "PT", "Swasta", "Kementerian", "PT & Asosiasi", "Kementerian/Lembaga", "Lainnya"],
+                    data: [185, 8, 7, 6, 4, 1, 1, 1, 1, 1, 6]
+                },
+                mou_tahun: {
+                    labels: [2020, 2021, 2022, 2023, 2024, 2025], data: [38, 35, 23, 17, 13, 9]
+                },
+                mou_instansi: {
+                    labels: ["UMP", "BLIBLI", "BAZNAS", "UPN VETERAN", "STEI Ar Risalah", "Univ Ary Ginanjar", "UNISBA", "UNISNU", "IAIN SORONG", "BSI"],
+                    data: [2, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                },
+                mou_direktorat: {
+                    labels: ["INSIS", "RISET & PENDIDIKAN", "KSS", "BIWIS", "INSIS ME KNEKS", "JKS/INSIS", "IPH", "JKS", "DIT IPH", "DIV HUKUM", "KNEKS", "BIWIA", "ME KNEKS", "JKS", "BKS", "BIWIS & PROMOSI", "Lainnya"],
+                    data: [46, 23, 5, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 41]
+                },
+                mou_kategori: {
+                    labels: ["Perguruan Tinggi", "Asosiasi", "Badan Hukum", "Lembaga", "Int. Org", "BUMN", "Perusahaan", "Bank Swasta", "Corporate", "Perkumpulan", "Org KNEKS", "Lembaga Gov MY", "Perus. & Lembaga", "Lainnya"],
+                    data: [67, 9, 7, 7, 2, 2, 1, 1, 1, 1, 1, 1, 1, 34]
+                }
+            },
+            akreditasi_pt: {
+                total_prodi: 1009,
+                distribusi: {
+                    labels: ["Baik", "Baik Sekali", "Unggul"], data: [376, 359, 169]
+                },
+                akreditasi_dosen: {
+                    labels: ["Unggul", "Baik Sekali", "Baik"], data: [16.05, 12.72, 7.84]
+                },
+                pembina: {
+                    labels: ["DIKTI", "DIKTIS"],
+                    unggul: [21, 148],
+                    baik_sekali: [53, 306],
+                    baik: [38, 338]
+                },
+                ptkin: {
+                    labels: ["NON PTKIN", "PTKIN"],
+                    unggul: [48, 121],
+                    baik_sekali: [136, 223],
+                    baik: [293, 83]
+                },
+                jenjang: {
+                    labels: ["D3", "D4", "S1", "S2", "S3"],
+                    unggul: [6, 3, 144, 15, 1],
+                    baik_sekali: [3, 8, 275, 67, 6],
+                    baik: [7, 7, 343, 18, 1]
+                }
+            }
+        },
+        sosialisasi_brand: {
+            awareness: {
+                labels: [2022, 2023, 2024],
+                data: [0.4368, 0.5004, 0.5102]
+            },
+            juara_umum: "Jawa Barat",
+            adinata: [
+                ["Ekonomi Hijau dan Berkelanjutan","Sulawesi Selatan","Jawa Barat","Sumatera Utara","Jawa Timur","DKI Jakarta"],
+                ["Industri Halal","Jawa Timur","Jawa Barat","Nusa Tenggara Barat","DKI Jakarta","Sumatera Barat"],
+                ["Inkubasi Usaha Syariah","DI Yogyakarta","DKI Jakarta","Sulawesi Selatan","Jawa Timur","Sumatera Barat"],
+                ["Inovasi Ekonomi Syariah","Jawa Barat","Sumatera Barat","Kepulauan Riau","Jawa Timur","Sulawesi Selatan"],
+                ["Kelembagaan KDEKS","Sumatera Barat","Jawa Barat","Aceh","Jawa Timur","Kalimantan Selatan"],
+                ["Keuangan Mikro Syariah","Jawa Timur","DI Yogyakarta","Jawa Tengah","DKI Jakarta","Nusa Tenggara Barat"],
+                ["Keuangan Sosial Syariah","Kepulauan Riau","Jawa Barat","DI Yogyakarta","Riau","Jawa Timur"],
+                ["Keuangan Syariah","Nusa Tenggara Barat","Sumatera Barat","Aceh","Sulawesi Selatan","Kepulauan Riau"],
+                ["Literasi Ekonomi Syariah","Aceh","Sumatera Barat","DI Yogyakarta","Jawa Barat","Jawa Timur"],
+                ["Pendidikan dan Pemberdayaan Ekonomi Pesantren","Jawa Timur","Jawa Barat","Aceh","Nusa Tenggara Barat","DI Yogyakarta"],
+                ["Zona Kuliner Halal, Aman dan Sehat","Jawa Tengah","Jawa Timur","Jawa Barat","Nusa Tenggara Timur","Sulawesi Selatan"]
+            ]
+        },
+        kdeks: {
+            jumlah: 31,
+            daftar: [
+                ["Maluku","1651 TAHUN 2024","2024-09-04T00:00:00+07:00"],
+                ["Papua Barat Daya","100.3.3.1/36/5/2024","2024-05-30T00:00:00+07:00"],
+                ["Sulawesi Barat","657 TAHUN 2024","2024-04-05T00:00:00+07:00"],
+                ["Sulawesi Utara","141 TAHUN 2024","2024-03-18T00:00:00+07:00"],
+                ["DI Yogyakarta","27/KEP/2024","2024-03-18T00:00:00+07:00"],
+                ["Jawa Barat","550.2/Kep.31-Rek/2024","2024-01-31T00:00:00+07:00"],
+                ["Kalimantan Barat","1563/RO-EKON/2023","2023-10-20T00:00:00+07:00"],
+                ["Kalimantan Tengah","188.44/473/2023","2023-10-20T00:00:00+07:00"],
+                ["Sulawesi Tenggara","534 TAHUN 2023","2023-09-04T00:00:00+07:00"],
+                ["Kalimantan Timur","100.3.3.1/K.581/2023","2023-07-31T00:00:00+07:00"],
+                ["Kalimantan Utara","188.44/K.401/2023","2023-07-24T00:00:00+07:00"],
+                ["Aceh","500/1293/2023","2023-07-17T00:00:00+07:00"],
+                ["DKI Jakarta","443 TAHUN 2023","2023-07-06T00:00:00+07:00"],
+                ["Sulawesi Tengah","500/365/RO.EKON-G.ST/2023","2023-07-03T00:00:00+07:00"],
+                ["Kepulauan Riau","676 TAHUN 2023","2023-06-05T00:00:00+07:00"],
+                ["Maluku Utara","350/KPTS/MU/2023","2023-05-05T00:00:00+07:00"],
+                ["Bengkulu","K.207.B3.TAHUN 2023","2023-04-17T00:00:00+07:00"],
+                ["Jambi","361/KEP.GUB/SETDA.PRKM/2023","2023-04-17T00:00:00+07:00"],
+                ["Gorontalo","122/3/III/2023","2023-03-31T00:00:00+07:00"],
+                ["Sumatera Utara","188.44/121/KPTS/2023","2023-02-13T00:00:00+07:00"],
+                ["Kalimantan Selatan","188.44/0143/KUM/2023","2023-02-10T00:00:00+07:00"],
+                ["Lampung","G/135/B.04/HK/2023","2023-02-10T00:00:00+07:00"],
+                ["Jawa Tengah","500/6 TAHUN 2023","2023-02-03T00:00:00+07:00"],
+                ["Banten","-","2023-02-01T00:00:00+07:00"],
+                ["Nusa Tenggara Barat","500-67 TAHUN 2023","2023-01-30T00:00:00+07:00"],
+                ["Kepulauan Bangka Belitung","188.44/8/IV/2023","2023-01-24T00:00:00+07:00"],
+                ["Jawa Timur","188/759/KPTS/013/2022","2022-10-24T00:00:00+07:00"],
+                ["Sulawesi Selatan","2068/X/TAHUN 2022","2022-10-17T00:00:00+07:00"],
+                ["Sumatera Selatan","583/KPTS/IV/2022","2022-08-10T00:00:00+07:00"],
+                ["Riau","Kpts.1122/VII/2022","2022-07-12T00:00:00+07:00"],
+                ["Sumatera Barat","500-315-2022","2022-04-07T00:00:00+07:00"]
+            ],
+            pertumbuhan: {
+                labels: ["Apr 22","Jul 22","Agt 22","Okt 22","Jan 23","Feb 23","Mar 23","Apr 23","Mei 23","Jun 23","Jul 23","Sep 23","Okt 23","Jan 24","Mar 24","Apr 24","Mei 24","Sep 24"],
+                data: [1,2,3,5,7,12,13,15,16,17,22,23,25,26,28,29,30,31]
+            },
+            sebaran: [
+                ["Sumatera Barat","500-315-2022","2022-04-07",-0.7399397,100.8000051],
+                ["Riau","Kpts.1122/VII/2022","2022-07-12",0.2933469,101.7068294],
+                ["Sumatera Selatan","583/KPTS/IV/2022","2022-08-10",-3.3194374,103.914399],
+                ["Sulawesi Selatan","2068/X/TAHUN 2022","2022-10-17",-3.6687994,119.9740534],
+                ["Jawa Timur","188/759/KPTS/013/2022","2022-10-24",-7.5360639,112.2384017],
+                ["Kepulauan Bangka Belitung","188.44/8/IV/2023","2023-01-24",-2.7410513,106.4405872],
+                ["Nusa Tenggara Barat","500-67 TAHUN 2023","2023-01-30",-8.6529334,117.3616476],
+                ["Banten","-","2023-02-01",-6.4058172,106.0640179],
+                ["Jawa Tengah","500/6 TAHUN 2023","2023-02-03",-7.150975,110.1402594],
+                ["Lampung","G/135/B.04/HK/2023","2023-02-10",-4.5585849,105.4068079],
+                ["Sumatera Utara","188.44/121/KPTS/2023","2023-02-13",2.1153547,99.5450974],
+                ["Kalimantan Selatan","188.44/0143/KUM/2023","2023-02-10",-3.0926415,115.2837585],
+                ["Gorontalo","122/3/III/2023","2023-03-31",0.6999372,122.4467238],
+                ["Bengkulu","K.207.B3.TAHUN 2023","2023-04-17",-3.5778471,102.3463875],
+                ["Jambi","361/KEP.GUB/SETDA.PRKM/2023","2023-04-17",-1.4851831,102.4380581],
+                ["Maluku Utara","350/KPTS/MU/2023","2023-05-05",1.5709993,127.8087693],
+                ["Kepulauan Riau","676 TAHUN 2023","2023-06-05",3.9456514,108.1428669],
+                ["DKI Jakarta","443 TAHUN 2023","2023-07-06",-6.211544,106.845172],
+                ["Sulawesi Tengah","500/365/RO.EKON-G.ST/2023","2023-07-03",-1.4300254,121.4456179],
+                ["Aceh","500/1293/2023","2023-07-17",4.695135,96.7493993],
+                ["Kalimantan Utara","188.44/K.401/2023","2023-07-24",3.35989,116.53198],
+                ["Kalimantan Timur","100.3.3.1/K.581/2023","2023-07-31",1.6406296,116.419389],
+                ["Kalimantan Barat","1563/RO-EKON/2023","2023-10-20",-0.2787808,111.4752851],
+                ["Kalimantan Tengah","188.44/473/2023","2023-10-20",-1.6814878,113.3823545],
+                ["Sulawesi Tenggara","534 TAHUN 2023","2023-09-04",-4.14491,122.174605],
+                ["Sulawesi Utara","141 TAHUN 2024","2024-03-18",0.6246932,123.9750018],
+                ["DI Yogyakarta","27/KEP/2024","2024-03-18",-7.8753849,110.4262088],
+                ["Jawa Barat","550.2/Kep.31-Rek/2024","2024-01-31",-7.090911,107.668887],
+                ["Papua Barat Daya","100.3.3.1/36/5/2024","2024-05-30",null,null],
+                ["Maluku","1651 TAHUN 2024","2024-09-04",-3.2384616,130.1452734],
+                ["Sulawesi Barat","657 TAHUN 2024","2024-04-05",-2.8441371,119.2320784]
+            ]
         }
     };
 
@@ -3689,14 +3922,14 @@ const DataStatistik = (() => {
         if (charts.nasWakafMap) charts.nasWakafMap.remove();
         
         charts.nasWakafMap = L.map('nasWakafMap', { scrollWheelZoom: false }).setView([-2.5, 118], 5);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(charts.nasWakafMap);
 
         const getColor = (v) => {
-            if (v > 50) return C.emerald;
-            if (v > 10) return C.blue;
-            return C.amber;
+            if (v > 50) return '#10b981'; // C.emerald
+            if (v > 10) return '#3b82f6'; // C.blue
+            return '#f59e0b'; // C.amber
         };
 
         d.sebaran_nazhir.forEach(item => {
@@ -3704,8 +3937,8 @@ const DataStatistik = (() => {
             const color = getColor(val);
             const icon = L.divIcon({
                 className: 'custom-div-icon',
-                html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px ${hexRgba(color, 0.5)};"></div>`,
-                iconSize: [12, 12], iconAnchor: [6, 6]
+                html: `<div style="background-color: ${color}; width: 14px; height: 14px; border: 2.5px solid white; border-radius: 50%; box-shadow: 0 3px 6px rgba(0,0,0,0.16);"></div>`,
+                iconSize: [14, 14], iconAnchor: [7, 7]
             });
             L.marker([lat, lng], { icon }).addTo(charts.nasWakafMap)
                 .bindPopup(`<div class="p-2 font-sans"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">${prov}</p><p class="text-sm font-black text-slate-800">${val} Nazhir</p></div>`);
@@ -3780,22 +4013,138 @@ const DataStatistik = (() => {
         charts.nasAgenMasjidTrans = new Chart(document.getElementById('chartNasAgenMasjidTrans'), { type: 'bar', data: makeComboTrans(d.agen_masjid, C.amber), options: optsCombo });
     }
 
+    function createSdmPendidikanCharts() {
+        const d = N_DATA.sdm_pendidikan;
+        
+        // Update Stats
+        const elTotal = document.getElementById('sdmTotalSekolah');
+        const elSma = document.getElementById('sdmTotalSma');
+        const elSmk = document.getElementById('sdmTotalSmk');
+        const elProdi = document.getElementById('sdmTotalProdi');
+        if (elTotal) elTotal.textContent = d.sekolah_pelopor.total_sekolah;
+        if (elSma) elSma.textContent = d.sekolah_pelopor.total_sma;
+        if (elSmk) elSmk.textContent = d.sekolah_pelopor.total_smk;
+        if (elProdi) elProdi.textContent = d.akreditasi_pt.total_prodi;
+
+        const optBar = { responsive: true, maintainAspectRatio: false, plugins: { legend: legendCfg('bottom'), tooltip: tooltipCfg() }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: GRID } } } };
+        const optLine = { responsive: true, maintainAspectRatio: false, plugins: { legend: legendCfg('bottom'), tooltip: tooltipCfg() }, scales: lineScale('') };
+        const optBarY = { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: tooltipCfg() }, scales: { y: { grid: { display: false } }, x: { beginAtZero: true, grid: { color: GRID } } } };
+        const optPieBase = { responsive: true, maintainAspectRatio: false, plugins: { legend: legendCfg('right'), tooltip: pieTooltipCfg() }, cutout: '65%' };
+        const withCenter = (opt, val) => ({ ...opt, plugins: { ...opt.plugins, centerText: { text: String(val) } } });
+
+        const sum = (arr) => arr.reduce((a, b) => a + b, 0);
+
+        // 1. Sekolah Pelopor
+        charts.sdmSekolahProv = new Chart(document.getElementById('chartSdmSekolahProv'), {
+            type: 'bar', data: {
+                labels: d.sekolah_pelopor.provinsi.labels,
+                datasets: [
+                    { label: 'SMA', data: d.sekolah_pelopor.provinsi.sma, backgroundColor: C.blue },
+                    { label: 'SMK', data: d.sekolah_pelopor.provinsi.smk, backgroundColor: C.amber }
+                ]
+            }, options: optBar
+        });
+        charts.sdmSekolahTrend = new Chart(document.getElementById('chartSdmSekolahTrend'), {
+            type: 'line', data: {
+                labels: d.sekolah_pelopor.pertumbuhan_sma.labels,
+                datasets: [
+                    { label: 'Akumulasi SMA', ...makeLine(d.sekolah_pelopor.pertumbuhan_sma.data, C.blue, true) },
+                    { label: 'Akumulasi SMK', ...makeLine(d.sekolah_pelopor.pertumbuhan_smk.data, C.amber, true) }
+                ]
+            }, options: optLine
+        });
+
+        // 2. Kampus KIH
+        charts.sdmKihPksTrend = new Chart(document.getElementById('chartSdmKihPksTrend'), { type: 'bar', data: { labels: d.kampus_kih.implementasi_pks.labels, datasets: [{ label: 'Jumlah PKS', data: d.kampus_kih.implementasi_pks.data, backgroundColor: C.emerald }] }, options: { ...optBar, plugins: { legend: { display: false } } } });
+        charts.sdmKihPksDir = new Chart(document.getElementById('chartSdmKihPksDir'), { type: 'doughnut', data: { labels: d.kampus_kih.direktorat_pks.labels, datasets: [{ data: d.kampus_kih.direktorat_pks.data, backgroundColor: [C.emerald, C.blue, C.amber, C.rose, C.violet] }] }, options: withCenter(optPieBase, sum(d.kampus_kih.direktorat_pks.data)) });
+        charts.sdmKihPksKat = new Chart(document.getElementById('chartSdmKihPksKat'), { type: 'doughnut', data: { labels: d.kampus_kih.kategori_pks.labels, datasets: [{ data: d.kampus_kih.kategori_pks.data, backgroundColor: [C.indigo, C.amber, C.rose] }] }, options: withCenter(optPieBase, sum(d.kampus_kih.kategori_pks.data)) });
+        
+        charts.sdmKihMouTrend = new Chart(document.getElementById('chartSdmKihMouTrend'), { type: 'bar', data: { labels: d.kampus_kih.implementasi_mou.labels, datasets: [{ label: 'Jumlah MoU', data: d.kampus_kih.implementasi_mou.data, backgroundColor: C.blue }] }, options: { ...optBar, plugins: { legend: { display: false } } } });
+        charts.sdmKihMouDir = new Chart(document.getElementById('chartSdmKihMouDir'), { type: 'doughnut', data: { labels: d.kampus_kih.direktorat_mou.labels, datasets: [{ data: d.kampus_kih.direktorat_mou.data, backgroundColor: [C.emerald, C.blue, C.amber, C.rose, C.violet] }] }, options: withCenter(optPieBase, sum(d.kampus_kih.direktorat_mou.data)) });
+        charts.sdmKihMouKat = new Chart(document.getElementById('chartSdmKihMouKat'), { type: 'doughnut', data: { labels: d.kampus_kih.kategori_mou.labels, datasets: [{ data: d.kampus_kih.kategori_mou.data, backgroundColor: [C.indigo, C.amber, C.rose] }] }, options: withCenter(optPieBase, sum(d.kampus_kih.kategori_mou.data)) });
+
+        // 3. PKS & MoU
+        const pksColors = [C.emerald, C.blue, C.amber, C.rose, C.violet, C.teal, C.pink, C.orange, C.cyan, '#84cc16', '#a855f7', '#0ea5e9', '#ef4444', '#14b8a6', '#6366f1', '#64748b', '#f43f5e', '#8b5cf6', '#f59e0b', '#3b82f6'];
+        charts.sdmPksTahun = new Chart(document.getElementById('chartSdmPksTahun'), { type: 'line', data: { labels: d.pks_mou_pt.pks_tahun.labels, datasets: [{ label: 'Jumlah PKS', ...makeLine(d.pks_mou_pt.pks_tahun.data, C.emerald, true) }] }, options: { ...optLine, plugins: { legend: { display: false } } } });
+        charts.sdmPksInstansi = new Chart(document.getElementById('chartSdmPksInstansi'), { type: 'bar', data: { labels: d.pks_mou_pt.pks_instansi.labels, datasets: [{ label: 'Total', data: d.pks_mou_pt.pks_instansi.data, backgroundColor: C.emerald }] }, options: optBarY });
+        charts.sdmPksDirAll = new Chart(document.getElementById('chartSdmPksDirAll'), { type: 'doughnut', data: { labels: d.pks_mou_pt.pks_direktorat.labels, datasets: [{ data: d.pks_mou_pt.pks_direktorat.data, backgroundColor: pksColors }] }, options: withCenter({ ...optPieBase, plugins: { legend: { display: false }, tooltip: pieTooltipCfg() } }, sum(d.pks_mou_pt.pks_direktorat.data)) });
+        charts.sdmPksKatAll = new Chart(document.getElementById('chartSdmPksKatAll'), { type: 'doughnut', data: { labels: d.pks_mou_pt.pks_kategori.labels, datasets: [{ data: d.pks_mou_pt.pks_kategori.data, backgroundColor: pksColors }] }, options: withCenter({ ...optPieBase, plugins: { legend: { display: false }, tooltip: pieTooltipCfg() } }, sum(d.pks_mou_pt.pks_kategori.data)) });
+
+        charts.sdmMouTahun = new Chart(document.getElementById('chartSdmMouTahun'), { type: 'line', data: { labels: d.pks_mou_pt.mou_tahun.labels, datasets: [{ label: 'Jumlah MoU', ...makeLine(d.pks_mou_pt.mou_tahun.data, C.blue, true) }] }, options: { ...optLine, plugins: { legend: { display: false } } } });
+        charts.sdmMouInstansi = new Chart(document.getElementById('chartSdmMouInstansi'), { type: 'bar', data: { labels: d.pks_mou_pt.mou_instansi.labels, datasets: [{ label: 'Total', data: d.pks_mou_pt.mou_instansi.data, backgroundColor: C.blue }] }, options: optBarY });
+        charts.sdmMouDirAll = new Chart(document.getElementById('chartSdmMouDirAll'), { type: 'doughnut', data: { labels: d.pks_mou_pt.mou_direktorat.labels, datasets: [{ data: d.pks_mou_pt.mou_direktorat.data, backgroundColor: pksColors }] }, options: withCenter({ ...optPieBase, plugins: { legend: { display: false }, tooltip: pieTooltipCfg() } }, sum(d.pks_mou_pt.mou_direktorat.data)) });
+        charts.sdmMouKatAll = new Chart(document.getElementById('chartSdmMouKatAll'), { type: 'doughnut', data: { labels: d.pks_mou_pt.mou_kategori.labels, datasets: [{ data: d.pks_mou_pt.mou_kategori.data, backgroundColor: pksColors }] }, options: withCenter({ ...optPieBase, plugins: { legend: { display: false }, tooltip: pieTooltipCfg() } }, sum(d.pks_mou_pt.mou_kategori.data)) });
+
+        // 4. Akreditasi PT
+        charts.sdmAkreDist = new Chart(document.getElementById('chartSdmAkreDist'), { type: 'doughnut', data: { labels: d.akreditasi_pt.distribusi.labels, datasets: [{ data: d.akreditasi_pt.distribusi.data, backgroundColor: [C.amber, C.blue, C.emerald] }] }, options: withCenter(optPieBase, sum(d.akreditasi_pt.distribusi.data)) });
+        charts.sdmAkreDosen = new Chart(document.getElementById('chartSdmAkreDosen'), { type: 'doughnut', data: { labels: d.akreditasi_pt.akreditasi_dosen.labels, datasets: [{ data: d.akreditasi_pt.akreditasi_dosen.data, backgroundColor: [C.emerald, C.blue, C.amber] }] }, options: { ...optPieBase, plugins: { ...optPieBase.plugins, centerText: { text: '%' } } } });
+        
+        charts.sdmAkrePembina = new Chart(document.getElementById('chartSdmAkrePembina'), { type: 'bar', data: { labels: d.akreditasi_pt.pembina.labels, datasets: [{ label: 'Unggul', data: d.akreditasi_pt.pembina.unggul, backgroundColor: C.emerald }, { label: 'Baik Sekali', data: d.akreditasi_pt.pembina.baik_sekali, backgroundColor: C.blue }, { label: 'Baik', data: d.akreditasi_pt.pembina.baik, backgroundColor: C.amber }] }, options: optBar });
+        charts.sdmAkrePtkin = new Chart(document.getElementById('chartSdmAkrePtkin'), { type: 'bar', data: { labels: d.akreditasi_pt.ptkin.labels, datasets: [{ label: 'Unggul', data: d.akreditasi_pt.ptkin.unggul, backgroundColor: C.emerald }, { label: 'Baik Sekali', data: d.akreditasi_pt.ptkin.baik_sekali, backgroundColor: C.blue }, { label: 'Baik', data: d.akreditasi_pt.ptkin.baik, backgroundColor: C.amber }] }, options: optBar });
+        charts.sdmAkreJenjang = new Chart(document.getElementById('chartSdmAkreJenjang'), { type: 'bar', data: { labels: d.akreditasi_pt.jenjang.labels, datasets: [{ label: 'Unggul', data: d.akreditasi_pt.jenjang.unggul, backgroundColor: C.emerald }, { label: 'Baik Sekali', data: d.akreditasi_pt.jenjang.baik_sekali, backgroundColor: C.blue }, { label: 'Baik', data: d.akreditasi_pt.jenjang.baik, backgroundColor: C.amber }] }, options: optBar });
+    }
+
+    function createSosialisasiBrandCharts() {
+        const d = N_DATA.sosialisasi_brand;
+        
+        // Awareness
+        charts.nasSosialisasiAwareness = new Chart(document.getElementById('chartNasSosialisasiAwareness'), {
+            type: 'line',
+            data: {
+                labels: d.awareness.labels,
+                datasets: [{ label: 'Awareness', ...makeLine(d.awareness.data.map(v => (v * 100).toFixed(2)), C.emerald, true) }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: tooltipCfg({ callbacks: { label: function(ctx) { return ' ' + ctx.dataset.label + ': ' + ctx.raw + '%'; } } }) },
+                scales: lineScale('%')
+            }
+        });
+
+        // Adinata Table
+        const elJuaraUmum = document.getElementById('sosialisasiJuaraUmum');
+        if (elJuaraUmum) elJuaraUmum.textContent = d.juara_umum;
+        
+        const tbody = document.getElementById('tableNasSosialisasiAdinata');
+        if (tbody) {
+            tbody.innerHTML = d.adinata.map(row => {
+                return `<tr>
+                    <td class="px-4 py-3 font-medium text-slate-700">${row[0]}</td>
+                    <td class="px-4 py-3 text-emerald-600 font-bold">${row[1]}</td>
+                    <td class="px-4 py-3 text-blue-600 font-medium">${row[2]}</td>
+                    <td class="px-4 py-3 text-amber-600 font-medium">${row[3]}</td>
+                    <td class="px-4 py-3 text-slate-600">${row[4]}</td>
+                    <td class="px-4 py-3 text-slate-600">${row[5]}</td>
+                </tr>`;
+            }).join('');
+        }
+    }
+
     function initLayananKomunitasMaps() {
         const d = N_DATA.layanan_komunitas_nas;
-        const configMap = (id, data, color) => {
+        const configMap = (id, data) => {
             const el = document.getElementById(id);
             if (!el) return null;
             const map = L.map(id, { scrollWheelZoom: false }).setView([-2.5, 118], 5);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+            
+            const maxVal = Math.max(...data.map(it => it[3]));
+            const getColor = (v) => {
+                if (v >= maxVal * 0.5) return '#10b981';
+                if (v >= maxVal * 0.1) return '#3b82f6';
+                return '#f59e0b';
+            };
+
             data.forEach(it => {
                 if (it[3] > 0) {
+                    const color = getColor(it[3]);
                     const icon = L.divIcon({
                         className: 'custom-div-icon',
-                        html: `<div style="background-color: ${color}; width: 10px; height: 10px; border-radius: 50%; border: 2px solid white;"></div>`,
-                        iconSize: [10, 10]
+                        html: `<div style="background-color: ${color}; width: 14px; height: 14px; border: 2.5px solid white; border-radius: 50%; box-shadow: 0 3px 6px rgba(0,0,0,0.16);"></div>`,
+                        iconSize: [14, 14], iconAnchor: [7, 7]
                     });
                     L.marker([it[1], it[2]], { icon }).addTo(map)
-                        .bindPopup(`<div class="p-2 font-sans"><strong>${it[0]}</strong><br>${it[3]} Agen</div>`);
+                        .bindPopup(`<div class="p-2 font-sans"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">${it[0]}</p><p class="text-sm font-black text-slate-800">${it[3]} Agen</p></div>`);
                 }
             });
             return map;
@@ -3805,9 +4154,9 @@ const DataStatistik = (() => {
         if (charts.nasAgenBumdesMap) charts.nasAgenBumdesMap.remove();
         if (charts.nasAgenMasjidMap) charts.nasAgenMasjidMap.remove();
 
-        charts.nasAgenPonpesMap = configMap('nasAgenPonpesMap', d.agen_ponpes.map, C.emerald);
-        charts.nasAgenBumdesMap = configMap('nasAgenBumdesMap', d.agen_bumdes.map, C.blue);
-        charts.nasAgenMasjidMap = configMap('nasAgenMasjidMap', d.agen_masjid.map, C.amber);
+        charts.nasAgenPonpesMap = configMap('nasAgenPonpesMap', d.agen_ponpes.map);
+        charts.nasAgenBumdesMap = configMap('nasAgenBumdesMap', d.agen_bumdes.map);
+        charts.nasAgenMasjidMap = configMap('nasAgenMasjidMap', d.agen_masjid.map);
     }
 
     function renderAgenTable(type = 'ponpes') {
@@ -3847,6 +4196,69 @@ const DataStatistik = (() => {
         renderAgenTable('ponpes');
         renderAgenTable('bumdes');
         renderAgenTable('masjid');
+    }
+
+    function createKdeksCharts() {
+        const d = N_DATA.kdeks;
+        const elTotal = document.getElementById('kdeksTotalCount');
+        if (elTotal) {
+            let val = 0;
+            const inc = setInterval(() => {
+                val += 1;
+                elTotal.textContent = val;
+                if (val >= d.jumlah) clearInterval(inc);
+            }, 30);
+        }
+
+        charts.nasKdeksTrend = new Chart(document.getElementById('chartNasKdeksTrend'), {
+            type: 'line',
+            data: {
+                labels: d.pertumbuhan.labels,
+                datasets: [{ label: 'Jumlah KDEKS', ...makeLine(d.pertumbuhan.data, C.emerald, true) }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: tooltipCfg() },
+                scales: lineScale('')
+            }
+        });
+
+        const tbody = document.getElementById('tableNasKdeks');
+        if (tbody) {
+            tbody.innerHTML = d.daftar.map(row => {
+                const date = new Date(row[2]).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                return `<tr>
+                    <td class="px-4 py-3 font-medium text-slate-700">${row[0]}</td>
+                    <td class="px-4 py-3 text-emerald-600 font-bold">${row[1] || '-'}</td>
+                    <td class="px-4 py-3 text-slate-500">${date}</td>
+                </tr>`;
+            }).join('');
+        }
+    }
+
+    function initKdeksMap() {
+        const d = N_DATA.kdeks;
+        const mapEl = document.getElementById('nasKdeksMap');
+        if (!mapEl) return;
+        
+        if (charts.nasKdeksMap) charts.nasKdeksMap.remove();
+        
+        charts.nasKdeksMap = L.map('nasKdeksMap', { scrollWheelZoom: false }).setView([-2.5, 118], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(charts.nasKdeksMap);
+
+        d.sebaran.forEach(item => {
+            const [prov, sk, dateStr, lat, lng] = item;
+            if (lat && lng) {
+                const icon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: #10b981; width: 14px; height: 14px; border: 2.5px solid white; border-radius: 50%; box-shadow: 0 3px 6px rgba(0,0,0,0.16);"></div>`,
+                    iconSize: [14, 14], iconAnchor: [7, 7]
+                });
+                const date = new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                L.marker([lat, lng], { icon }).addTo(charts.nasKdeksMap)
+                    .bindPopup(`<div class="p-2 font-sans"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">${prov}</p><p class="text-sm font-black text-emerald-600 mb-1">${sk || '-'}</p><p class="text-[10px] text-slate-500">${date}</p></div>`);
+            }
+        });
     }
 
     // ── Render ────────────────────────────────────
@@ -3964,6 +4376,13 @@ const DataStatistik = (() => {
                     initLayananKomunitasMaps();
                     renderAllAgenTables();
                 }, 200);
+            } else if (state.nasView === 'sdm-pendidikan') {
+                createSdmPendidikanCharts();
+            } else if (state.nasView === 'sosialisasi-brand') {
+                createSosialisasiBrandCharts();
+            } else if (state.nasView === 'kdeks') {
+                createKdeksCharts();
+                setTimeout(initKdeksMap, 200);
             }
         } else {
             renderDaerahPanels();
@@ -3993,6 +4412,9 @@ const DataStatistik = (() => {
         const isSertifUmkNas   = state.nasView === 'sertifikasi-umk-nas';
         const isLiterasiEkonomi = state.nasView === 'literasi-ekonomi';
         const isLayananKomunitas = state.nasView === 'layanan-komunitas';
+        const isSdmPendidikan  = state.nasView === 'sdm-pendidikan';
+        const isSosialisasiBrand = state.nasView === 'sosialisasi-brand';
+        const isKdeks          = state.nasView === 'kdeks';
         const isEksekutif      = state.nasView === 'eksekutif';
 
         toggle('nasView-eksekutif', state.nasView === 'eksekutif');
@@ -4037,14 +4459,33 @@ const DataStatistik = (() => {
         toggle('nasView-sertifikasi-umk-nas', isSertifUmkNas);
         toggle('nasView-literasi-ekonomi', isLiterasiEkonomi);
         toggle('nasView-layanan-komunitas', isLayananKomunitas);
+        toggle('nasView-sdm-pendidikan', isSdmPendidikan);
+        toggle('nasView-sosialisasi-brand', isSosialisasiBrand);
+        toggle('nasView-kdeks', isKdeks);
 
-        const activeBtn = document.querySelector(`.nas-nav-btn[data-view="${state.nasView}"]`);
+        // Update active state in sidebar
+        document.querySelectorAll('.nas-nav-btn, .nas-sub-nav-btn').forEach(btn => {
+            btn.classList.remove('is-active');
+        });
+        
+        const activeBtn = document.querySelector(`[data-nas-view="${state.nasView}"]`);
+        if (activeBtn) {
+            activeBtn.classList.add('is-active');
+            
+            // If it's a sub-nav, make sure its parent accordion is open
+            if (activeBtn.classList.contains('nas-sub-nav-btn')) {
+                const parentAccordion = activeBtn.closest('.nas-accordion-item');
+                if (parentAccordion && !parentAccordion.classList.contains('is-open')) {
+                    parentAccordion.classList.add('is-open');
+                }
+            }
+        }
+
         const placeholderView = document.getElementById('nasView-placeholder');
         if (!isEksekutif) {
-            const btn = document.querySelector(`[data-nas-view="${state.nasView}"]`);
             const label = document.getElementById('nasActiveCategoryName');
-            if (btn && label) {
-                label.textContent = btn.textContent.trim();
+            if (activeBtn && label) {
+                label.textContent = activeBtn.textContent.trim();
             }
         }
     }

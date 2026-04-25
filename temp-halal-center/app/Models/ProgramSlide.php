@@ -8,11 +8,8 @@ class ProgramSlide extends Model
 {
     protected $fillable = [
         'title',
-        'title_en',
         'subtitle',
-        'subtitle_en',
         'description',
-        'description_en',
         'cta_label',
         'cta_url',
         'image_path',

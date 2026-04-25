@@ -20,7 +20,6 @@ class HalalProduct extends Model
         'certificate_issued_at',
         'certificate_expires_at',
         'description',
-        'description_en',
         'image_path',
         'product_url',
         'is_featured',

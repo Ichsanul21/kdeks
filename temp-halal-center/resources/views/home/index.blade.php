@@ -16,15 +16,62 @@
         $totalSertifikatTerbit = ($statistics['certificates_total'] ?? 0) + ($statistics['products_total'] ?? 0);
     @endphp
 
+    {{-- ===== BANNER SLIDER ===== --}}
+    @if($banners->isEmpty())
+        <div class="relative w-full overflow-hidden bg-slate-900 flex items-center justify-center" style="height:780px;margin-top:64px;">
+            <p class="text-white text-2xl font-bold">Banner belum tersedia</p>
+        </div>
+    @else
+        <div id="bannerSlider" class="relative w-full overflow-hidden" style="height:780px;margin-top:64px;" onmouseenter="window.bannerPause=true" onmouseleave="window.bannerPause=false">
+            <div id="bannerTrack" class="flex h-full transition-transform duration-700 ease-in-out">
+                @foreach($banners as $index => $banner)
+                    <div class="w-full flex-shrink-0 relative h-full bg-slate-900">
+                        {{-- Background Image --}}
+                        <img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-slate-900/30"></div>
+
+                        <div class="relative mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
+                            <h2 class="font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.12]">{{ $banner->title }}</h2>
+                            <p class="mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">{{ $banner->subtitle }}</p>
+                        </div>
+
+                        {{-- Bottom fade to hero --}}
+                        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Navigation arrows --}}
+            <button type="button" onclick="slideBanner(-1)" class="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:left-8">
+                <i data-lucide="chevron-left" class="h-5 w-5"></i>
+            </button>
+            <button type="button" onclick="slideBanner(1)" class="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:right-8">
+                <i data-lucide="chevron-right" class="h-5 w-5"></i>
+            </button>
+
+            {{-- Dots --}}
+            <div class="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 gap-2.5 lg:bottom-14">
+                @foreach($banners as $index => $banner)
+                    <button type="button" onclick="goToBannerSlide({{ $index }})" class="banner-dot h-2 w-2 rounded-full bg-white/40 transition-all duration-300 {{ $index === 0 ? 'w-8 !bg-white' : '' }}" data-index="{{ $index }}"></button>
+                @endforeach
+            </div>
+
+            {{-- Slide counter --}}
+            <div class="absolute bottom-12 right-6 z-10 hidden items-center gap-2 text-sm font-bold text-white/50 lg:flex lg:right-10 lg:bottom-14">
+                <span id="bannerCurrentNum" class="text-white">01</span>
+                <span class="w-8 h-px bg-white/30"></span>
+                <span>{{ str_pad($banners->count(), 2, '0', STR_PAD_LEFT) }}</span>
+            </div>
+        </div>
+    @endif
+
     {{-- ===== HERO SECTION ===== --}}
-    <section id="hero" class="relative flex flex-col overflow-hidden pb-8 pt-24 lg:pb-16 lg:pt-32">
+    <section id="hero" class="relative flex flex-col overflow-hidden pb-8 pt-8 lg:pb-16">
         <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
         <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
 
         <div class="relative z-10 mx-auto max-w-7xl px-6">
-            {{-- Grid 70:30 --}}
             <div class="grid items-center gap-10 lg:grid-cols-[7fr_3fr] lg:gap-14">
-                {{-- Kiri: Teks + CTA --}}
                 <div class="flex flex-col gap-6">
                     <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-7xl xl:leading-[1.2]">
                         Komite Daerah
@@ -48,7 +95,6 @@
                     </div>
                 </div>
 
-                {{-- Kanan: Foto Hero --}}
                 <div class="relative hidden lg:block">
                     <div class="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
                     <div class="relative overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-white/60">
@@ -82,13 +128,7 @@
         </div>
 
         <div class="relative z-10 mx-auto max-w-7xl px-6">
-            {{-- Statistik Sertifikasi Halal --}}
-            {{-- <div class="mt-8 mb-4 md:mt-10">
-                <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Statistik Sertifikasi Halal</h2>
-            </div> --}}
-
             <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
-                {{-- UMKM Halal Kaltim --}}
                 <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
                     <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
                         <i data-lucide="award" class="h-5 w-5"></i>
@@ -99,7 +139,6 @@
                     <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
                 </div>
 
-                {{-- Produk Terdaftar --}}
                 <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
                     <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
                         <i data-lucide="package" class="h-5 w-5"></i>
@@ -110,7 +149,6 @@
                     <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
                 </div>
 
-                {{-- Sertifikat Halal Terbit --}}
                 <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
                     <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
                         <i data-lucide="badge-check" class="h-5 w-5"></i>
@@ -121,7 +159,6 @@
                     <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
                 </div>
 
-                {{-- Lembaga Pendamping Aktif --}}
                 <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
                     <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
                         <i data-lucide="users" class="h-5 w-5"></i>
@@ -133,7 +170,6 @@
                 </div>
             </div>
 
-            {{-- Program Unggulan --}}
             @if($slides->isNotEmpty())
                 <div class="mt-8 mb-4 md:mt-10">
                     <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
@@ -203,7 +239,6 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- Baris Kecamatan & Kelurahan — akan di-hide via JS jika mode kota saja --}}
                         <div id="mapSubDistrictFilters" class="pointer-events-auto flex gap-2">
                             <select id="mapKecamatanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
                                 <option value="">Kecamatan</option>
@@ -254,7 +289,6 @@
     <section id="direktori" class="border-t border-slate-100 bg-white py-24">
         <div class="mx-auto max-w-7xl px-6">
             <div class="grid gap-16 lg:grid-cols-2">
-                {{-- Data Produk --}}
                 <div class="flex h-full flex-col">
                     <div class="mb-8 flex items-end justify-between">
                         <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
@@ -276,7 +310,6 @@
                     </div>
                 </div>
 
-                {{-- Dokumen & Regulasi --}}
                 <div id="data" class="flex h-full flex-col">
                     <div class="mb-8 flex items-end justify-between">
                         <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
@@ -362,31 +395,71 @@
         </div>
     </section>
 
+    {{-- ===== BANNER SLIDER SCRIPT ===== --}}
+    <script>
+        (() => {
+            window.bannerPause = false;
+            let currentBannerSlide = 0;
+            const totalBannerSlides = {{ $banners->count() }};
+            const bannerTrack = document.getElementById('bannerTrack');
+            const bannerDots = document.querySelectorAll('.banner-dot');
+            const bannerCounter = document.getElementById('bannerCurrentNum');
+
+            function pad(n) { return String(n + 1).padStart(2, '0'); }
+
+            function updateBannerSlider() {
+                if (!bannerTrack) return;
+                bannerTrack.style.transform = `translateX(-${currentBannerSlide * 100}%)`;
+                bannerDots.forEach((dot, i) => {
+                    if (i === currentBannerSlide) {
+                        dot.classList.add('w-8', '!bg-white');
+                        dot.classList.remove('w-2', 'bg-white/40');
+                    } else {
+                        dot.classList.remove('w-8', '!bg-white');
+                        dot.classList.add('w-2', 'bg-white/40');
+                    }
+                });
+                if (bannerCounter) bannerCounter.textContent = pad(currentBannerSlide);
+            }
+
+            window.slideBanner = function(direction) {
+                currentBannerSlide = (currentBannerSlide + direction + totalBannerSlides) % totalBannerSlides;
+                updateBannerSlider();
+            };
+
+            window.goToBannerSlide = function(index) {
+                currentBannerSlide = index;
+                updateBannerSlider();
+            };
+
+            setInterval(() => {
+                if (!window.bannerPause) {
+                    currentBannerSlide = (currentBannerSlide + 1) % totalBannerSlides;
+                    updateBannerSlider();
+                }
+            }, 3000);
+
+            // Touch / swipe support
+            let touchStartX = 0;
+            const sliderEl = document.getElementById('bannerSlider');
+            if (sliderEl) {
+                sliderEl.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                sliderEl.addEventListener('touchend', (e) => {
+                    const diff = touchStartX - e.changedTouches[0].screenX;
+                    if (Math.abs(diff) > 50) {
+                        slideBanner(diff > 0 ? 1 : -1);
+                    }
+                }, { passive: true });
+            }
+        })();
+    </script>
+
     {{-- ===== MAP SCRIPT ===== --}}
     <script>
         (() => {
-            /* ============================================================
-             *  MODE FILTER PETA SEBARAN HALAL
-             *  ─────────────────────────────────
-             *  Untuk presentasi, aktifkan SALAH SATU mode di bawah ini
-             *  dengan menghapus komentar (//) di depan barisnya.
-             *
-             *  [MODE A] Filter KOTA SAJA
-             *    → Hanya tampilkan dropdown Kota & LP3H/LPH
-             *    → Kecamatan & Kelurahan disembunyikan otomatis
-             *
-             *  [MODE B] Filter KOTA + KECAMATAN + KELURAHAN
-             *    → Tampilkan semua dropdown (default)
-             *    → Kecamatan aktif setelah pilih Kota
-             *    → Kelurahan aktif setelah pilih Kecamatan
-             * ============================================================ */
-
-            // [MODE A] — Hapus komentar baris ini untuk filter KOTA SAJA
             const MAP_FILTER_MODE = 'city-only';
-
-            // [MODE B] — Komentari baris ini saat menggunakan MODE A
-            // const MAP_FILTER_MODE = 'full';
-
 
             const escapeHtml = (value) => {
                 if (value === null || value === undefined) return '';
@@ -477,7 +550,6 @@
                 const zoomButtons = document.querySelectorAll('[data-map-zoom]');
                 const markersLayer = L.layerGroup().addTo(map);
 
-                // Sembunyikan filter kecamatan & kelurahan jika mode kota saja
                 if (MAP_FILTER_MODE === 'city-only') {
                     const subFilters = document.getElementById('mapSubDistrictFilters');
                     if (subFilters) subFilters.style.display = 'none';
@@ -604,7 +676,6 @@
                     kelurahanFilter.innerHTML = '<option value="">Kelurahan</option>';
                     kelurahanFilter.disabled = true;
 
-                    // [MODE B] Isi dropdown kecamatan berdasarkan kota yang dipilih
                     if (MAP_FILTER_MODE === 'full') {
                         if (state.city && filterData[state.city]) {
                             kecamatanFilter.disabled = false;
@@ -627,7 +698,6 @@
                     renderMap();
                 });
 
-                // [MODE B] Event listener kecamatan — hanya aktif di mode full
                 if (MAP_FILTER_MODE === 'full') {
                     kecamatanFilter?.addEventListener('change', () => {
                         state.kecamatan = kecamatanFilter.value;

@@ -41,19 +41,26 @@
         $adminNavigation = [
             'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard'],
             'admin.sehati-registrations.index' => ['label' => 'Pengajuan SEHATI', 'icon' => 'file-check-2'],
-            // 'admin.halal-products.index' => ['label' => 'Direktori Produk', 'icon' => 'package'],
             'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin'],
+            'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package'],
+            'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned'],
             'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open'],
             'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper'],
+            // 'admin.events.index' => ['label' => 'Kegiatan & Event', 'icon' => 'calendar'],
+            // 'admin.gallery-items.index' => ['label' => 'Galeri Foto', 'icon' => 'image'],
             'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation'],
+            'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor'],
             'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2'],
             'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users'],
             'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map'],
             'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles'],
             'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business'],
+            'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network'],
+            'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone'],
             'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
-            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
+            'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle'],
             'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square'],
+            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
         ];
 
         if (auth()->user()?->hasRole('developer')) {
