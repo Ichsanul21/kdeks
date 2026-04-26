@@ -41,8 +41,12 @@
 
                 {{-- Parallax text --}}
                 <div class="banner-parallax-text mx-auto flex flex-1 max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
-                    <h2 class="banner-parallax-title font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.12]">{{ $banner->title }}</h2>
-                    <p class="banner-parallax-subtitle mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">{{ $banner->subtitle }}</p>
+                    <h2 class="banner-parallax-title font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.12]">
+                        <span id="bannerTitle" class="banner-text-inner inline-block">{{ $banners->first()->title }}</span>
+                    </h2>
+                    <p class="banner-parallax-subtitle mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">
+                        <span id="bannerSubtitle" class="banner-text-inner inline-block">{{ $banners->first()->subtitle }}</span>
+                    </p>
                 </div>
 
                 {{-- Bottom fade --}}
@@ -411,7 +415,7 @@
 
     </div>{{-- end wrapper --}}
 
-    {{-- ===== SCROLL DOWN ANIMATION STYLE ===== --}}
+    {{-- ===== ANIMATION STYLES ===== --}}
     <style>
         @keyframes scrollDownBounce {
             0%, 100% {
@@ -431,9 +435,13 @@
         .scroll-down-btn:hover .scroll-down-arrow {
             animation: scrollDownBounce 1.2s ease-in-out infinite;
         }
+
+        .banner-text-inner {
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
     </style>
 
-        {{-- ===== BANNER SLIDER + PARALLAX SCRIPT ===== --}}
+    {{-- ===== BANNER SLIDER + PARALLAX SCRIPT ===== --}}
     <script>
         (() => {
             window.bannerPause = false;
@@ -443,18 +451,56 @@
             const bannerCounter = document.getElementById('bannerCurrentNum');
             const bannerSlider = document.getElementById('bannerSlider');
             const bannerFixedBg = document.getElementById('bannerFixedBg');
+            const bannerTitleEl = document.getElementById('bannerTitle');
+            const bannerSubtitleEl = document.getElementById('bannerSubtitle');
             const parallaxTitles = document.querySelectorAll('.banner-parallax-title');
             const parallaxSubtitles = document.querySelectorAll('.banner-parallax-subtitle');
 
             const NAVBAR_HEIGHT = 64;
             const BANNER_HEIGHT = 665;
 
+            {{-- Data banner untuk teks yang berubah --}}
+            const bannerTexts = @json($banners->map(fn($b) => [
+                'title' => $b->title,
+                'subtitle' => $b->subtitle,
+            ]));
+
+            let textAnimating = false;
+
             function pad(n) { return String(n + 1).padStart(2, '0'); }
+
+            function updateBannerText() {
+                if (!bannerTitleEl || !bannerSubtitleEl || textAnimating) return;
+                textAnimating = true;
+
+                const slide = bannerTexts[currentBannerSlide];
+
+                {{-- Fade out --}}
+                bannerTitleEl.style.opacity = '0';
+                bannerTitleEl.style.transform = 'translateY(18px)';
+                bannerSubtitleEl.style.opacity = '0';
+                bannerSubtitleEl.style.transform = 'translateY(12px)';
+
+                setTimeout(() => {
+                    {{-- Ganti konten --}}
+                    bannerTitleEl.textContent = slide.title;
+                    bannerSubtitleEl.textContent = slide.subtitle;
+
+                    {{-- Fade in --}}
+                    bannerTitleEl.style.opacity = '1';
+                    bannerTitleEl.style.transform = 'translateY(0)';
+                    bannerSubtitleEl.style.opacity = '1';
+                    bannerSubtitleEl.style.transform = 'translateY(0)';
+
+                    textAnimating = false;
+                }, 380);
+            }
 
             function updateBannerSlider() {
                 if (!bannerTrack) return;
                 bannerTrack.style.transform = `translateX(-${currentBannerSlide * 100}%)`;
                 if (bannerCounter) bannerCounter.textContent = pad(currentBannerSlide);
+                updateBannerText();
             }
 
             window.slideBanner = function(direction) {
@@ -488,7 +534,7 @@
                 }, { passive: true });
             }
 
-            // ===== CUSTOM SMOOTH SCROLL (tidak pakai scrollIntoView) =====
+            // ===== CUSTOM SMOOTH SCROLL =====
             function smoothScrollTo(targetY, duration) {
                 const startY = window.pageYOffset || document.documentElement.scrollTop;
                 const diff = targetY - startY;
@@ -501,7 +547,6 @@
                     const elapsed = timestamp - start;
                     const progress = Math.min(elapsed / duration, 1);
 
-                    // easeInOutQuart — mulai pelan, tengah cepat, akhir pelan
                     const ease = progress < 0.5
                         ? 8 * progress * progress * progress * progress
                         : 1 - Math.pow(-2 * progress + 2, 4) / 2;
@@ -529,7 +574,7 @@
                 });
             }
 
-            // ===== PARALLAX — TEKS BERGERAK KE BAWAH LEBIH TERASA =====
+            // ===== PARALLAX =====
             let ticking = false;
             let bgHidden = false;
 
