@@ -19,7 +19,7 @@
             <div class="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[0.95fr,1.05fr]">
                 <div class="hidden rounded-[2rem] py-[2.15rem] border border-slate-200/95 bg-white/55 p-8 shadow-[0_10px_50px_rgba(15,23,42,0.05)] backdrop-blur-xl lg:block">
                     <a href="/" class="flex items-center">
-                        <img src="{{ asset('storage/branding/logo.png') }}" class="w-[16rem]" alt="KDEKS Kaltim" class="h-10 object-contain sm:h-11">
+                        <img src="{{ asset('storage/'.data_get($setting, 'logo_path', 'branding/logo.png')) }}" class="w-[16rem]" alt="KDEKS Kaltim" class="h-10 object-contain sm:h-11">
                     </a>
 
                     <div class="-mt-4 max-w-lg">
