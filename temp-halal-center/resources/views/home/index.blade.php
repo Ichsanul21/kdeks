@@ -29,7 +29,7 @@
                 <div id="bannerTrack" class="flex h-full transition-transform duration-700 ease-in-out">
                     @foreach($banners as $index => $banner)
                         <div class="w-full flex-shrink-0 relative h-full bg-slate-900">
-                            <img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover">
+                            <img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover opacity-[70%]">
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10"></div>
                         </div>
                     @endforeach
@@ -41,7 +41,7 @@
 
                 {{-- Parallax text --}}
                 <div class="banner-parallax-text mx-auto flex flex-1 max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
-                    <h2 class="banner-parallax-title font-heading text-3xl font-extrabold leading-tight text-white md:text-4xl md:leading-[1.15] lg:text-5xl lg:leading-[1.12]">{{ $banner->title }}</h2>
+                    <h2 class="banner-parallax-title font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.12]">{{ $banner->title }}</h2>
                     <p class="banner-parallax-subtitle mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">{{ $banner->subtitle }}</p>
                 </div>
 
