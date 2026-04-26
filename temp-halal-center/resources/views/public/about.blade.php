@@ -128,4 +128,182 @@
             </div>
         </div>
     </section>
+    {{-- ===== ROADMAP / MILESTONE ===== --}}
+    <section class="relative pb-24 overflow-hidden">
+        {{-- Background decoration --}}
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.04),transparent_50%)]"></div>
+
+        <div class="mx-auto max-w-5xl px-6">
+            <div class="mb-14 text-center">
+                <span class="inline-block rounded-full bg-emerald-50 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.25em] text-emerald-600 border border-emerald-100">Sejarah & Perjalanan</span>
+                <h2 class="mt-4 font-heading text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Tonggak Perjalanan</h2>
+                <p class="mt-3 text-sm font-medium leading-relaxed text-slate-500">Dari KNKS hingga KDEKS Kalimantan Timur | rekam jejak kebijakan yang membentuk ekosistem ekonomi syariah Indonesia.</p>
+            </div>
+
+            {{-- Timeline --}}
+            <div class="relative">
+                {{-- Vertical line (desktop) --}}
+                <div class="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-emerald-200 via-emerald-300 to-transparent md:block"></div>
+
+                <div class="space-y-12 md:space-y-16">
+
+                    @php
+                    $milestones = [
+                        [
+                            'year' => '2016',
+                            'sub'  => '',
+                            'title'=> 'Pendirian KNKS',
+                            'color'=> 'emerald',
+                            'icon' => 'landmark',
+                            'items'=> [
+                                'Peraturan Presiden No. 91 Tahun 2016 Tgl. 08/11/2016 tentang Komite Nasional Keuangan Syariah',
+                                'KNKS bertujuan mendukung pembangunan ekonomi nasional & mendorong percepatan pengembangan sektor keuangan syariah, perlu memperkuat koordinasi, sinkronisasi & sinergi antara otoritas, kementerian/lembaga, & pemangku kepentingan lain di sektor keuangan syariah',
+                            ],
+                        ],
+                        [
+                            'year' => '2020',
+                            'sub'  => '',
+                            'title'=> 'Transformasi Menjadi KNEKS',
+                            'color'=> 'cyan',
+                            'icon' => 'refresh-cw',
+                            'items'=> [
+                                'Peraturan Presiden No. 28 Tahun 2020 Tgl. 07/02/2020 tentang Komite Nasional Ekonomi & Keuangan Syariah',
+                                'KNEKS adalah lembaga nonstruktural yang dipimpin oleh Presiden sebagai ketua dan Wakil Presiden sebagai Ketua Harian yang bertujuan meningkatkan pembangunan ekosistem ekonomi & keuangan syariah guna mendukung pembangunan ekonomi nasional',
+                            ],
+                        ],
+                        [
+                            'year' => '2021',
+                            'sub'  => '30 November',
+                            'title'=> 'Rapat Pleno I KNEKS',
+                            'color'=> 'blue',
+                            'icon' => 'users',
+                            'items'=> [
+                                'Komite Daerah Ekonomi & Keuangan Syariah (KDEKS) ditetapkan sebagai salah satu dari 13 Program Prioritas oleh Ketua Harian KNEKS',
+                            ],
+                        ],
+                        [
+                            'year' => '2022',
+                            'sub'  => '30 Mei',
+                            'title'=> 'Rapat Pleno II KNEKS',
+                            'color'=> 'violet',
+                            'icon' => 'mic',
+                            'items'=> [
+                                '"Kita akan membangun kelembagaannya (KNEKS) sampai ke daerah dengan membangun KDEKS di semua provinsi" Arahan Wakil Presiden RI selaku Ketua Harian KNEKS',
+                            ],
+                        ],
+                        [
+                            'year' => '2022',
+                            'sub'  => '20 Desember',
+                            'title'=> 'Rapat Pleno III KNEKS',
+                            'color'=> 'violet',
+                            'icon' => 'file-text',
+                            'items'=> [
+                                '"Pengintegrasian rencana pengembangan ekonomi & keuangan syariah ke dalam rencana pembangunan nasional dan daerah, termasuk penyusunan Masterplan Ekonomi dan Keuangan Syariah Indonesia (MEKSI), sebagai kelanjutan Masterplan sebelumnya" Arahan Wakil Presiden RI selaku Ketua Harian KNEKS',
+                            ],
+                        ],
+                        [
+                            'year' => '2023',
+                            'sub'  => '04 Agustus',
+                            'title'=> 'Pengukuhan KDEKS Prov. Kaltim Periode 2023–2025',
+                            'color'=> 'emerald',
+                            'icon' => 'award',
+                            'items'=> [],
+                        ],
+                        [
+                            'year' => '2023',
+                            'sub'  => '25 September',
+                            'title'=> 'Dukungan Kemendagri – Ekonomi Syariah',
+                            'color'=> 'amber',
+                            'icon' => 'book-open',
+                            'items'=> [
+                                'Peraturan Menteri Dalam Negeri No. 15 Tahun 2023 Tgl. 25/09/2023 tentang Pedoman Penyusunan Anggaran Pendapatan & Belanja Daerah Tahun Anggaran 2024',
+                            ],
+                        ],
+                        [
+                            'year' => '2024',
+                            'sub'  => '20 September',
+                            'title'=> 'Dukungan Kemendagri – Ekonomi Syariah',
+                            'color'=> 'amber',
+                            'icon' => 'book-open',
+                            'items'=> [
+                                'Peraturan Menteri Dalam Negeri No. 15 Tahun 2023 Tgl. 20/09/2024 tentang Pedoman Penyusunan Anggaran Pendapatan & Belanja Daerah Tahun Anggaran 2025',
+                            ],
+                        ],
+                        [
+                            'year' => '2024',
+                            'sub'  => '',
+                            'title'=> 'Agenda Strategis Wapres Gibran',
+                            'color'=> 'rose',
+                            'icon' => 'book-marked',
+                            'items'=> [
+                                '"Dalam buku setebal sekitar seratus halaman tersebut, dijelaskan berbagai agenda, termasuk penurunan prevalensi stunting, akselerasi pertumbuhan ekonomi dan keuangan syariah, pemberdayaan ekonomi pesantren, reformasi birokrasi, serta percepatan pembangunan dan peningkatan kesejahteraan di Papua. Buku ini menjadi panduan bagi Wapres Gibran untuk melanjutkan program-program strategis yang telah dicanangkan, dengan fokus pada perbaikan di berbagai sektor."',
+                            ],
+                        ],
+                    ];
+
+                    $colorMap = [
+                        'emerald' => ['bg' => 'bg-emerald-500', 'ring' => 'ring-emerald-200', 'badge_bg' => 'bg-emerald-50', 'badge_text' => 'text-emerald-700', 'badge_border' => 'border-emerald-200', 'card_border' => 'border-emerald-100', 'dot' => 'bg-emerald-400'],
+                        'cyan'    => ['bg' => 'bg-cyan-500',    'ring' => 'ring-cyan-200',    'badge_bg' => 'bg-cyan-50',    'badge_text' => 'text-cyan-700',    'badge_border' => 'border-cyan-200',    'card_border' => 'border-cyan-100',    'dot' => 'bg-cyan-400'],
+                        'blue'    => ['bg' => 'bg-blue-500',    'ring' => 'ring-blue-200',    'badge_bg' => 'bg-blue-50',    'badge_text' => 'text-blue-700',    'badge_border' => 'border-blue-200',    'card_border' => 'border-blue-100',    'dot' => 'bg-blue-400'],
+                        'violet'  => ['bg' => 'bg-violet-500',  'ring' => 'ring-violet-200',  'badge_bg' => 'bg-violet-50',  'badge_text' => 'text-violet-700',  'badge_border' => 'border-violet-200',  'card_border' => 'border-violet-100',  'dot' => 'bg-violet-400'],
+                        'amber'   => ['bg' => 'bg-amber-500',   'ring' => 'ring-amber-200',   'badge_bg' => 'bg-amber-50',   'badge_text' => 'text-amber-700',   'badge_border' => 'border-amber-200',   'card_border' => 'border-amber-100',   'dot' => 'bg-amber-400'],
+                        'rose'    => ['bg' => 'bg-rose-500',    'ring' => 'ring-rose-200',    'badge_bg' => 'bg-rose-50',    'badge_text' => 'text-rose-700',    'badge_border' => 'border-rose-200',    'card_border' => 'border-rose-100',    'dot' => 'bg-rose-400'],
+                    ];
+                    @endphp
+
+                    @foreach($milestones as $i => $m)
+                        @php
+                            $c = $colorMap[$m['color']];
+                            $isRight = $i % 2 === 0;
+                        @endphp
+
+                        <div class="relative flex flex-col md:flex-row md:items-start {{ $isRight ? 'md:flex-row' : 'md:flex-row-reverse' }} gap-6 md:gap-0">
+
+                            {{-- ─── CENTER NODE (desktop) ─── --}}
+                            <div class="hidden md:flex absolute left-1/2 top-5 -translate-x-1/2 z-10 flex-col items-center">
+                                <div class="flex h-11 w-11 items-center justify-center rounded-full {{ $c['bg'] }} text-white shadow-lg ring-4 {{ $c['ring'] }}">
+                                    <i data-lucide="{{ $m['icon'] }}" class="h-4.5 w-4.5 h-5 w-5"></i>
+                                </div>
+                            </div>
+
+                            {{-- ─── YEAR BADGE side ─── --}}
+                            <div class="md:w-[calc(50%-2.5rem)] {{ $isRight ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left' }} flex items-start {{ $isRight ? 'md:justify-end' : 'md:justify-start' }}">
+                                <div class="flex items-center gap-2 md:flex-col md:items-{{ $isRight ? 'end' : 'start' }} md:gap-1 pt-4">
+                                    {{-- Mobile node --}}
+                                    <div class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-full {{ $c['bg'] }} text-white shadow ring-4 {{ $c['ring'] }}">
+                                        <i data-lucide="{{ $m['icon'] }}" class="h-4 w-4"></i>
+                                    </div>
+                                    <div>
+                                        <span class="inline-block rounded-full {{ $c['badge_bg'] }} border {{ $c['badge_border'] }} px-3 py-1 text-xs font-extrabold {{ $c['badge_text'] }}">{{ $m['year'] }}</span>
+                                        @if($m['sub'])
+                                            <p class="mt-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ $m['sub'] }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- ─── CARD ─── --}}
+                            <div class="md:w-[calc(50%-2.5rem)] {{ $isRight ? 'md:pl-16' : 'md:pr-16' }}">
+                                <div class="rounded-2xl border {{ $c['card_border'] }} bg-white p-5 shadow-sm transition hover:shadow-md">
+                                    <h3 class="font-heading text-base font-extrabold text-slate-900">{{ $m['title'] }}</h3>
+                                    @if(!empty($m['items']))
+                                        <ul class="mt-3 space-y-2">
+                                            @foreach($m['items'] as $item)
+                                                <li class="flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
+                                                    <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full {{ $c['dot'] }}"></span>
+                                                    <span>{{ $item }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+    </section>
+
 @endsection

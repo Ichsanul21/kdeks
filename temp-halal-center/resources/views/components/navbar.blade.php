@@ -91,10 +91,10 @@
             <button aria-label="Search" class="group flex h-10 w-10 items-center justify-center rounded-full text-slate-500 transition-all hover:bg-emerald-50 hover:text-emerald-600" onclick="openModal('searchModal')">
                 <i data-lucide="search" class="h-5 w-5 transition-transform group-hover:scale-110"></i>
             </button>
-            <div class="h-4 w-px bg-slate-300"></div>
-            <button onclick="openModal('sehatiModal')" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:bg-emerald-400 active:scale-95">
+            {{-- <div class="h-4 w-px bg-slate-300"></div> --}}
+            {{-- <button onclick="openModal('sehatiModal')" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:bg-emerald-400 active:scale-95">
                 Daftar Sertifikasi Halal
-            </button>
+            </button> --}}
         </div>
 
         <button class="-mr-2 rounded-lg p-2 text-slate-800 transition hover:bg-slate-100 lg:hidden" aria-label="Menu" onclick="toggleMobileMenu()">

@@ -102,14 +102,14 @@
                         </div>
 
                         <div class="mt-2 flex flex-wrap gap-4">
-                            <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
-                                Daftar Sertifikasi Gratis
+                            <a href="{{ route('about') }}" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
+                                Lihat Selengkapnya
                                 <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                            </button>
-                            <a href="#webgis" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
-                                <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
-                                Jelajahi Peta
                             </a>
+                            <button id="btnPenyebaranData" type="button" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
+                                <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
+                                Penyebaran data KDEKS KalTim
+                            </button>
                         </div>
                     </div>
 
@@ -132,7 +132,7 @@
                 <div class="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]"></div>
 
                 <div class="relative z-10 mx-auto max-w-5xl text-center">
-                    <i data-lucide="quote" class="mx-auto mb-8 h-10 w-10 text-emerald-500/40 md:h-14 md:w-14"></i>
+                    <i data-lucide="quote" class="mx-auto mb-5 h-10 w-8 text-emerald-500/40 md:h-14 md:w-10"></i>
 
                     <blockquote class="font-heading text-2xl font-extrabold leading-snug tracking-tight text-white md:text-3xl lg:text-4xl lg:leading-tight">
                         <span class="text-emerald-400">Menjadikan Indonesia</span> yang Mandiri, Makmur & Madani
@@ -146,8 +146,9 @@
             </div>
 
             <div class="relative z-10 mx-auto max-w-7xl px-6">
+                {{-- ===== UMKM HALAL KALTIM STAT CARDS ===== --}}
                 <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
-                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
                         <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
                             <i data-lucide="award" class="h-5 w-5"></i>
                         </div>
@@ -157,7 +158,7 @@
                         <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
                     </div>
 
-                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
                         <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
                             <i data-lucide="package" class="h-5 w-5"></i>
                         </div>
@@ -167,7 +168,7 @@
                         <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
                     </div>
 
-                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
                         <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
                             <i data-lucide="badge-check" class="h-5 w-5"></i>
                         </div>
@@ -177,7 +178,7 @@
                         <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
                     </div>
 
-                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
                         <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
                             <i data-lucide="users" class="h-5 w-5"></i>
                         </div>
@@ -188,19 +189,130 @@
                     </div>
                 </div>
 
+                {{-- ===== PROGRAM UNGGULAN ===== --}}
                 @if($slides->isNotEmpty())
                     <div class="mt-8 mb-4 md:mt-10">
                         <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
                     </div>
-                    <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
+                    <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4 items-start">
                         @foreach($slides->take(4) as $slide)
-                            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                                <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.28em]">{{ $slide->subtitle }}</p>
-                                <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
-                                <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
-                            </div>
+                            <button
+                                type="button"
+                                onclick="openProgramModal({{ $loop->index }})"
+                                class="group text-left rounded-2xl border border-emerald-200 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:border-emerald-300 hover:shadow-md overflow-hidden relative cursor-pointer flex flex-col"
+                                style="height: 340px;"
+                            >
+                                @if($slide->image_path)
+                                    <div class="h-36 w-full flex-shrink-0 overflow-hidden bg-slate-100">
+                                        <img src="{{ asset('storage/'.$slide->image_path) }}" alt="{{ $slide->title }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    </div>
+                                @else
+                                    <div class="h-36 w-full flex-shrink-0 bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center">
+                                        <i data-lucide="layout-grid" class="h-10 w-10 text-emerald-200"></i>
+                                    </div>
+                                @endif
+
+                                <div class="p-4 flex flex-col flex-1 overflow-hidden">
+                                    <div class="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-colors duration-200">
+                                        <i data-lucide="arrow-up-right" class="h-3.5 w-3.5 text-slate-400 transition-colors duration-200 group-hover:text-emerald-600"></i>
+                                    </div>
+
+                                    <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em] line-clamp-2 flex-shrink-0">{{ $slide->subtitle }}</p>
+
+                                    <h3 class="mt-2 text-sm font-extrabold text-slate-900 line-clamp-2 flex-shrink-0">{{ $slide->title }}</h3>
+
+                                    <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500 line-clamp-5 flex-1">{{ strip_tags($slide->description) }}</p>
+
+                                    <div class="mt-auto pt-2 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors flex-shrink-0">
+                                        <span>Lihat Detail</span>
+                                        <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                                    </div>
+                                </div>
+                            </button>
                         @endforeach
                     </div>
+
+                    {{-- Modal Detail Program Unggulan --}}
+                    <div id="programModal" class="fixed inset-0 z-[200] flex items-center justify-center px-4 py-8" style="display:none!important;">
+                        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProgramModal()"></div>
+                        <div class="relative z-10 w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+                            <div id="programModalImg" class="h-52 w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex-shrink-0 overflow-hidden"></div>
+
+                            <div class="overflow-y-auto flex-1 px-7 py-6">
+                                <p id="programModalSubtitle" class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-600 break-words"></p>
+                                <h3 id="programModalTitle" class="mt-2 font-heading text-xl font-extrabold text-slate-900 break-words leading-snug"></h3>
+                                <div id="programModalDesc" class="mt-4 text-sm leading-7 text-slate-600 break-words whitespace-pre-line max-w-full"></div>
+                                @foreach($slides->take(4) as $slide)
+                                    @if($slide->cta_url)
+                                        <div class="mt-5 slide-cta-{{ $loop->index }}">
+                                            <a href="{{ $slide->cta_url }}" target="_blank" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition">
+                                                {{ $slide->cta_label ?: 'Selengkapnya' }}
+                                                <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+
+                            <button onclick="closeProgramModal()" class="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm hover:bg-black/40 transition">
+                                <i data-lucide="x" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @php
+                        $slidesJsonData = $slides->take(4)->map(function($s) {
+                            return [
+                                'subtitle'    => $s->subtitle,
+                                'title'       => $s->title,
+                                'description' => strip_tags($s->description),
+                                'image_path'  => $s->image_path ? asset('storage/'.$s->image_path) : null,
+                                'cta_url'     => $s->cta_url,
+                                'cta_label'   => $s->cta_label,
+                            ];
+                        })->values()->toArray();
+                    @endphp
+                    <script>
+                        const __programSlides = {!! json_encode($slidesJsonData) !!};
+
+                        function openProgramModal(index) {
+                            const slide = __programSlides[index];
+                            if (!slide) return;
+
+                            const modal = document.getElementById('programModal');
+                            const imgBox = document.getElementById('programModalImg');
+
+                            if (slide.image_path) {
+                                imgBox.innerHTML = `<img src="${slide.image_path}" alt="${slide.title}" class="h-full w-full object-cover">`;
+                            } else {
+                                imgBox.innerHTML = '<div class="h-full w-full flex items-center justify-center"><svg class="h-14 w-14 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h8"/></svg></div>';
+                            }
+
+                            document.getElementById('programModalSubtitle').textContent = slide.subtitle || '';
+                            document.getElementById('programModalTitle').textContent = slide.title || '';
+                            document.getElementById('programModalDesc').textContent = slide.description || '';
+
+                            document.querySelectorAll('[class*="slide-cta-"]').forEach(el => el.style.display = 'none');
+                            const ctaEl = document.querySelector('.slide-cta-' + index);
+                            if (ctaEl) ctaEl.style.display = 'block';
+
+                            modal.style.removeProperty('display');
+                            modal.style.display = 'flex';
+                            document.body.style.overflow = 'hidden';
+
+                            if (window.lucide) window.lucide.createIcons();
+                        }
+
+                        function closeProgramModal() {
+                            const modal = document.getElementById('programModal');
+                            modal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }
+
+                        document.addEventListener('keydown', function(e) {
+                            if (e.key === 'Escape') closeProgramModal();
+                        });
+                    </script>
                 @endif
             </div>
         </section>
@@ -212,12 +324,15 @@
                     <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
                     <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-5">
                         @foreach($sectorItems as $item)
-                            <a href="{{ route('direktorat.show', $item->slug) }}" class="group block rounded-[1.75rem] border border-slate-100 p-6 transition hover:shadow-md hover:border-emerald-200">
+                            <a href="{{ route('direktorat.show', $item->slug) }}" class="group relative block rounded-[1.75rem] border border-emerald-200 p-6 transition hover:shadow-md hover:border-emerald-400">
                                 <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
                                     <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5"></i>
                                 </div>
                                 <h4 class="mb-1 text-base font-bold text-slate-900 transition-colors group-hover:text-emerald-700">{{ $item->title }}</h4>
                                 <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
+                                <span class="absolute top-4 right-4 flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-slate-50 transition-all duration-200 group-hover:border-emerald-300 group-hover:bg-emerald-50">
+                                    <i data-lucide="arrow-up-right" class="h-3.5 w-3.5 text-slate-400 transition-colors duration-200 group-hover:text-emerald-600"></i>
+                                </span>
                             </a>
                         @endforeach
                     </div>
@@ -230,7 +345,7 @@
             <div class="mx-auto max-w-7xl px-6">
                 <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                     <div>
-                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Peta Sebaran Halal</h2>
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Peta Sebaran KDEKS KalTim</h2>
                         <p class="font-medium text-slate-500">Lokasi usaha dan layanan halal di Kalimantan Timur berdasarkan kategori, LP3H, dan kabupaten/kota.</p>
                     </div>
                 </div>
@@ -314,7 +429,7 @@
                         </div>
                         <div class="flex flex-1 flex-col gap-4">
                             @foreach($featuredProducts->take(4) as $product)
-                                <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
                                         <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
                                     </div>
@@ -338,7 +453,7 @@
                         </div>
                         <div class="flex flex-1 flex-col gap-4">
                             @foreach($resources->take(2) as $resource)
-                                <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
                                         <i data-lucide="file-text" class="h-5 w-5"></i>
                                     </div>
@@ -351,7 +466,7 @@
                             @endforeach
 
                             @foreach($regulations->take(2) as $regulation)
-                                <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
                                         <i data-lucide="scale" class="h-5 w-5"></i>
                                     </div>
@@ -418,14 +533,8 @@
     {{-- ===== ANIMATION STYLES ===== --}}
     <style>
         @keyframes scrollDownBounce {
-            0%, 100% {
-                transform: translateY(0);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(6px);
-                opacity: 1;
-            }
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(6px); opacity: 1; }
         }
 
         .scroll-down-arrow {
@@ -437,11 +546,21 @@
         }
 
         .banner-text-inner {
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .banner-parallax-title,
+        .banner-parallax-subtitle {
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
         }
     </style>
 
-    {{-- ===== BANNER SLIDER + PARALLAX SCRIPT ===== --}}
+    {{-- ===== BANNER SLIDER + SMOOTH PARALLAX SCRIPT ===== --}}
     <script>
         (() => {
             window.bannerPause = false;
@@ -459,7 +578,6 @@
             const NAVBAR_HEIGHT = 64;
             const BANNER_HEIGHT = 665;
 
-            {{-- Data banner untuk teks yang berubah --}}
             const bannerTexts = @json($banners->map(fn($b) => [
                 'title' => $b->title,
                 'subtitle' => $b->subtitle,
@@ -475,30 +593,47 @@
 
                 const slide = bannerTexts[currentBannerSlide];
 
-                {{-- Fade out --}}
-                bannerTitleEl.style.opacity = '0';
-                bannerTitleEl.style.transform = 'translateY(18px)';
-                bannerSubtitleEl.style.opacity = '0';
-                bannerSubtitleEl.style.transform = 'translateY(12px)';
+                // Fade OUT — cepat, 160ms
+                var outT = 'opacity 0.16s ease-in, transform 0.16s ease-in';
+                bannerTitleEl.style.transition = outT;
+                bannerSubtitleEl.style.transition = outT;
 
-                setTimeout(() => {
-                    {{-- Ganti konten --}}
+                bannerTitleEl.style.opacity = '0';
+                bannerTitleEl.style.transform = 'translateY(12px)';
+                bannerSubtitleEl.style.opacity = '0';
+                bannerSubtitleEl.style.transform = 'translateY(8px)';
+
+                // Ganti teks tepat saat fade-out selesai, langsung fade-in tanpa jeda
+                setTimeout(function() {
                     bannerTitleEl.textContent = slide.title;
                     bannerSubtitleEl.textContent = slide.subtitle;
 
-                    {{-- Fade in --}}
+                    // Posisikan di atas dulu (masih opacity 0, tidak kelihatan)
+                    bannerTitleEl.style.transition = 'none';
+                    bannerSubtitleEl.style.transition = 'none';
+                    bannerTitleEl.style.transform = 'translateY(-12px)';
+                    bannerSubtitleEl.style.transform = 'translateY(-8px)';
+
+                    // Force reflow supaya posisi baru dihitung browser
+                    void bannerTitleEl.offsetHeight;
+
+                    // Fade IN — halus dengan deceleration, 360ms
+                    var inT = 'opacity 0.36s ease-out, transform 0.36s cubic-bezier(0.22,1,0.36,1)';
+                    bannerTitleEl.style.transition = inT;
+                    bannerSubtitleEl.style.transition = inT;
+
                     bannerTitleEl.style.opacity = '1';
                     bannerTitleEl.style.transform = 'translateY(0)';
                     bannerSubtitleEl.style.opacity = '1';
                     bannerSubtitleEl.style.transform = 'translateY(0)';
 
-                    textAnimating = false;
-                }, 380);
+                    setTimeout(function() { textAnimating = false; }, 380);
+                }, 180);
             }
 
             function updateBannerSlider() {
                 if (!bannerTrack) return;
-                bannerTrack.style.transform = `translateX(-${currentBannerSlide * 100}%)`;
+                bannerTrack.style.transform = 'translateX(-' + (currentBannerSlide * 100) + '%)';
                 if (bannerCounter) bannerCounter.textContent = pad(currentBannerSlide);
                 updateBannerText();
             }
@@ -513,7 +648,7 @@
                 updateBannerSlider();
             };
 
-            setInterval(() => {
+            setInterval(function() {
                 if (!window.bannerPause) {
                     currentBannerSlide = (currentBannerSlide + 1) % totalBannerSlides;
                     updateBannerSlider();
@@ -521,13 +656,13 @@
             }, 3000);
 
             // Touch / swipe support
-            let touchStartX = 0;
+            var touchStartX = 0;
             if (bannerSlider) {
-                bannerSlider.addEventListener('touchstart', (e) => {
+                bannerSlider.addEventListener('touchstart', function(e) {
                     touchStartX = e.changedTouches[0].screenX;
                 }, { passive: true });
-                bannerSlider.addEventListener('touchend', (e) => {
-                    const diff = touchStartX - e.changedTouches[0].screenX;
+                bannerSlider.addEventListener('touchend', function(e) {
+                    var diff = touchStartX - e.changedTouches[0].screenX;
                     if (Math.abs(diff) > 50) {
                         slideBanner(diff > 0 ? 1 : -1);
                     }
@@ -536,18 +671,18 @@
 
             // ===== CUSTOM SMOOTH SCROLL =====
             function smoothScrollTo(targetY, duration) {
-                const startY = window.pageYOffset || document.documentElement.scrollTop;
-                const diff = targetY - startY;
+                var startY = window.pageYOffset || document.documentElement.scrollTop;
+                var diff = targetY - startY;
                 if (Math.abs(diff) < 2) return;
 
-                let start = null;
+                var start = null;
 
                 function step(timestamp) {
                     if (!start) start = timestamp;
-                    const elapsed = timestamp - start;
-                    const progress = Math.min(elapsed / duration, 1);
+                    var elapsed = timestamp - start;
+                    var progress = Math.min(elapsed / duration, 1);
 
-                    const ease = progress < 0.5
+                    var ease = progress < 0.5
                         ? 8 * progress * progress * progress * progress
                         : 1 - Math.pow(-2 * progress + 2, 4) / 2;
 
@@ -562,43 +697,76 @@
             }
 
             // ===== SCROLL DOWN BUTTON =====
-            const scrollDownBtn = document.getElementById('scrollDownBtn');
+            var scrollDownBtn = document.getElementById('scrollDownBtn');
             if (scrollDownBtn) {
-                scrollDownBtn.addEventListener('click', () => {
-                    const heroSection = document.getElementById('hero');
+                scrollDownBtn.addEventListener('click', function() {
+                    var heroSection = document.getElementById('hero');
                     if (heroSection) {
-                        const rect = heroSection.getBoundingClientRect();
-                        const targetY = window.pageYOffset + rect.top - NAVBAR_HEIGHT;
+                        var rect = heroSection.getBoundingClientRect();
+                        var targetY = window.pageYOffset + rect.top - NAVBAR_HEIGHT;
                         smoothScrollTo(targetY, 1000);
                     }
                 });
             }
 
-            // ===== PARALLAX =====
-            let ticking = false;
-            let bgHidden = false;
-
-            function updateParallax() {
-                if (!bannerSlider) { ticking = false; return; }
-
-                const rect = bannerSlider.getBoundingClientRect();
-                const sliderHeight = bannerSlider.offsetHeight || BANNER_HEIGHT;
-
-                const scrollPast = Math.max(0, NAVBAR_HEIGHT - rect.top);
-                const progress = Math.min(scrollPast / sliderHeight, 1);
-
-                const titleY = progress * sliderHeight * 0.3;
-                const subtitleY = progress * sliderHeight * 0.18;
-
-                parallaxTitles.forEach((el) => {
-                    el.style.transform = 'translate3d(0,' + titleY + 'px,0)';
+            // ===== PENYEBARAN DATA BUTTON =====
+            var btnPenyebaran = document.getElementById('btnPenyebaranData');
+            if (btnPenyebaran) {
+                btnPenyebaran.addEventListener('click', function() {
+                    var target = document.getElementById('webgis');
+                    if (target) {
+                        var rect = target.getBoundingClientRect();
+                        var targetY = window.pageYOffset + rect.top - NAVBAR_HEIGHT - 16;
+                        smoothScrollTo(targetY, 900);
+                    }
                 });
+            }
 
-                parallaxSubtitles.forEach((el) => {
-                    el.style.transform = 'translate3d(0,' + subtitleY + 'px,0)';
+            // ===== SMOOTH PARALLAX WITH LERP =====
+            var bgHidden = false;
+            var LERP_FACTOR = 0.08;
+            var currentTitleY = 0;
+            var currentSubtitleY = 0;
+            var targetTitleY = 0;
+            var targetSubtitleY = 0;
+
+            function lerp(a, b, t) {
+                return a + (b - a) * t;
+            }
+
+            function calcTargets() {
+                if (!bannerSlider) return;
+
+                var rect = bannerSlider.getBoundingClientRect();
+                var sliderHeight = bannerSlider.offsetHeight || BANNER_HEIGHT;
+
+                var scrollPast = Math.max(0, NAVBAR_HEIGHT - rect.top);
+                var progress = Math.min(scrollPast / sliderHeight, 1);
+
+                var eased = progress * progress * (3 - 2 * progress);
+
+                targetTitleY = eased * sliderHeight * 0.35;
+                targetSubtitleY = eased * sliderHeight * 0.2;
+            }
+
+            function parallaxLoop() {
+                calcTargets();
+
+                currentTitleY = lerp(currentTitleY, targetTitleY, LERP_FACTOR);
+                currentSubtitleY = lerp(currentSubtitleY, targetSubtitleY, LERP_FACTOR);
+
+                if (Math.abs(currentTitleY - targetTitleY) < 0.05) currentTitleY = targetTitleY;
+                if (Math.abs(currentSubtitleY - targetSubtitleY) < 0.05) currentSubtitleY = targetSubtitleY;
+
+                parallaxTitles.forEach(function(el) {
+                    el.style.transform = 'translate3d(0,' + currentTitleY + 'px,0)';
+                });
+                parallaxSubtitles.forEach(function(el) {
+                    el.style.transform = 'translate3d(0,' + currentSubtitleY + 'px,0)';
                 });
 
                 if (bannerFixedBg) {
+                    var rect = bannerSlider.getBoundingClientRect();
                     if (rect.bottom <= 0 && !bgHidden) {
                         bannerFixedBg.style.display = 'none';
                         bgHidden = true;
@@ -608,18 +776,10 @@
                     }
                 }
 
-                ticking = false;
+                requestAnimationFrame(parallaxLoop);
             }
 
-            function onScroll() {
-                if (!ticking) {
-                    ticking = true;
-                    requestAnimationFrame(updateParallax);
-                }
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            requestAnimationFrame(updateParallax);
+            requestAnimationFrame(parallaxLoop);
         })();
     </script>
 

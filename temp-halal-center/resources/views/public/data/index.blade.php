@@ -111,6 +111,63 @@
             background-color: #f1f5f9;
             color: #059669;
         }
+
+        /* ── KDEKS Sidebar Nav ── */
+        .kdeks-nav-btn {
+            transition: all 0.2s ease;
+        }
+
+        .kdeks-nav-btn.is-active {
+            background-color: #059669;
+            color: white;
+            box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.3);
+        }
+
+        .kdeks-nav-btn.is-active i {
+            color: white !important;
+        }
+
+        .kdeks-sub-btn {
+            transition: all 0.2s ease;
+            color: #94a3b8;
+        }
+
+        .kdeks-sub-btn:hover {
+            background-color: #f1f5f9;
+            color: #059669;
+        }
+
+        /* ── Dev Modal ── */
+        #devModal {
+            animation: fadeInModal 0.25s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.96); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── Sticky Sidebar (Desktop Only) ── */
+        @media (min-width: 1024px) {
+            .sidebar-sticky {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 90px; /* Di bawah navbar */
+                align-self: flex-start;
+                z-index: 30;
+                will-change: transform, top;
+                transform: translate3d(0,0,0);
+            }
+        }
+
+        /* Mobile sidebar reset */
+        .sidebar-mobile { display: none; }
+
+        /* Parent flex alignment */
+        #contentDaerah > .flex-data,
+        #contentNasional > .flex {
+            align-items: flex-start;
+        }
     </style>
 
     <section class="mx-auto max-w-7xl px-4 pb-24 pt-28 sm:px-6">
@@ -160,7 +217,7 @@
         {{-- ============================================ --}}
         {{-- Quick Stats Cards --}}
         {{-- ============================================ --}}
-        <div id="statsDaerah" class="mb-8 grid grid-cols-2 gap-3 md:mb-10 md:grid-cols-4 md:gap-4">
+        <div id="statsDaerah" class="w-full mb-8 grid grid-cols-1 gap-4 xs:grid-cols-2 md:mb-10 md:grid-cols-4 md:gap-4">
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 sm:h-9 sm:w-9 sm:rounded-xl">
@@ -195,7 +252,7 @@
             </div>
         </div>
 
-        <div id="statsNasional" class="mb-8 hidden grid grid-cols-2 gap-3 md:mb-10 md:grid-cols-4 md:gap-4">
+        <div id="statsNasional" class="w-full mb-8 hidden grid grid-cols-1 gap-4 xs:grid-cols-2 md:mb-10 md:grid-cols-4 md:gap-4">
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 sm:h-9 sm:w-9 sm:rounded-xl">
@@ -232,11 +289,98 @@
 
 
 
-        <div id="contentDaerah">
+        {{-- ============================================ --}}
+        {{-- Dev In Progress Modal --}}
+        {{-- ============================================ --}}
+        <div id="devModalOverlay" class="fixed inset-0 z-[300] hidden items-center justify-center px-4" style="display:none!important;">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDevModal()"></div>
+            <div id="devModal" class="relative z-10 w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl text-center">
+                <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50">
+                    <i data-lucide="construction" class="h-7 w-7 text-amber-500"></i>
+                </div>
+                <h3 class="font-heading text-lg font-extrabold text-slate-900">Sedang Dikembangkan</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Data untuk direktorat ini masih dalam proses pengembangan dan akan segera tersedia. Kami terus berupaya menyajikan data yang akurat dan komprehensif.</p>
+                <button onclick="closeDevModal()" class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                    Mengerti
+                </button>
+            </div>
+        </div>
+
+        <div id="contentDaerah" class="w-full overflow-visible">
+            <div class="flex-data flex flex-col gap-6 lg:flex-row w-full overflow-visible">
+                {{-- ===== SIDEBAR KDEKS ===== --}}
+                <aside class="w-full lg:w-80 shrink-0 sidebar-sticky">
+                    <div class="space-y-1.5">
+
+                        {{-- Dashboard (semua data) --}}
+                        <button data-kdeks-view="dashboard"
+                            class="kdeks-nav-btn is-active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-700 hover:bg-slate-50">
+                            <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-100/50 text-emerald-600">
+                                <i data-lucide="layout-dashboard" class="h-3.5 w-3.5"></i>
+                            </div>
+                            <span class="text-[13px] font-bold">Dashboard</span>
+                            <span class="ml-auto text-[9px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-600 rounded-full px-2 py-0.5">Semua Data</span>
+                        </button>
+
+                        {{-- Direktorat Items --}}
+                        <div class="pt-1">
+                            <p class="px-4 pb-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Direktorat</p>
+
+                            <button data-kdeks-sub="industri-produk-halal" onclick="openDevModal(this)"
+                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-500">
+                                    <i data-lucide="package" class="h-3.5 w-3.5"></i>
+                                </div>
+                                <span class="text-[12px] font-semibold">Industri Produk Halal</span>
+                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
+                            </button>
+
+                            <button data-kdeks-sub="jasa-keuangan-syariah" onclick="openDevModal(this)"
+                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-500">
+                                    <i data-lucide="landmark" class="h-3.5 w-3.5"></i>
+                                </div>
+                                <span class="text-[12px] font-semibold">Jasa Keuangan Syariah</span>
+                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
+                            </button>
+
+                            <button data-kdeks-sub="keuangan-sosial-syariah" onclick="openDevModal(this)"
+                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-500">
+                                    <i data-lucide="heart-handshake" class="h-3.5 w-3.5"></i>
+                                </div>
+                                <span class="text-[12px] font-semibold">Keuangan Sosial Syariah</span>
+                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
+                            </button>
+
+                            <button data-kdeks-sub="bisnis-kewirausahaan-syariah" onclick="openDevModal(this)"
+                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
+                                    <i data-lucide="briefcase" class="h-3.5 w-3.5"></i>
+                                </div>
+                                <span class="text-[12px] font-semibold">Bisnis & Kewirausahaan Syariah</span>
+                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
+                            </button>
+
+                            <button data-kdeks-sub="infrastruktur-ekosistem-syariah" onclick="openDevModal(this)"
+                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-500">
+                                    <i data-lucide="layers" class="h-3.5 w-3.5"></i>
+                                </div>
+                                <span class="text-[12px] font-semibold">Infrastruktur Ekosistem Syariah</span>
+                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                {{-- ===== Main KDEKS Content ===== --}}
+                <div class="flex-1 min-w-0 w-full">
             {{-- ============================================ --}}
             {{-- 1. SGIE --}}
             {{-- ============================================ --}}
-            <div class="mb-8">
+            <div class="mb-8 w-full">
                 <div class="mb-4 flex items-center gap-3">
                     <div
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
@@ -427,15 +571,18 @@
                                 Tingkat Keberhasilan</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div> {{-- /.rounded-2xl Sertifikasi UMK --}}
+            </div> {{-- /.mb-8 section UMK --}}
 
-        <div id="contentNasional" class="hidden">
-            <div class="flex flex-col gap-6 lg:flex-row">
+                </div> {{-- /.flex-1 min-w-0 main KDEKS content --}}
+            </div> {{-- /.flex flex-col gap-6 KDEKS flex row --}}
+        </div> {{-- /#contentDaerah --}}
+
+        <div id="contentNasional" class="hidden w-full overflow-visible">
+            <div class="flex flex-col gap-6 lg:flex-row w-full overflow-visible">
                 {{-- Sidebar Accordion --}}
-                <aside class="w-full lg:w-80 shrink-0">
-                    <div class="sticky top-24 space-y-2">
+                <aside class="w-full lg:w-80 shrink-0 sidebar-sticky" id="nasSidebarDesktop">
+                    <div class="space-y-2">
                         {{-- 1. Dashboard Eksekutif --}}
                         <button data-nas-view="eksekutif"
                             class="nas-nav-btn is-active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-700 hover:bg-slate-50 transition-all duration-300">
@@ -443,7 +590,7 @@
                                 class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-100/50 text-emerald-600">
                                 <i data-lucide="layout-dashboard" class="h-3.5 w-3.5"></i>
                             </div>
-                            <span class="text-[13px] font-bold">1. Dashboard Eksekutif</span>
+                            <span class="text-[13px] font-bold">Dashboard Eksekutif</span>
                         </button>
 
                         {{-- 2. Penguatan Industri --}}
@@ -456,7 +603,7 @@
                                         class="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 text-blue-500">
                                         <i data-lucide="package" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">2. Industri & UMKM Halal</span>
+                                    <span class="text-[13px] font-bold">Industri & UMKM Halal</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -508,7 +655,7 @@
                                         class="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
                                         <i data-lucide="bar-chart-3" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">3. Aktivitas Usaha / PDB</span>
+                                    <span class="text-[13px] font-bold">Aktivitas Usaha / PDB</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -529,7 +676,7 @@
                                     <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-sky-50 text-sky-500">
                                         <i data-lucide="ship" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">4. Ekspor & Internasional</span>
+                                    <span class="text-[13px] font-bold">Ekspor & Internasional</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -557,7 +704,7 @@
                                         class="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-50 text-violet-500">
                                         <i data-lucide="landmark" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">5. Keuangan Syariah</span>
+                                    <span class="text-[13px] font-bold">Keuangan Syariah</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -631,7 +778,7 @@
                                         class="flex h-6 w-6 items-center justify-center rounded-lg bg-rose-50 text-rose-500">
                                         <i data-lucide="heart-handshake" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">6. Dana Sosial Syariah</span>
+                                    <span class="text-[13px] font-bold">Dana Sosial Syariah</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -665,7 +812,7 @@
                                         class="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-50 text-teal-500">
                                         <i data-lucide="layers" class="h-3.5 w-3.5"></i>
                                     </div>
-                                    <span class="text-[13px] font-bold">7. Ekosistem Pendukung</span>
+                                    <span class="text-[13px] font-bold">Ekosistem Pendukung</span>
                                 </div>
                                 <i data-lucide="chevron-down"
                                     class="h-3.5 w-3.5 text-slate-400 transition-transform duration-300"></i>
@@ -693,7 +840,7 @@
                 </aside>
 
                 {{-- Main Content Area --}}
-                <div id="nasMainContent" class="flex-1 min-w-0">
+                <div id="nasMainContent" class="flex-1 min-w-0 w-full">
                     {{-- 1. Dashboard Eksekutif View --}}
                     <div id="nasView-eksekutif" class="nas-view-content space-y-10">
                         {{-- SGIE & Global Ranking --}}
@@ -4413,5 +4560,52 @@
         window.SERVER_DATA = @json($dashboard_data ?? []);
     </script>
     @vite(['resources/js/data_statistik.js'])
+
+    <script>
+        // ===== KDEKS SIDEBAR =====
+        (function () {
+            const kdeksDashBtn = document.querySelector('[data-kdeks-view="dashboard"]');
+
+            if (kdeksDashBtn) {
+                kdeksDashBtn.addEventListener('click', function () {
+                    document.querySelectorAll('.kdeks-sub-btn').forEach(b => b.classList.remove('is-active'));
+                    document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.add('is-active'));
+                });
+            }
+        })();
+
+        // ===== DEV IN PROGRESS MODAL =====
+        function openDevModal(triggerEl) {
+            const overlay = document.getElementById('devModalOverlay');
+            if (!overlay) return;
+            document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.remove('is-active'));
+            overlay.style.removeProperty('display');
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function closeDevModal() {
+            const overlay = document.getElementById('devModalOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+            document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.add('is-active'));
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeDevModal();
+        });
+
+        // ===== JS STICKY SIDEBAR (Reverted to CSS) =====
+        // CSS Sticky is used for better performance and reliability
+
+
+        // ===== MOBILE KNEKS NAV (Legacy/Reverted) =====
+        (function() {
+            // Reverted to standard accordion behavior
+        })();
+    </script>
 
 @endsection

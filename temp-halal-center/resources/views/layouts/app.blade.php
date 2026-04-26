@@ -14,8 +14,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="relative overflow-x-hidden bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
-    <div class="relative min-h-screen overflow-x-hidden">
+<body class="relative overflow-x-clip bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
+    <div class="relative min-h-screen overflow-x-clip">
         @include('components.watermark-overlay', ['setting' => $setting ?? null])
         
         <div class="organic-shape pointer-events-none left-[-100px] top-[-100px] h-[500px] w-[500px] bg-emerald-200/50"></div>
