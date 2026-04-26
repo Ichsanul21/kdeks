@@ -29,7 +29,7 @@
                 <div class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl transition-all hover:border-emerald-200">
                     <div class="absolute inset-0 z-10 pointer-events-none border-[12px] border-white/50 rounded-[inherit]"></div>
                     <iframe 
-                        src="{{ asset('storage/' . $regulation->document_path) }}#toolbar=0" 
+                        src="{{ route('documents.view', ['type' => 'regulation', 'id' => $regulation->id]) }}#toolbar=0" 
                         class="h-[800px] w-full border-none" 
                         title="PDF Preview">
                     </iframe>

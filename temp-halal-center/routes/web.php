@@ -37,6 +37,7 @@ Route::post('/consultation', [HomeController::class, 'storeConsultation'])->name
 Route::post('/sehati-registration', [HomeController::class, 'storeSehatiRegistration'])->name('sehati.store');
 Route::get('/search', SearchController::class)->name('search');
 Route::get('/documents/{type}/{id}', [HomeController::class, 'downloadDocument'])->name('documents.download');
+Route::get('/documents/{type}/{id}/view', [HomeController::class, 'viewDocument'])->name('documents.view');
 Route::get('/locale/{locale}', [HomeController::class, 'switchLocale'])->name('locale.switch');
 Route::get('/articles', [PublicContentController::class, 'articlesIndex'])->name('articles.index');
 Route::get('/articles/{slug}', [PublicContentController::class, 'articleShow'])->name('articles.show');

@@ -71,4 +71,24 @@ class HomeController extends Controller
 
         return Storage::disk('private')->download($record->document_path);
     }
+
+    public function viewDocument(string $type, int $id)
+    {
+        $map = [
+            'resource' => KnowledgeResource::class,
+            'regulation' => Regulation::class,
+            'article' => Article::class,
+        ];
+
+        abort_unless(isset($map[$type]), 404);
+
+        $record = $map[$type]::query()->findOrFail($id);
+        abort_unless($record->document_path, 404);
+
+        if (!Storage::disk('private')->exists($record->document_path)) {
+            abort(404);
+        }
+
+        return Storage::disk('private')->response($record->document_path);
+    }
 }
