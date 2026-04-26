@@ -416,6 +416,10 @@
                         <a href="{{ route('articles.show', $article->slug) }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
                             @if($article->cover_image_path)
                                 <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
+                            @else
+                                <div class="h-48 w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center">
+                                    <i data-lucide="layout-grid" class="h-10 w-10 text-emerald-200"></i>
+                                </div>
                             @endif
                             <div class="p-5">
                                 <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ strtoupper($article->type) }}</p>
