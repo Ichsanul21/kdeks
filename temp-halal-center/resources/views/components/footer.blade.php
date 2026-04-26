@@ -33,8 +33,12 @@
                 </a>
             </div>
         </div>
-        <div class="border-t border-slate-200 pt-6 text-center text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">
-            &copy; {{ now()->year }} Komite Daerah Keuangan dan Ekonomi Syariah (KDEKS) Kalimantan Timur.
+        <div class="flex flex-col items-center justify-between border-t border-slate-200 pt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:flex-row">
+            <span>&copy; {{ now()->year }} Komite Daerah Keuangan dan Ekonomi Syariah (KDEKS) Kalimantan Timur.</span>
+            <span class="mt-4 flex items-center gap-2 sm:mt-0">
+                <i data-lucide="users" class="h-4 w-4"></i>
+                Total Kunjungan: {{ number_format(data_get($setting, 'visitor_count', 0), 0, ',', '.') }}
+            </span>
         </div>
     </div>
 </footer>

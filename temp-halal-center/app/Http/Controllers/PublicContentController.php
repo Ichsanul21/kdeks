@@ -16,6 +16,8 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Services\LandingPageService;
+
 class PublicContentController extends Controller
 {
     public function articlesIndex(Request $request): View
@@ -185,10 +187,14 @@ class PublicContentController extends Controller
         ]);
     }
 
-    public function dataIndex(Request $request): View
+    public function dataIndex(Request $request, LandingPageService $service): View
     {
+        $data = $service->getHomepageData();
 
-        return view('public.data.index');
+        return view('public.data.index', [
+            'statistics' => $data['statistics'] ?? [],
+            'dashboard_data' => $data['dashboard_data'] ?? [],
+        ]);
     }
 
     public function organizationStructure(): View

@@ -1647,6 +1647,34 @@ const DataStatistik = (() => {
         }
     }
 
+    function createKesehatanCharts() {
+        if (charts.nasKesehatanFarmasi) { charts.nasKesehatanFarmasi.destroy(); }
+        const el = document.getElementById('chartNasFarmasiHalal');
+        if (el) {
+            const k = N_DATA.kesehatan.farmasi;
+            charts.nasKesehatanFarmasi = new Chart(el, {
+                type: 'bar',
+                data: {
+                    labels: k.labels,
+                    datasets: [{
+                        label: 'Jumlah Produk',
+                        data: k.data,
+                        backgroundColor: C.rose,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: tooltipCfg() },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                        y: { beginAtZero: true, grid: { color: GRID } }
+                    }
+                }
+            });
+        }
+    }
+
     function renderKesehatanPanels() {
         const k = N_DATA.kesehatan;
         const table = document.getElementById('tableNasRS');
@@ -4428,10 +4456,10 @@ const DataStatistik = (() => {
         toggle('nasView-rph', state.nasView === 'rph');
         toggle('nasView-hvc', state.nasView === 'hvc');
         toggle('nasView-khas', state.nasView === 'khas');
-        toggle('nasView-umkm-ih', state.nasView === 'umkm-ih');
-        toggle('nasView-industri-daging', state.nasView === 'industri-daging');
-        toggle('nasView-aktivitas-ekonomi', state.nasView === 'aktivitas-ekonomi');
-        toggle('nasView-ekspor-pdb', state.nasView === 'ekspor-pdb');
+        toggle('nasView-modul-umkm', state.nasView === 'modul-umkm');
+        toggle('nasView-cold-storage', state.nasView === 'cold-storage');
+        toggle('nasView-indikator-aktivitas', state.nasView === 'indikator-aktivitas');
+        toggle('nasView-nilai-ekspor', state.nasView === 'nilai-ekspor');
         toggle('nasView-logistik', state.nasView === 'logistik');
         toggle('nasView-percepatan-ekspor', state.nasView === 'percepatan-ekspor');
         toggle('nasView-aset-keuangan', state.nasView === 'aset-keuangan');

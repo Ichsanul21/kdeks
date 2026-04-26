@@ -125,18 +125,18 @@
                 <div class="tab-icon-wrap flex h-7 w-7 shrink-0 items-center justify-center rounded-lg md:h-8 md:w-8">
                     <i data-lucide="landmark" class="h-3 w-3 md:h-3.5 md:w-3.5"></i>
                 </div>
-                <p class="tab-label text-[13px] font-bold leading-none md:text-sm">Nasional</p>
+                <p class="tab-label text-[13px] font-bold leading-none md:text-sm">KNEKS</p>
                 <div class="tab-divider mx-0.5 h-4 w-px shrink-0 md:mx-1 md:h-5"></div>
-                <p class="tab-sublabel text-[8px] font-bold uppercase tracking-widest leading-none md:text-[9px]">KNEKS</p>
+                <p class="tab-sublabel text-[8px] font-bold uppercase tracking-widest leading-none md:text-[9px]">Nasional</p>
             </button>
             <button data-tab="daerah"
                 class="tab-btn is-active flex items-center justify-center gap-2 rounded-xl px-3 py-2 transition-all duration-300 md:gap-2.5 md:px-4 md:py-2.5">
                 <div class="tab-icon-wrap flex h-7 w-7 shrink-0 items-center justify-center rounded-lg md:h-8 md:w-8">
                     <i data-lucide="map-pin" class="h-3 w-3 md:h-3.5 md:w-3.5"></i>
                 </div>
-                <p class="tab-label text-[13px] font-bold leading-none md:text-sm">Kalimantan Timur</p>
+                <p class="tab-label text-[13px] font-bold leading-none md:text-sm">KDEKS</p>
                 <div class="tab-divider mx-0.5 h-4 w-px shrink-0 md:mx-1 md:h-5"></div>
-                <p class="tab-sublabel text-[8px] font-bold uppercase tracking-widest leading-none md:text-[9px]">KDEKS</p>
+                <p class="tab-sublabel text-[8px] font-bold uppercase tracking-widest leading-none md:text-[9px]">Kalimantan TImur</p>
             </button>
         </div>
 
@@ -1455,7 +1455,7 @@
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Produk Farmasi
                                 </p>
-                                <p class="text-2xl font-black text-slate-900">44.634</p>
+                                <p class="text-2xl font-black text-slate-900">{{ number_format($dashboard_data['farmasi_total'] ?? 44634, 0, ',', '.') }}</p>
                             </div>
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Anggota MUKISI
@@ -1464,15 +1464,15 @@
                             </div>
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">RS Syariah</p>
-                                <p class="text-2xl font-black text-slate-900">38</p>
+                                <p class="text-2xl font-black text-slate-900">{{ number_format($dashboard_data['rs_syariah_total'] ?? 38, 0, ',', '.') }}</p>
                             </div>
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Klinik</p>
-                                <p class="text-2xl font-black text-slate-900">1</p>
+                                <p class="text-2xl font-black text-slate-900">{{ number_format($dashboard_data['klinik_total'] ?? 1, 0, ',', '.') }}</p>
                             </div>
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Lab Medis</p>
-                                <p class="text-2xl font-black text-slate-900">1</p>
+                                <p class="text-2xl font-black text-slate-900">{{ number_format($dashboard_data['lab_medis_total'] ?? 1, 0, ',', '.') }}</p>
                             </div>
                         </div>
 
@@ -1778,7 +1778,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <p class="text-[10px] font-bold uppercase text-slate-400">Total Usaha</p>
-                                            <p class="text-3xl font-black" id="statRPHRTotal">594</p>
+                                            <p class="text-3xl font-black" id="statRPHRTotal">{{ number_format($dashboard_data['rphr_total'] ?? 594, 0, ',', '.') }}</p>
                                         </div>
                                         <div>
                                             <p class="text-[10px] font-bold uppercase text-slate-400">Operasional</p>
@@ -1814,7 +1814,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <p class="text-[10px] font-bold uppercase text-slate-400">Total Usaha</p>
-                                            <p class="text-3xl font-black" id="statRPHUTotal">362</p>
+                                            <p class="text-3xl font-black" id="statRPHUTotal">{{ number_format($dashboard_data['rphu_total'] ?? 362, 0, ',', '.') }}</p>
                                         </div>
                                         <div>
                                             <p class="text-[10px] font-bold uppercase text-slate-400">Operasional</p>
@@ -4215,7 +4215,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="grid gap-4 md:grid-cols-12">
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm md:col-span-12">
                                 <h3 class="mb-6 font-heading text-sm font-bold text-slate-800">MoU Perguruan Tinggi</h3>
@@ -4409,6 +4409,9 @@
 
     </section>
 
+    <script>
+        window.SERVER_DATA = @json($dashboard_data ?? []);
+    </script>
     @vite(['resources/js/data_statistik.js'])
 
 @endsection

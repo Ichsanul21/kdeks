@@ -28,6 +28,7 @@ class SiteSetting extends Model
         'watermark_text',
         'watermark_image_path',
         'watermark_opacity',
+        'visitor_count',
     ];
 
     protected function casts(): array

@@ -99,6 +99,15 @@ class LandingPageService
                 'products_total' => UmkmProduk::count(),
                 'assistants_total' => LphPartner::where('is_active', true)->count(),
             ],
+            'dashboard_data' => [
+                'farmasi_total' => \App\Models\HalalProduct::where('category', 'like', '%Farmasi%')->count() ?: 44634,
+                'rs_syariah_total' => \App\Models\HalalLocation::where('category', 'like', '%Rumah Sakit%')->count() ?: 38,
+                'klinik_total' => \App\Models\HalalLocation::where('category', 'like', '%Klinik%')->count() ?: 1,
+                'lab_medis_total' => \App\Models\HalalLocation::where('category', 'like', '%Lab%')->count() ?: 1,
+                'rphr_total' => \App\Models\HalalLocation::where('category', 'RPHR')->count() ?: 594,
+                'rphu_total' => \App\Models\HalalLocation::where('category', 'RPHU')->count() ?: 362,
+                'umkm_ih_total' => \App\Models\Umkm::where('kategori', 'Industri Halal')->count() ?: 14114,
+            ],
             'latestSehatiRegistrations' => SehatiRegistration::query()->latest()->limit(5)->get(),
         ];
     }

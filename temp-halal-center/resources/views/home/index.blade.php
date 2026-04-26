@@ -16,262 +16,254 @@
         $totalSertifikatTerbit = ($statistics['certificates_total'] ?? 0) + ($statistics['products_total'] ?? 0);
     @endphp
 
-    {{-- ===== BANNER SLIDER ===== --}}
+    {{-- ===== BANNER SLIDER — FIXED IMAGE, SCROLLABLE TEXT ===== --}}
     @if($banners->isEmpty())
-        <div class="relative w-full overflow-hidden bg-slate-900 flex items-center justify-center" style="height:780px;margin-top:64px;">
+        <div class="relative w-full bg-slate-900 flex items-center justify-center" style="height:665px;margin-top:64px;">
             <p class="text-white text-2xl font-bold">Banner belum tersedia</p>
         </div>
     @else
-        <div id="bannerSlider" class="relative w-full overflow-hidden" style="height:780px;margin-top:64px;" onmouseenter="window.bannerPause=true" onmouseleave="window.bannerPause=false">
-            <div id="bannerTrack" class="flex h-full transition-transform duration-700 ease-in-out">
-                @foreach($banners as $index => $banner)
-                    <div class="w-full flex-shrink-0 relative h-full bg-slate-900">
-                        {{-- Background Image --}}
-                        <img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover opacity-60">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-slate-900/30"></div>
+        <div id="bannerSlider" class="relative w-full" style="height:665px;margin-top:64px;" onmouseenter="window.bannerPause=true" onmouseleave="window.bannerPause=false">
 
-                        <div class="relative mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
-                            <h2 class="font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.12]">{{ $banner->title }}</h2>
-                            <p class="mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">{{ $banner->subtitle }}</p>
+            {{-- FIXED layer — gambar tetap nempel di viewport --}}
+            <div id="bannerFixedBg" class="fixed left-0 right-0 overflow-hidden" style="top:64px;height:665px;z-index:1;">
+                <div id="bannerTrack" class="flex h-full transition-transform duration-700 ease-in-out">
+                    @foreach($banners as $index => $banner)
+                        <div class="w-full flex-shrink-0 relative h-full bg-slate-900">
+                            <img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/30 to-slate-900/10"></div>
                         </div>
-
-                        {{-- Bottom fade to hero --}}
-                        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
-            {{-- Navigation arrows --}}
-            <button type="button" onclick="slideBanner(-1)" class="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:left-8">
-                <i data-lucide="chevron-left" class="h-5 w-5"></i>
-            </button>
-            <button type="button" onclick="slideBanner(1)" class="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:right-8">
-                <i data-lucide="chevron-right" class="h-5 w-5"></i>
-            </button>
+            {{-- SCROLLABLE layer — teks, arrows ikut scroll --}}
+            <div class="relative flex h-full flex-col" style="z-index:2;">
 
-            {{-- Dots --}}
-            <div class="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 gap-2.5 lg:bottom-14">
-                @foreach($banners as $index => $banner)
-                    <button type="button" onclick="goToBannerSlide({{ $index }})" class="banner-dot h-2 w-2 rounded-full bg-white/40 transition-all duration-300 {{ $index === 0 ? 'w-8 !bg-white' : '' }}" data-index="{{ $index }}"></button>
-                @endforeach
-            </div>
+                {{-- Parallax text --}}
+                <div class="banner-parallax-text mx-auto flex flex-1 max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
+                    <h2 class="banner-parallax-title font-heading text-3xl font-extrabold leading-tight text-white md:text-4xl md:leading-[1.15] lg:text-5xl lg:leading-[1.12]">{{ $banner->title }}</h2>
+                    <p class="banner-parallax-subtitle mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/70 md:text-lg md:leading-relaxed">{{ $banner->subtitle }}</p>
+                </div>
 
-            {{-- Slide counter --}}
-            <div class="absolute bottom-12 right-6 z-10 hidden items-center gap-2 text-sm font-bold text-white/50 lg:flex lg:right-10 lg:bottom-14">
-                <span id="bannerCurrentNum" class="text-white">01</span>
-                <span class="w-8 h-px bg-white/30"></span>
-                <span>{{ str_pad($banners->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                {{-- Bottom fade --}}
+                <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-emerald-800/15 to-transparent pointer-events-none"></div>
+
+                {{-- Navigation arrows --}}
+                <button type="button" onclick="slideBanner(-1)" class="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:left-8">
+                    <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                </button>
+                <button type="button" onclick="slideBanner(1)" class="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-black/40 hover:text-white lg:right-8">
+                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                </button>
+
+                {{-- Scroll Down Indicator --}}
+                <button type="button" id="scrollDownBtn" class="scroll-down-btn absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 cursor-pointer group">
+                    <span class="text-[11px] font-bold uppercase tracking-[0.25em] text-white/60 transition-colors group-hover:text-white">Scroll Down</span>
+                    <span class="scroll-down-arrow flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all group-hover:border-white/50 group-hover:text-white">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </span>
+                </button>
+
+                {{-- Slide counter --}}
+                <div class="absolute bottom-10 right-6 z-10 hidden items-center gap-2 text-sm font-bold text-white/50 lg:flex lg:right-10">
+                    <span id="bannerCurrentNum" class="text-white">01</span>
+                    <span class="w-8 h-px bg-white/30"></span>
+                    <span>{{ str_pad($banners->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                </div>
             </div>
         </div>
     @endif
 
-    {{-- ===== HERO SECTION ===== --}}
-    <section id="hero" class="relative flex flex-col overflow-hidden pb-8 pt-8 lg:pb-16">
-        <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
-        <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
+    {{-- ===== WRAPPER: semua konten di bawah banner ===== --}}
+    <div id="pageContent" style="position:relative; z-index:5; background-color:#fff;">
 
-        <div class="relative z-10 mx-auto max-w-7xl px-6">
-            <div class="grid items-center gap-10 lg:grid-cols-[7fr_3fr] lg:gap-14">
-                <div class="flex flex-col gap-6">
-                    <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-7xl xl:leading-[1.2]">
-                        Komite Daerah
-                        <span class="text-gradient md:block">Keuangan dan Ekonomi</span>
-                        Syariah Kaltim
-                    </h1>
+        {{-- ===== HERO SECTION ===== --}}
+        <section id="hero" class="relative flex flex-col overflow-hidden bg-white pb-8 pt-8 lg:pb-16">
+            <div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),transparent_40%)]"></div>
+            <div class="pointer-events-none absolute inset-0 z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdHRlcm4gaWQ9InNtYWxsR3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTAgMEwwIDBMMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSJ1cmwoI3NtYWxsR3JpZCkiLz48cGF0aCBkPSJNNDAgMEwwIDBMMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMCwwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
 
-                    <div class="max-w-xl text-base font-medium leading-relaxed text-slate-500 lg:max-w-2xl xl:max-w-none sm:text-lg [&_p]:inline [&_p]:m-0">
-                        {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
-                    </div>
+            <div class="relative z-10 mx-auto max-w-7xl px-6">
+                <div class="grid items-center gap-10 lg:grid-cols-[7fr_3fr] lg:gap-14">
+                    <div class="flex flex-col gap-6">
+                        <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-7xl xl:leading-[1.2]">
+                            Komite Daerah
+                            <span class="text-gradient md:block">Keuangan dan Ekonomi</span>
+                            Syariah Kaltim
+                        </h1>
 
-                    <div class="mt-2 flex flex-wrap gap-4">
-                        <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
-                            Daftar Sertifikasi Gratis
-                            <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                        </button>
-                        <a href="#webgis" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
-                            <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
-                            Jelajahi Peta
-                        </a>
-                    </div>
-                </div>
-
-                <div class="relative hidden lg:block">
-                    <div class="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
-                    <div class="relative overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-white/60">
-                        <img
-                            src="{{ asset('assets/img/hero.png') }}"
-                            alt="KDEKS Kalimantan Timur"
-                            class="block h-full min-h-[420px] w-full object-cover"
-                        >
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- ===== SEHATI CTA ===== --}}
-        <div id="sehati" class="relative z-10 mt-10 flex flex-col items-center justify-center overflow-hidden bg-slate-900 px-6 py-20 md:mt-14 md:px-16 md:py-12">
-            <div class="pointer-events-none absolute -left-20 top-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-[120px]"></div>
-            <div class="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]"></div>
-
-            <div class="relative z-10 mx-auto max-w-5xl text-center">
-                <i data-lucide="quote" class="mx-auto mb-8 h-10 w-10 text-emerald-500/40 md:h-14 md:w-14"></i>
-
-                <blockquote class="font-heading text-2xl font-extrabold leading-snug tracking-tight text-white md:text-3xl lg:text-4xl lg:leading-tight">
-                    <span class="text-emerald-400">Menjadikan Indonesia</span> yang Mandiri, Makmur & Madani
-                    <br class="hidden sm:block">
-                    dengan Menjadi
-                    <span class="text-emerald-400">Pusat Ekonomi Syariah Terkemuka Dunia</span>
-                </blockquote>
-
-                <div class="mx-auto mt-10 h-px w-24 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
-            </div>
-        </div>
-
-        <div class="relative z-10 mx-auto max-w-7xl px-6">
-            <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
-                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                        <i data-lucide="award" class="h-5 w-5"></i>
-                    </div>
-                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                        <span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span>
-                    </h3>
-                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
-                </div>
-
-                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
-                        <i data-lucide="package" class="h-5 w-5"></i>
-                    </div>
-                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                        <span class="counter" data-target="{{ $statistics['products_total'] }}">0</span>
-                    </h3>
-                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
-                </div>
-
-                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                        <i data-lucide="badge-check" class="h-5 w-5"></i>
-                    </div>
-                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                        <span class="counter" data-target="{{ $totalSertifikatTerbit }}">0</span>
-                    </h3>
-                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
-                </div>
-
-                <div class="group rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl transition hover:shadow-lg md:p-6">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
-                        <i data-lucide="users" class="h-5 w-5"></i>
-                    </div>
-                    <h3 class="font-heading text-2xl font-extrabold tracking-tight text-cyan-500 md:text-3xl">
-                        <span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span>
-                    </h3>
-                    <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Lembaga Pendamping Aktif</p>
-                </div>
-            </div>
-
-            @if($slides->isNotEmpty())
-                <div class="mt-8 mb-4 md:mt-10">
-                    <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
-                </div>
-                <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
-                    @foreach($slides->take(4) as $slide)
-                        <div class="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-                            <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.28em]">{{ $slide->subtitle }}</p>
-                            <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
-                            <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
+                        <div class="max-w-xl text-base font-medium leading-relaxed text-slate-500 lg:max-w-2xl xl:max-w-none sm:text-lg [&_p]:inline [&_p]:m-0">
+                            {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
                         </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-    </section>
 
-    {{-- ===== SEKTOR EKONOMI SYARIAH ===== --}}
-    <section id="sektor" class="bg-white py-24 border-b border-slate-100">
-        <div class="mx-auto max-w-7xl px-6">
-            <div>
-                <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
-                <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-5">
-                    @foreach($sectorItems as $item)
-                        <a href="{{ route('direktorat.show', $item->slug) }}" class="group block rounded-[1.75rem] border border-slate-100 p-6 transition hover:shadow-md hover:border-emerald-200">
-                            <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                                <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5"></i>
+                        <div class="mt-2 flex flex-wrap gap-4">
+                            <button onclick="openModal('sehatiModal')" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
+                                Daftar Sertifikasi Gratis
+                                <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                            </button>
+                            <a href="#webgis" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
+                                <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
+                                Jelajahi Peta
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="relative hidden lg:block">
+                        <div class="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-emerald-500/10 to-cyan-500/10 blur-[80px]"></div>
+                        <div class="relative overflow-hidden rounded-[2rem] shadow-2xl ring-1 ring-white/60">
+                            <img
+                                src="{{ asset('assets/img/hero.png') }}"
+                                alt="KDEKS Kalimantan Timur"
+                                class="block h-full min-h-[420px] w-full object-cover"
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ===== SEHATI CTA ===== --}}
+            <div id="sehati" class="relative z-10 mt-10 flex flex-col items-center justify-center overflow-hidden bg-slate-900 px-6 py-20 md:mt-14 md:px-16 md:py-12">
+                <div class="pointer-events-none absolute -left-20 top-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-[120px]"></div>
+                <div class="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]"></div>
+
+                <div class="relative z-10 mx-auto max-w-5xl text-center">
+                    <i data-lucide="quote" class="mx-auto mb-8 h-10 w-10 text-emerald-500/40 md:h-14 md:w-14"></i>
+
+                    <blockquote class="font-heading text-2xl font-extrabold leading-snug tracking-tight text-white md:text-3xl lg:text-4xl lg:leading-tight">
+                        <span class="text-emerald-400">Menjadikan Indonesia</span> yang Mandiri, Makmur & Madani
+                        <br class="hidden sm:block">
+                        dengan Menjadi
+                        <span class="text-emerald-400">Pusat Ekonomi Syariah Terkemuka Dunia</span>
+                    </blockquote>
+
+                    <div class="mx-auto mt-10 h-px w-24 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+                </div>
+            </div>
+
+            <div class="relative z-10 mx-auto max-w-7xl px-6">
+                <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
+                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                            <i data-lucide="award" class="h-5 w-5"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                            <span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span>
+                        </h3>
+                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
+                    </div>
+
+                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
+                            <i data-lucide="package" class="h-5 w-5"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                            <span class="counter" data-target="{{ $statistics['products_total'] }}">0</span>
+                        </h3>
+                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
+                    </div>
+
+                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                            <i data-lucide="badge-check" class="h-5 w-5"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+                            <span class="counter" data-target="{{ $totalSertifikatTerbit }}">0</span>
+                        </h3>
+                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
+                    </div>
+
+                    <div class="group rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg md:p-6">
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
+                            <i data-lucide="users" class="h-5 w-5"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-cyan-500 md:text-3xl">
+                            <span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span>
+                        </h3>
+                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Lembaga Pendamping Aktif</p>
+                    </div>
+                </div>
+
+                @if($slides->isNotEmpty())
+                    <div class="mt-8 mb-4 md:mt-10">
+                        <h2 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Program Unggulan</h2>
+                    </div>
+                    <div class="grid max-w-2xl gap-3 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
+                        @foreach($slides->take(4) as $slide)
+                            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                                <p class="text-[10px] font-extrabold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.28em]">{{ $slide->subtitle }}</p>
+                                <h3 class="mt-2 text-sm font-extrabold text-slate-900">{{ $slide->title }}</h3>
+                                <p class="mt-2 text-xs font-medium leading-relaxed text-slate-500">{{ strip_tags($slide->description) }}</p>
                             </div>
-                            <h4 class="mb-1 text-base font-bold text-slate-900 transition-colors group-hover:text-emerald-700">{{ $item->title }}</h4>
-                            <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
-                        </a>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
-        </div>
-    </section>
+        </section>
 
-    {{-- ===== PETA SEBARAN HALAL ===== --}}
-    <section id="webgis" class="relative z-10 py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        {{-- ===== SEKTOR EKONOMI SYARIAH ===== --}}
+        <section id="sektor" class="bg-white py-24 border-b border-slate-100">
+            <div class="mx-auto max-w-7xl px-6">
                 <div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Peta Sebaran Halal</h2>
-                    <p class="font-medium text-slate-500">Lokasi usaha dan layanan halal di Kalimantan Timur berdasarkan kategori, LP3H, dan kabupaten/kota.</p>
+                    <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
+                    <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-5">
+                        @foreach($sectorItems as $item)
+                            <a href="{{ route('direktorat.show', $item->slug) }}" class="group block rounded-[1.75rem] border border-slate-100 p-6 transition hover:shadow-md hover:border-emerald-200">
+                                <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                                    <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5"></i>
+                                </div>
+                                <h4 class="mb-1 text-base font-bold text-slate-900 transition-colors group-hover:text-emerald-700">{{ $item->title }}</h4>
+                                <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="relative">
-                <div class="absolute inset-x-0 -top-10 bottom-10 rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-[100px] opacity-80"></div>
-                <div class="relative flex min-h-[500px] w-full flex-col overflow-hidden rounded-[2.5rem] border border-white bg-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:h-[600px]">
-                    <div class="pointer-events-none absolute inset-x-5 top-5 z-[500] flex flex-col gap-3 sm:left-8 sm:right-auto sm:top-8 sm:w-80">
-                        <div class="pointer-events-auto flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white/95 p-3.5 shadow-sm backdrop-blur-md">
-                            <i data-lucide="search" class="ml-2 h-4 w-4 shrink-0 text-slate-400"></i>
-                            <input id="mapSearchInput" type="text" placeholder="Cari kota atau usaha..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
-                        </div>
-                        <div class="pointer-events-auto flex gap-2">
-                            <select id="mapCityFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
-                                <option value="">Semua Kota</option>
-                                @foreach($mapCities as $city)
-                                    <option value="{{ $city }}">{{ $city }}</option>
-                                @endforeach
-                            </select>
-                            <select id="mapPartnerFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
-                                <option value="">LP3H / LPH</option>
-                                @foreach($lphPartners as $partner)
-                                    <option value="{{ $partner->id }}">{{ $partner->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div id="mapSubDistrictFilters" class="pointer-events-auto flex gap-2">
-                            <select id="mapKecamatanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
-                                <option value="">Kecamatan</option>
-                            </select>
-                            <select id="mapKelurahanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
-                                <option value="">Kelurahan</option>
-                            </select>
-                        </div>
+        {{-- ===== PETA SEBARAN HALAL ===== --}}
+        <section id="webgis" class="relative z-10 bg-white py-24">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Peta Sebaran Halal</h2>
+                        <p class="font-medium text-slate-500">Lokasi usaha dan layanan halal di Kalimantan Timur berdasarkan kategori, LP3H, dan kabupaten/kota.</p>
                     </div>
+                </div>
 
-                    <div class="pointer-events-auto absolute right-5 top-5 z-[500] hidden flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:flex sm:right-8 sm:top-8">
-                        <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-3 text-slate-500 transition hover:bg-slate-50">
-                            <i data-lucide="plus" class="h-4 w-4"></i>
-                        </button>
-                        <button type="button" data-map-zoom="out" class="p-3 text-slate-500 transition hover:bg-slate-50">
-                            <i data-lucide="minus" class="h-4 w-4"></i>
-                        </button>
-                    </div>
-
-                    <div id="leafletKaltim" class="absolute inset-0 z-0" data-map-url="{{ url('/api/map') }}"></div>
-
-                    <div class="pointer-events-none absolute bottom-5 left-5 right-5 z-[500] flex items-center justify-between gap-4 sm:bottom-8 sm:left-8 sm:right-8">
-                        <div class="pointer-events-auto relative w-full sm:w-auto">
-                            <select id="mapCategoryFilter" class="w-full cursor-pointer appearance-none rounded-2xl border border-slate-200 bg-white/95 px-5 py-3.5 pr-12 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md sm:w-auto sm:text-xs">
-                                <option value="">Semua Kategori</option>
-                                @foreach($mapCategories as $category)
-                                    <option value="{{ $category }}">{{ $category }}</option>
-                                @endforeach
-                            </select>
-                            <i data-lucide="chevrons-up-down" class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                <div class="relative">
+                    <div class="absolute inset-x-0 -top-10 bottom-10 rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-[100px] opacity-80"></div>
+                    <div class="relative flex min-h-[500px] w-full flex-col overflow-hidden rounded-[2.5rem] border border-white bg-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:h-[600px]">
+                        <div class="pointer-events-none absolute inset-x-5 top-5 z-[500] flex flex-col gap-3 sm:left-8 sm:right-auto sm:top-8 sm:w-80">
+                            <div class="pointer-events-auto flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white/95 p-3.5 shadow-sm backdrop-blur-md">
+                                <i data-lucide="search" class="ml-2 h-4 w-4 shrink-0 text-slate-400"></i>
+                                <input id="mapSearchInput" type="text" placeholder="Cari kota atau usaha..." class="w-full border-none bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400">
+                            </div>
+                            <div class="pointer-events-auto flex gap-2">
+                                <select id="mapCityFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                                    <option value="">Semua Kota</option>
+                                    @foreach($mapCities as $city)
+                                        <option value="{{ $city }}">{{ $city }}</option>
+                                    @endforeach
+                                </select>
+                                <select id="mapPartnerFilter" class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md">
+                                    <option value="">LP3H / LPH</option>
+                                    @foreach($lphPartners as $partner)
+                                        <option value="{{ $partner->id }}">{{ $partner->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div id="mapSubDistrictFilters" class="pointer-events-auto flex gap-2">
+                                <select id="mapKecamatanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <option value="">Kecamatan</option>
+                                </select>
+                                <select id="mapKelurahanFilter" disabled class="w-full cursor-pointer rounded-xl border border-slate-100 bg-white/95 px-3 py-2 text-[10px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <option value="">Kelurahan</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="pointer-events-auto flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:hidden">
+                        <div class="pointer-events-auto absolute right-5 top-5 z-[500] hidden flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:flex sm:right-8 sm:top-8">
                             <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-3 text-slate-500 transition hover:bg-slate-50">
                                 <i data-lucide="plus" class="h-4 w-4"></i>
                             </button>
@@ -279,146 +271,189 @@
                                 <i data-lucide="minus" class="h-4 w-4"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    {{-- ===== DIREKTORI ===== --}}
-    <section id="direktori" class="border-t border-slate-100 bg-white py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="grid gap-16 lg:grid-cols-2">
-                <div class="flex h-full flex-col">
-                    <div class="mb-8 flex items-end justify-between">
-                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
-                        <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-                    </div>
-                    <div class="flex flex-1 flex-col gap-4">
-                        @foreach($featuredProducts->take(4) as $product)
-                            <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
-                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
-                                    <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
-                                </div>
-                                <div class="flex flex-1 flex-col justify-center">
-                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
-                                    <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
-                                </div>
-                                <span class="self-center rounded bg-emerald-50 px-2.5 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
+                        <div id="leafletKaltim" class="absolute inset-0 z-0" data-map-url="{{ url('/api/map') }}"></div>
 
-                <div id="data" class="flex h-full flex-col">
-                    <div class="mb-8 flex items-end justify-between">
-                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
-                        <div class="flex gap-4">
-                            <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
-                            <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
+                        <div class="pointer-events-none absolute bottom-5 left-5 right-5 z-[500] flex items-center justify-between gap-4 sm:bottom-8 sm:left-8 sm:right-8">
+                            <div class="pointer-events-auto relative w-full sm:w-auto">
+                                <select id="mapCategoryFilter" class="w-full cursor-pointer appearance-none rounded-2xl border border-slate-200 bg-white/95 px-5 py-3.5 pr-12 text-[11px] font-bold text-slate-700 shadow-sm outline-none backdrop-blur-md sm:w-auto sm:text-xs">
+                                    <option value="">Semua Kategori</option>
+                                    @foreach($mapCategories as $category)
+                                        <option value="{{ $category }}">{{ $category }}</option>
+                                    @endforeach
+                                </select>
+                                <i data-lucide="chevrons-up-down" class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                            </div>
+
+                            <div class="pointer-events-auto flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-white/95 shadow-sm backdrop-blur-md sm:hidden">
+                                <button type="button" data-map-zoom="in" class="border-b border-slate-100 p-3 text-slate-500 transition hover:bg-slate-50">
+                                    <i data-lucide="plus" class="h-4 w-4"></i>
+                                </button>
+                                <button type="button" data-map-zoom="out" class="p-3 text-slate-500 transition hover:bg-slate-50">
+                                    <i data-lucide="minus" class="h-4 w-4"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-1 flex-col gap-4">
-                        @foreach($resources->take(2) as $resource)
-                            <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
-                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
-                                    <i data-lucide="file-text" class="h-5 w-5"></i>
-                                </div>
-                                <div class="flex flex-1 flex-col justify-center">
-                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $resource->title }}</h4>
-                                    <p class="mt-1 text-[11px] font-medium text-slate-500">Dokumen &bull; {{ optional($resource->published_at)->translatedFormat('M Y') }}</p>
-                                </div>
-                                <i data-lucide="download" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
-                            </a>
-                        @endforeach
-
-                        @foreach($regulations->take(2) as $regulation)
-                            <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
-                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
-                                    <i data-lucide="scale" class="h-5 w-5"></i>
-                                </div>
-                                <div class="flex flex-1 flex-col justify-center">
-                                    <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $regulation->title }}</h4>
-                                    <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $regulation->regulation_number }}</p>
-                                </div>
-                                <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
-                            </a>
-                        @endforeach
-                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {{-- ===== BERITA & PUBLIKASI ===== --}}
-    <section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="mb-10 flex items-end justify-between">
-                <div>
-                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Berita & Publikasi</h2>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Update berita, siaran pers, dan riset terbaru KDEKS Kaltim.</p>
-                </div>
-                <a href="{{ route('articles.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-            </div>
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @foreach($featuredArticles->take(4) as $article)
-                    <a href="{{ route('articles.show', $article->slug) }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                        @if($article->cover_image_path)
-                            <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
-                        @endif
-                        <div class="p-5">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ strtoupper($article->type) }}</p>
-                            <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $article->title }}</h3>
-                            <p class="mt-3 text-sm leading-7 text-slate-500">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 110) }}</p>
+        {{-- ===== DIREKTORI ===== --}}
+        <section id="direktori" class="border-t border-slate-100 bg-white py-24">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="grid gap-16 lg:grid-cols-2">
+                    <div class="flex h-full flex-col">
+                        <div class="mb-8 flex items-end justify-between">
+                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
+                            <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
                         </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- ===== FAQ ===== --}}
-    <section id="faq" class="border-t border-slate-100 bg-white py-24">
-        <div class="mx-auto max-w-5xl px-6">
-            <div class="mb-10 text-center">
-                <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Pertanyaan Umum</h2>
-                <p class="mt-2 text-sm font-medium text-slate-500">Jawaban singkat untuk alur layanan publik yang paling sering ditanyakan.</p>
-            </div>
-            <div class="space-y-4">
-                @foreach($faqs->take(6) as $faq)
-                    <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6">
-                        <h3 class="text-base font-extrabold text-slate-900">{{ $faq->question }}</h3>
-                        <div class="mt-3 text-sm leading-7 text-slate-500">{!! $faq->answer !!}</div>
+                        <div class="flex flex-1 flex-col gap-4">
+                            @foreach($featuredProducts->take(4) as $product)
+                                <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
+                                        <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-center">
+                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
+                                        <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
+                                    </div>
+                                    <span class="self-center rounded bg-emerald-50 px-2.5 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
-    {{-- ===== BANNER SLIDER SCRIPT ===== --}}
+                    <div id="data" class="flex h-full flex-col">
+                        <div class="mb-8 flex items-end justify-between">
+                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
+                            <div class="flex gap-4">
+                                <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
+                                <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
+                            </div>
+                        </div>
+                        <div class="flex flex-1 flex-col gap-4">
+                            @foreach($resources->take(2) as $resource)
+                                <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
+                                        <i data-lucide="file-text" class="h-5 w-5"></i>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-center">
+                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $resource->title }}</h4>
+                                        <p class="mt-1 text-[11px] font-medium text-slate-500">Dokumen &bull; {{ optional($resource->published_at)->translatedFormat('M Y') }}</p>
+                                    </div>
+                                    <i data-lucide="download" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
+                                </a>
+                            @endforeach
+
+                            @foreach($regulations->take(2) as $regulation)
+                                <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 p-5 transition hover:border-slate-200 hover:shadow-sm">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
+                                        <i data-lucide="scale" class="h-5 w-5"></i>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-center">
+                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $regulation->title }}</h4>
+                                        <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $regulation->regulation_number }}</p>
+                                    </div>
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ===== BERITA & PUBLIKASI ===== --}}
+        <section id="artikel" class="border-t border-slate-100 bg-slate-50 py-24">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="mb-10 flex items-end justify-between">
+                    <div>
+                        <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Berita & Publikasi</h2>
+                        <p class="mt-2 text-sm font-medium text-slate-500">Update berita, siaran pers, dan riset terbaru KDEKS Kaltim.</p>
+                    </div>
+                    <a href="{{ route('articles.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+                </div>
+                <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                    @foreach($featuredArticles->take(4) as $article)
+                        <a href="{{ route('articles.show', $article->slug) }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                            @if($article->cover_image_path)
+                                <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
+                            @endif
+                            <div class="p-5">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ strtoupper($article->type) }}</p>
+                                <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $article->title }}</h3>
+                                <p class="mt-3 text-sm leading-7 text-slate-500">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 110) }}</p>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- ===== FAQ ===== --}}
+        <section id="faq" class="border-t border-slate-100 bg-white py-24">
+            <div class="mx-auto max-w-5xl px-6">
+                <div class="mb-10 text-center">
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Pertanyaan Umum</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Jawaban singkat untuk alur layanan publik yang paling sering ditanyakan.</p>
+                </div>
+                <div class="space-y-4">
+                    @foreach($faqs->take(6) as $faq)
+                        <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6">
+                            <h3 class="text-base font-extrabold text-slate-900">{{ $faq->question }}</h3>
+                            <div class="mt-3 text-sm leading-7 text-slate-500">{!! $faq->answer !!}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+    </div>{{-- end wrapper --}}
+
+    {{-- ===== SCROLL DOWN ANIMATION STYLE ===== --}}
+    <style>
+        @keyframes scrollDownBounce {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(6px);
+                opacity: 1;
+            }
+        }
+
+        .scroll-down-arrow {
+            animation: scrollDownBounce 2s ease-in-out infinite;
+        }
+
+        .scroll-down-btn:hover .scroll-down-arrow {
+            animation: scrollDownBounce 1.2s ease-in-out infinite;
+        }
+    </style>
+
+        {{-- ===== BANNER SLIDER + PARALLAX SCRIPT ===== --}}
     <script>
         (() => {
             window.bannerPause = false;
             let currentBannerSlide = 0;
             const totalBannerSlides = {{ $banners->count() }};
             const bannerTrack = document.getElementById('bannerTrack');
-            const bannerDots = document.querySelectorAll('.banner-dot');
             const bannerCounter = document.getElementById('bannerCurrentNum');
+            const bannerSlider = document.getElementById('bannerSlider');
+            const bannerFixedBg = document.getElementById('bannerFixedBg');
+            const parallaxTitles = document.querySelectorAll('.banner-parallax-title');
+            const parallaxSubtitles = document.querySelectorAll('.banner-parallax-subtitle');
+
+            const NAVBAR_HEIGHT = 64;
+            const BANNER_HEIGHT = 665;
 
             function pad(n) { return String(n + 1).padStart(2, '0'); }
 
             function updateBannerSlider() {
                 if (!bannerTrack) return;
                 bannerTrack.style.transform = `translateX(-${currentBannerSlide * 100}%)`;
-                bannerDots.forEach((dot, i) => {
-                    if (i === currentBannerSlide) {
-                        dot.classList.add('w-8', '!bg-white');
-                        dot.classList.remove('w-2', 'bg-white/40');
-                    } else {
-                        dot.classList.remove('w-8', '!bg-white');
-                        dot.classList.add('w-2', 'bg-white/40');
-                    }
-                });
                 if (bannerCounter) bannerCounter.textContent = pad(currentBannerSlide);
             }
 
@@ -441,18 +476,105 @@
 
             // Touch / swipe support
             let touchStartX = 0;
-            const sliderEl = document.getElementById('bannerSlider');
-            if (sliderEl) {
-                sliderEl.addEventListener('touchstart', (e) => {
+            if (bannerSlider) {
+                bannerSlider.addEventListener('touchstart', (e) => {
                     touchStartX = e.changedTouches[0].screenX;
                 }, { passive: true });
-                sliderEl.addEventListener('touchend', (e) => {
+                bannerSlider.addEventListener('touchend', (e) => {
                     const diff = touchStartX - e.changedTouches[0].screenX;
                     if (Math.abs(diff) > 50) {
                         slideBanner(diff > 0 ? 1 : -1);
                     }
                 }, { passive: true });
             }
+
+            // ===== CUSTOM SMOOTH SCROLL (tidak pakai scrollIntoView) =====
+            function smoothScrollTo(targetY, duration) {
+                const startY = window.pageYOffset || document.documentElement.scrollTop;
+                const diff = targetY - startY;
+                if (Math.abs(diff) < 2) return;
+
+                let start = null;
+
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const elapsed = timestamp - start;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // easeInOutQuart — mulai pelan, tengah cepat, akhir pelan
+                    const ease = progress < 0.5
+                        ? 8 * progress * progress * progress * progress
+                        : 1 - Math.pow(-2 * progress + 2, 4) / 2;
+
+                    window.scrollTo(0, startY + diff * ease);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    }
+                }
+
+                requestAnimationFrame(step);
+            }
+
+            // ===== SCROLL DOWN BUTTON =====
+            const scrollDownBtn = document.getElementById('scrollDownBtn');
+            if (scrollDownBtn) {
+                scrollDownBtn.addEventListener('click', () => {
+                    const heroSection = document.getElementById('hero');
+                    if (heroSection) {
+                        const rect = heroSection.getBoundingClientRect();
+                        const targetY = window.pageYOffset + rect.top - NAVBAR_HEIGHT;
+                        smoothScrollTo(targetY, 1000);
+                    }
+                });
+            }
+
+            // ===== PARALLAX — TEKS BERGERAK KE BAWAH LEBIH TERASA =====
+            let ticking = false;
+            let bgHidden = false;
+
+            function updateParallax() {
+                if (!bannerSlider) { ticking = false; return; }
+
+                const rect = bannerSlider.getBoundingClientRect();
+                const sliderHeight = bannerSlider.offsetHeight || BANNER_HEIGHT;
+
+                const scrollPast = Math.max(0, NAVBAR_HEIGHT - rect.top);
+                const progress = Math.min(scrollPast / sliderHeight, 1);
+
+                const titleY = progress * sliderHeight * 0.3;
+                const subtitleY = progress * sliderHeight * 0.18;
+
+                parallaxTitles.forEach((el) => {
+                    el.style.transform = 'translate3d(0,' + titleY + 'px,0)';
+                });
+
+                parallaxSubtitles.forEach((el) => {
+                    el.style.transform = 'translate3d(0,' + subtitleY + 'px,0)';
+                });
+
+                if (bannerFixedBg) {
+                    if (rect.bottom <= 0 && !bgHidden) {
+                        bannerFixedBg.style.display = 'none';
+                        bgHidden = true;
+                    } else if (rect.bottom > 0 && bgHidden) {
+                        bannerFixedBg.style.display = 'block';
+                        bgHidden = false;
+                    }
+                }
+
+                ticking = false;
+            }
+
+            function onScroll() {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(updateParallax);
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            requestAnimationFrame(updateParallax);
         })();
     </script>
 
