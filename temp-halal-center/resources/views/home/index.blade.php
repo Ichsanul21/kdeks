@@ -231,88 +231,6 @@
                             </button>
                         @endforeach
                     </div>
-
-                    {{-- Modal Detail Program Unggulan --}}
-                    <div id="programModal" class="fixed inset-0 z-[200] flex items-center justify-center px-4 py-8" style="display:none!important;">
-                        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProgramModal()"></div>
-                        <div class="relative z-10 w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-                            <div id="programModalImg" class="h-52 w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex-shrink-0 overflow-hidden"></div>
-
-                            <div class="overflow-y-auto flex-1 px-7 py-6">
-                                <p id="programModalSubtitle" class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-600 break-words"></p>
-                                <h3 id="programModalTitle" class="mt-2 font-heading text-xl font-extrabold text-slate-900 break-words leading-snug"></h3>
-                                <div id="programModalDesc" class="mt-4 text-sm leading-7 text-slate-600 break-words whitespace-pre-line max-w-full"></div>
-                                @foreach($slides->take(4) as $slide)
-                                    @if($slide->cta_url)
-                                        <div class="mt-5 slide-cta-{{ $loop->index }}">
-                                            <a href="{{ $slide->cta_url }}" target="_blank" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition">
-                                                {{ $slide->cta_label ?: 'Selengkapnya' }}
-                                                <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
-                                            </a>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-
-                            <button onclick="closeProgramModal()" class="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm hover:bg-black/40 transition">
-                                <i data-lucide="x" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    @php
-                        $slidesJsonData = $slides->take(4)->map(function($s) {
-                            return [
-                                'subtitle'    => $s->subtitle,
-                                'title'       => $s->title,
-                                'description' => strip_tags($s->description),
-                                'image_path'  => $s->image_path ? asset('storage/'.$s->image_path) : null,
-                                'cta_url'     => $s->cta_url,
-                                'cta_label'   => $s->cta_label,
-                            ];
-                        })->values()->toArray();
-                    @endphp
-                    <script>
-                        const __programSlides = {!! json_encode($slidesJsonData) !!};
-
-                        function openProgramModal(index) {
-                            const slide = __programSlides[index];
-                            if (!slide) return;
-
-                            const modal = document.getElementById('programModal');
-                            const imgBox = document.getElementById('programModalImg');
-
-                            if (slide.image_path) {
-                                imgBox.innerHTML = `<img src="${slide.image_path}" alt="${slide.title}" class="h-full w-full object-cover">`;
-                            } else {
-                                imgBox.innerHTML = '<div class="h-full w-full flex items-center justify-center"><svg class="h-14 w-14 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h8"/></svg></div>';
-                            }
-
-                            document.getElementById('programModalSubtitle').textContent = slide.subtitle || '';
-                            document.getElementById('programModalTitle').textContent = slide.title || '';
-                            document.getElementById('programModalDesc').textContent = slide.description || '';
-
-                            document.querySelectorAll('[class*="slide-cta-"]').forEach(el => el.style.display = 'none');
-                            const ctaEl = document.querySelector('.slide-cta-' + index);
-                            if (ctaEl) ctaEl.style.display = 'block';
-
-                            modal.style.removeProperty('display');
-                            modal.style.display = 'flex';
-                            document.body.style.overflow = 'hidden';
-
-                            if (window.lucide) window.lucide.createIcons();
-                        }
-
-                        function closeProgramModal() {
-                            const modal = document.getElementById('programModal');
-                            modal.style.display = 'none';
-                            document.body.style.overflow = '';
-                        }
-
-                        document.addEventListener('keydown', function(e) {
-                            if (e.key === 'Escape') closeProgramModal();
-                        });
-                    </script>
                 @endif
             </div>
         </section>
@@ -528,7 +446,92 @@
             </div>
         </section>
 
-    </div>{{-- end wrapper --}}
+    </div>{{-- end #pageContent --}}
+
+
+    {{-- ===== MODAL PROGRAM UNGGULAN — di luar pageContent agar menutupi seluruh layar termasuk navbar ===== --}}
+    @if($slides->isNotEmpty())
+        <div id="programModal" class="fixed inset-0 flex items-center justify-center px-4 py-8" style="z-index:99999; display:none!important;">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeProgramModal()"></div>
+            <div class="relative w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" style="z-index:1;">
+                <div id="programModalImg" class="h-52 w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex-shrink-0 overflow-hidden"></div>
+
+                <div class="overflow-y-auto flex-1 px-7 py-6">
+                    <p id="programModalSubtitle" class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-600 break-words"></p>
+                    <h3 id="programModalTitle" class="mt-2 font-heading text-xl font-extrabold text-slate-900 break-words leading-snug"></h3>
+                    <div id="programModalDesc" class="mt-4 text-sm leading-7 text-slate-600 break-words whitespace-pre-line max-w-full"></div>
+                    @foreach($slides->take(4) as $slide)
+                        @if($slide->cta_url)
+                            <div class="mt-5 slide-cta-{{ $loop->index }}">
+                                <a href="{{ $slide->cta_url }}" target="_blank" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition">
+                                    {{ $slide->cta_label ?: 'Selengkapnya' }}
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </a>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+
+                <button onclick="closeProgramModal()" class="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm hover:bg-black/40 transition">
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                </button>
+            </div>
+        </div>
+
+        @php
+            $slidesJsonData = $slides->take(4)->map(function($s) {
+                return [
+                    'subtitle'    => $s->subtitle,
+                    'title'       => $s->title,
+                    'description' => strip_tags($s->description),
+                    'image_path'  => $s->image_path ? asset('storage/'.$s->image_path) : null,
+                    'cta_url'     => $s->cta_url,
+                    'cta_label'   => $s->cta_label,
+                ];
+            })->values()->toArray();
+        @endphp
+        <script>
+            const __programSlides = {!! json_encode($slidesJsonData) !!};
+
+            function openProgramModal(index) {
+                const slide = __programSlides[index];
+                if (!slide) return;
+
+                const modal = document.getElementById('programModal');
+                const imgBox = document.getElementById('programModalImg');
+
+                if (slide.image_path) {
+                    imgBox.innerHTML = '<img src="' + slide.image_path + '" alt="' + slide.title + '" class="h-full w-full object-cover">';
+                } else {
+                    imgBox.innerHTML = '<div class="h-full w-full flex items-center justify-center"><svg class="h-14 w-14 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h8"/></svg></div>';
+                }
+
+                document.getElementById('programModalSubtitle').textContent = slide.subtitle || '';
+                document.getElementById('programModalTitle').textContent = slide.title || '';
+                document.getElementById('programModalDesc').textContent = slide.description || '';
+
+                document.querySelectorAll('[class*="slide-cta-"]').forEach(function(el) { el.style.display = 'none'; });
+                const ctaEl = document.querySelector('.slide-cta-' + index);
+                if (ctaEl) ctaEl.style.display = 'block';
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                if (window.lucide) window.lucide.createIcons();
+            }
+
+            function closeProgramModal() {
+                const modal = document.getElementById('programModal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeProgramModal();
+            });
+        </script>
+    @endif
+
 
     {{-- ===== ANIMATION STYLES ===== --}}
     <style>
@@ -593,32 +596,32 @@
 
                 const slide = bannerTexts[currentBannerSlide];
 
-                // Fade OUT — cepat, 160ms
-                var outT = 'opacity 0.16s ease-in, transform 0.16s ease-in';
+                // Fade OUT — cepat 120ms
+                var outT = 'opacity 0.12s ease-in, transform 0.12s ease-in';
                 bannerTitleEl.style.transition = outT;
                 bannerSubtitleEl.style.transition = outT;
 
                 bannerTitleEl.style.opacity = '0';
-                bannerTitleEl.style.transform = 'translateY(12px)';
+                bannerTitleEl.style.transform = 'translateY(10px)';
                 bannerSubtitleEl.style.opacity = '0';
-                bannerSubtitleEl.style.transform = 'translateY(8px)';
+                bannerSubtitleEl.style.transform = 'translateY(6px)';
 
-                // Ganti teks tepat saat fade-out selesai, langsung fade-in tanpa jeda
+                // Ganti teks langsung setelah fade-out, tanpa jeda
                 setTimeout(function() {
                     bannerTitleEl.textContent = slide.title;
                     bannerSubtitleEl.textContent = slide.subtitle;
 
-                    // Posisikan di atas dulu (masih opacity 0, tidak kelihatan)
+                    // Posisikan di atas (opacity masih 0)
                     bannerTitleEl.style.transition = 'none';
                     bannerSubtitleEl.style.transition = 'none';
-                    bannerTitleEl.style.transform = 'translateY(-12px)';
-                    bannerSubtitleEl.style.transform = 'translateY(-8px)';
+                    bannerTitleEl.style.transform = 'translateY(-10px)';
+                    bannerSubtitleEl.style.transform = 'translateY(-6px)';
 
-                    // Force reflow supaya posisi baru dihitung browser
+                    // Force reflow
                     void bannerTitleEl.offsetHeight;
 
-                    // Fade IN — halus dengan deceleration, 360ms
-                    var inT = 'opacity 0.36s ease-out, transform 0.36s cubic-bezier(0.22,1,0.36,1)';
+                    // Fade IN — halus deceleration 280ms
+                    var inT = 'opacity 0.28s ease-out, transform 0.28s cubic-bezier(0.22,1,0.36,1)';
                     bannerTitleEl.style.transition = inT;
                     bannerSubtitleEl.style.transition = inT;
 
@@ -627,8 +630,8 @@
                     bannerSubtitleEl.style.opacity = '1';
                     bannerSubtitleEl.style.transform = 'translateY(0)';
 
-                    setTimeout(function() { textAnimating = false; }, 380);
-                }, 180);
+                    setTimeout(function() { textAnimating = false; }, 300);
+                }, 140);
             }
 
             function updateBannerSlider() {
@@ -722,9 +725,10 @@
                 });
             }
 
-            // ===== SMOOTH PARALLAX WITH LERP =====
+            // ===== PARALLAX — langsung ikut scroll, jarak pendek =====
             var bgHidden = false;
-            var LERP_FACTOR = 0.08;
+            // Lerp tinggi = teks langsung ngejar scroll tanpa lag
+            var LERP_FACTOR = 0.22;
             var currentTitleY = 0;
             var currentSubtitleY = 0;
             var targetTitleY = 0;
@@ -740,13 +744,16 @@
                 var rect = bannerSlider.getBoundingClientRect();
                 var sliderHeight = bannerSlider.offsetHeight || BANNER_HEIGHT;
 
+                // Seberapa jauh user sudah scroll melewati top banner
                 var scrollPast = Math.max(0, NAVBAR_HEIGHT - rect.top);
                 var progress = Math.min(scrollPast / sliderHeight, 1);
 
+                // Smoothstep
                 var eased = progress * progress * (3 - 2 * progress);
 
-                targetTitleY = eased * sliderHeight * 0.35;
-                targetSubtitleY = eased * sliderHeight * 0.2;
+                // Jarak parallax pendek — title max ~80px, subtitle max ~50px
+                targetTitleY = eased * 80;
+                targetSubtitleY = eased * 50;
             }
 
             function parallaxLoop() {
@@ -755,8 +762,9 @@
                 currentTitleY = lerp(currentTitleY, targetTitleY, LERP_FACTOR);
                 currentSubtitleY = lerp(currentSubtitleY, targetSubtitleY, LERP_FACTOR);
 
-                if (Math.abs(currentTitleY - targetTitleY) < 0.05) currentTitleY = targetTitleY;
-                if (Math.abs(currentSubtitleY - targetSubtitleY) < 0.05) currentSubtitleY = targetSubtitleY;
+                // Snap jika sudah dekat
+                if (Math.abs(currentTitleY - targetTitleY) < 0.1) currentTitleY = targetTitleY;
+                if (Math.abs(currentSubtitleY - targetSubtitleY) < 0.1) currentSubtitleY = targetSubtitleY;
 
                 parallaxTitles.forEach(function(el) {
                     el.style.transform = 'translate3d(0,' + currentTitleY + 'px,0)';
@@ -765,6 +773,7 @@
                     el.style.transform = 'translate3d(0,' + currentSubtitleY + 'px,0)';
                 });
 
+                // Sembunyikan fixed bg saat banner sudah keluar viewport
                 if (bannerFixedBg) {
                     var rect = bannerSlider.getBoundingClientRect();
                     if (rect.bottom <= 0 && !bgHidden) {
