@@ -38,6 +38,8 @@ class SiteSettingRequest extends FormRequest
             'watermark_text' => ['nullable', 'string', 'max:255'],
             'watermark_image_path' => ['nullable', 'image', 'max:4096'],
             'watermark_opacity' => ['nullable', 'numeric', 'between:0.05,1'],
+            'about_description' => ['nullable', 'string'],
+            'about_focus' => ['nullable', 'string'],
         ];
     }
 }

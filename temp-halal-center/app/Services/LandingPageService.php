@@ -111,4 +111,104 @@ class LandingPageService
             'latestSehatiRegistrations' => SehatiRegistration::query()->latest()->limit(5)->get(),
         ];
     }
+
+    public function getStatisticsData()
+    {
+        $years = collect(range(now()->year - 5, now()->year));
+
+        // Quick Stats
+        $sh_terbit = UmkmProduk::count() + Umkm::count();
+        $umkm_count = Umkm::count();
+        $produk_count = UmkmProduk::count();
+        $assistants_count = LphPartner::count();
+
+        // Indikator Ekonomi Islam (Sorted Desc)
+        $ekonomi_islam_raw = collect([
+            'Makanan Halal' => Umkm::where('kategori', 'like', '%Makanan%')->count(),
+            'Wisata Ramah Muslim' => Umkm::where('kategori', 'like', '%Wisata%')->count(),
+            'Pondok Pesantren' => Umkm::where('kategori', 'like', '%Ponpes%')->count(),
+            'Minuman Halal' => Umkm::where('kategori', 'like', '%Minuman%')->count(),
+            'Perbankan Syariah' => Umkm::where('kategori', 'like', '%Perbankan%')->count(),
+            'Produk Halal Lainnya' => Umkm::where('kategori', 'like', '%Produk Halal%')->count(),
+        ])->sortDesc();
+
+        $ekonomi_islam = [
+            'labels' => $ekonomi_islam_raw->keys()->toArray(),
+            'short' => $ekonomi_islam_raw->keys()->map(fn($l) => explode(' ', $l)[0])->toArray(),
+            'data' => $ekonomi_islam_raw->values()->toArray()
+        ];
+
+        // Industri Produk Halal (SH Terbit over years)
+        $sh_growth = $years->map(fn($y) => UmkmProduk::where('tahun_terbit', $y)->count() + Umkm::whereYear('created_at', $y)->count());
+
+        // Regional Data (from Region table)
+        $regions = Region::orderBy('name')->get();
+        $pariwisata_per_kota = [
+            'labels' => $regions->pluck('name')->toArray(),
+            'data' => $regions->pluck('issued_certificate_count')->toArray()
+        ];
+
+        // Sebaran UMKM Halal (Pie Chart - per city from Region table)
+        $umkm_sebaran = $regions->map(fn($r) => ['name' => $r->name, 'value' => $r->halal_msmes_count]);
+
+        // LPH & Auditor Perkembangan (Auditor from Mentor table)
+        $lph_growth = $years->map(fn($y) => LphPartner::whereYear('created_at', '<=', $y)->count());
+        $auditor_growth = $years->map(fn($y) => Mentor::whereYear('created_at', '<=', $y)->count());
+
+        // Komposisi Jenis LPH (LPH vs LP3H)
+        $lph_komposisi = [
+            'labels' => ['LPH', 'LP3H'],
+            'data' => [
+                LphPartner::where('partner_type', 'lph')->count(),
+                LphPartner::where('partner_type', 'lp3h')->count(),
+            ]
+        ];
+
+        // RPH Growth (HalalLocation + Umkm with RPH category)
+        $rph_growth = $years->map(function($y) {
+            $locs = HalalLocation::where('category', 'like', '%Rumah Potong%')->whereYear('created_at', '<=', $y)->count();
+            $umkms = Umkm::where('kategori', 'like', '%Rumah Potong%')->whereYear('created_at', '<=', $y)->count();
+            return $locs + $umkms;
+        });
+
+        // Ponpes Growth
+        $ponpes_growth = $years->map(fn($y) => Umkm::where('kategori', 'like', '%Ponpes%')->whereYear('created_at', '<=', $y)->count());
+
+        // Perkembangan Sertifikasi Halal UMKM per Tahun
+        $umkm_growth = $years->map(fn($y) => Umkm::whereYear('created_at', '<=', $y)->count());
+
+        return [
+            'stats' => [$sh_terbit, $umkm_count, $produk_count, $assistants_count],
+            'ekonomi_islam' => $ekonomi_islam,
+            'sh_growth' => [
+                'years' => $years->toArray(),
+                'values' => $sh_growth->toArray(),
+            ],
+            'pariwisata' => $pariwisata_per_kota,
+            'umkm_sebaran' => $umkm_sebaran->toArray(),
+            'lph_auditor' => [
+                'years' => $years->toArray(),
+                'lph' => $lph_growth->toArray(),
+                'auditor' => $auditor_growth->toArray(),
+            ],
+            'lph_komposisi' => $lph_komposisi,
+            'rph_growth' => [
+                'years' => $years->toArray(),
+                'values' => $rph_growth->toArray(),
+            ],
+            'ponpes_growth' => [
+                'years' => $years->toArray(),
+                'values' => $ponpes_growth->toArray(),
+            ],
+            'umkm_perkembangan' => [
+                'years' => $years->toArray(),
+                'values' => $umkm_growth->toArray(),
+            ],
+            'umk_info' => [
+                $assistants_count,
+                LphPartner::where('partner_type', 'lp3h')->count(),
+                '100%' // Placeholder for percentage
+            ]
+        ];
+    }
 }

@@ -15,7 +15,8 @@ class OrganizationMemberController extends BaseCrudController
     protected array $tableColumns = [
         ['key' => 'name', 'label' => 'Nama'],
         ['key' => 'role_title', 'label' => 'Jabatan'],
-        ['key' => 'expertise', 'label' => 'Keahlian'],
+        ['key' => 'email', 'label' => 'Email'],
+        ['key' => 'phone', 'label' => 'Telepon'],
     ];
     protected array $publicFileFields = ['photo_path'];
 

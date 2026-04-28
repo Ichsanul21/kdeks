@@ -8,6 +8,18 @@
     body {
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
+
+    /* Quill 2.0 List Fix for Tailwind Prose */
+    .prose ol > li[data-list="bullet"] {
+        list-style-type: disc !important;
+    }
+    .prose ol > li[data-list="ordered"] {
+        list-style-type: decimal !important;
+    }
+    .prose ol > li[data-list="bullet"]::marker,
+    .prose ul > li::marker {
+        color: #10b981 !important;
+    }
 }
 
 @layer components {

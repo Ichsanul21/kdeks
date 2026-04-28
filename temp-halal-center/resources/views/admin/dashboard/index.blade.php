@@ -28,7 +28,7 @@
     <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         @foreach([
             ['label' => 'Total UMKM', 'value' => $stats['umkms'] ?? 0, 'icon' => 'store', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'route' => route('admin.umkms.index')],
-            ['label' => 'Sertifikasi SEHATI', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
+            ['label' => 'Sertifikasi Halal', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
             ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati_pending'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.sehati-registrations.index', ['search' => 'baru'])],
             ['label' => 'Pesan Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'message-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
         ] as $card)

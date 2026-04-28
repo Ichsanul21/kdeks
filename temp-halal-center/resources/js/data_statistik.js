@@ -1248,34 +1248,51 @@ const DataStatistik = (() => {
 
     const DATA = {
         daerah: {
-            stats:[12847,384,1253,14],
-            sgie:{
-                labels:['Halal Food','Islamic Finance','Muslim-Friendly Travel','Media & Recreation','Halal Pharma & Cosmetics','Modest Fashion','Global (Rata-rata)'],
-                short:['Halal Food','Islamic Finance','Muslim Travel','Media','Pharma & Cosmetics','Modest Fashion','Global Avg'],
-                data:[72,58,64,41,53,48,56],
+            stats: window.STATS_DATA?.stats || [0, 0, 0, 0],
+            sgie: window.STATS_DATA?.ekonomi_islam || {
+                labels:['Makanan Halal', 'Wisata Ramah Muslim', 'Pondok Pesantren', 'Minuman Halal', 'Perbankan Syariah', 'Produk Halal Lainnya'],
+                short:['Makanan', 'Wisata', 'Ponpes', 'Minuman', 'Perbankan', 'Produk'],
+                data:[0,0,0,0,0,0],
             },
-            sertifikasi:{ years:['2020','2021','2022','2023','2024','2025*'], values:[1890,3420,5680,8150,10840,12847] },
-            ekspor:{ years:['2020','2021','2022','2023','2024','2025*'], values:[38,67,94,128,156,183] },
-            pariwisataBar:{
-                labels:['Kota Samarinda','Kota Balikpapan','Kota Bontang','Kutai Kartanegara','Penajam Paser Utara','Kutai Timur','Paser','Berau','Mahakam Ulu'],
-                short:['Samarinda','Balikpapan','Bontang','Kukar','PPU','Kutim','Paser','Berau','Mahulu'],
-                data:[387,324,168,112,78,64,52,41,27],
+            sertifikasi: window.STATS_DATA?.sh_growth || {
+                years:['2020','2021','2022','2023','2024','2025'],
+                values:[0,0,0,0,0,0]
             },
-            umkmSebaran:[
-                {name:'Kaltim',value:1253,color:'emerald'},{name:'Kalsel',value:987,color:'blue'},
-                {name:'Kaltara',value:324,color:'amber'},{name:'Kalbar',value:256,color:'violet'},
-                {name:'Kalteng',value:198,color:'rose'},
+            pariwisataBar: window.STATS_DATA?.pariwisata || {
+                labels:['Samarinda','Balikpapan','Kutai Kartanegara','Paser','Berau'],
+                short:['Smd','Bpn','Kkr','Psr','Bru'],
+                data:[0,0,0,0,0]
+            },
+            umkm_sebaran: window.STATS_DATA?.umkm_sebaran || [
+                { name:'Samarinda', value:0, color:'emerald' },
+                { name:'Balikpapan', value:0, color:'blue' },
+                { name:'Kukar', value:0, color:'amber' },
+                { name:'Bontang', value:0, color:'violet' },
+                { name:'Lainnya', value:0, color:'rose' }
             ],
-            lph:{ years:['2020','2021','2022','2023','2024','2025*'], lph:[3,5,7,9,11,14], auditor:[18,34,52,73,98,124] },
-            lphKomposisi:{ labels:['LPH UMK','LPH Pemerintah','LPH Blended'], data:[8,3,3], colors:['rgba(139,92,246,0.8)','rgba(6,182,212,0.8)','rgba(245,158,11,0.8)'] },
-            rphKomposisi:{ labels:['Pemerintah','Swasta','BUMD'], data:[5,7,2], colors:['rgba(239,68,68,0.8)','rgba(59,130,246,0.8)','rgba(16,185,129,0.8)'] },
-            rphSebaran:[
-                {name:'Kaltim',value:14,color:'emerald'},{name:'Kalsel',value:11,color:'blue'},
-                {name:'Kaltara',value:7,color:'amber'},{name:'Kalbar',value:9,color:'violet'},
-                {name:'Kalteng',value:6,color:'rose'},
-            ],
-            umk:{ years:['2020','2021','2022','2023','2024','2025*'], reguler:[210,680,1420,2890,4350,5640], selfDeclare:[0,0,180,620,1840,3200] },
-            umkInfo:[87,12,'94,2%'],
+            lph: window.STATS_DATA?.lph_auditor || {
+                years:['2020','2021','2022','2023','2024','2025'],
+                lph:[0,0,0,0,0,0],
+                auditor:[0,0,0,0,0,0]
+            },
+            lphKomposisi: window.STATS_DATA?.lph_komposisi || {
+                labels:['LPH','LP3H'],
+                data:[0,0],
+                colors:[C.violet, C.cyan]
+            },
+            rph_growth: window.STATS_DATA?.rph_growth || {
+                years:['2020','2021','2022','2023','2024','2025'],
+                values:[0,0,0,0,0,0]
+            },
+            ponpes_growth: window.STATS_DATA?.ponpes_growth || {
+                years:['2020','2021','2022','2023','2024','2025'],
+                values:[0,0,0,0,0,0]
+            },
+            umkm_perkembangan: window.STATS_DATA?.umkm_perkembangan || {
+                years:['2020','2021','2022','2023','2024','2025'],
+                values:[0,0,0,0,0,0]
+            },
+            umkInfo: window.STATS_DATA?.umk_info || [0,0,'0%'],
             locLabel:'Kalimantan Timur', locChartLabel:'Kabupaten/Kota', totalLabel:'Total Kalimantan',
         },
     };
@@ -1701,33 +1718,7 @@ const DataStatistik = (() => {
     }
 
     function renderDaerahPanels() {
-        const d = DATA.daerah;
-        // Pariwisata
-        document.getElementById('panelPariwisata').querySelector('.relative.z-10').innerHTML = d.umkmSebaran.map(it => `
-            <div class="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white/80 px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3">
-                <div class="flex items-center gap-2">
-                    <span class="h-2 w-2 rounded-full" style="background-color:${C[it.color]}"></span>
-                    <span class="text-[11px] font-semibold text-slate-700 sm:text-xs">${it.name}</span>
-                </div>
-                <span class="text-sm font-extrabold text-slate-900">${fmt(it.value)}</span>
-            </div>
-        `).join('');
-
-        // RPH
-        const items = d.rphSebaran;
-        const total = items.reduce((s,i) => s + i.value, 0);
-        const cards = items.map(it => `
-            <div class="flex flex-col items-center justify-center rounded-xl border border-slate-200/80 bg-white/80 p-2.5 backdrop-blur-sm sm:p-3">
-                <span class="text-xl font-extrabold text-slate-900 sm:text-2xl">${it.value}</span>
-                <span class="mt-0.5 text-[9px] font-bold uppercase tracking-wider sm:text-[10px]" style="color:${C[it.color]}">${it.name}</span>
-            </div>
-        `).join('');
-        const totalCard = `
-            <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-2.5 backdrop-blur-sm sm:p-3">
-                <span class="text-xl font-extrabold text-slate-400 sm:text-2xl">${fmt(total)}</span>
-                <span class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:text-[10px]">${d.totalLabel}</span>
-            </div>`;
-        document.getElementById('panelRPH').querySelector('.relative.z-10').innerHTML = cards + totalCard;
+        // No panels currently used for Daerah
     }
 
     // ── Chart Creators ────────────────────────────
@@ -1736,8 +1727,8 @@ const DataStatistik = (() => {
         const m = mob();
 
         charts.sgie = new Chart(document.getElementById('chartSGIE'), {
-            type:'bar', data:{ labels: m ? d.sgie.short : d.sgie.labels, datasets:[{ label:'Skor SGIE 2025', data:d.sgie.data, backgroundColor:['rgba(16,185,129,0.85)','rgba(16,185,129,0.7)','rgba(16,185,129,0.6)','rgba(16,185,129,0.48)','rgba(16,185,129,0.38)','rgba(16,185,129,0.28)','rgba(100,116,139,0.25)'], borderColor:'transparent', borderRadius:6, barThickness: m?18:28 }] },
-            options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg({callbacks:{label:c=>`Skor: ${c.parsed.x}/100`}}) }, scales:{ x:{beginAtZero:true,max:100,grid:{color:GRID}}, y:{grid:{display:false},ticks:{font:{weight:'600'}}} } }
+            type:'bar', data:{ labels: m ? d.sgie.short : d.sgie.labels, datasets:[{ label:'Jumlah Terdaftar', data:d.sgie.data, backgroundColor:['rgba(16,185,129,0.85)','rgba(16,185,129,0.7)','rgba(16,185,129,0.6)','rgba(16,185,129,0.48)','rgba(16,185,129,0.38)','rgba(16,185,129,0.28)','rgba(100,116,139,0.25)'], borderColor:'transparent', borderRadius:6, barThickness: m?18:28 }] },
+            options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg({callbacks:{label:c=>`Jumlah: ${fmt(c.parsed.x)}`}}) }, scales:{ x:{beginAtZero:true,grid:{color:GRID}}, y:{grid:{display:false},ticks:{font:{weight:'600'}}} } }
         });
 
         charts.sertifikasi = new Chart(document.getElementById('chartSertifikasi'), {
@@ -1745,38 +1736,45 @@ const DataStatistik = (() => {
             options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('K') }
         });
 
-        charts.ekspor = new Chart(document.getElementById('chartEkspor'), {
-            type:'line', data:{ labels:slice(d.ekspor.years,state.period), datasets:[makeLine(slice(d.ekspor.values,state.period),C.blue)] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('$') }
+        charts.umkmSebaran = new Chart(document.getElementById('chartUmkmSebaran'), {
+            type:'pie', data:{ labels:d.umkm_sebaran.map(it=>it.name), datasets:[{data:d.umkm_sebaran.map(it=>it.value),backgroundColor:[C.emerald, C.blue, C.amber, C.violet, C.rose, C.cyan, C.teal, C.slate, C.orange, C.sky, C.lime]}] },
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'bottom', labels:{boxWidth:10, font:{size:9}}}, tooltip:tooltipCfg() } }
+        });
+
+        charts.ponpes = new Chart(document.getElementById('chartPonpes'), {
+            type:'line', data:{ labels:slice(d.ponpes_growth.years,state.period), datasets:[makeLine(slice(d.ponpes_growth.values,state.period),C.emerald)] },
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
         });
 
         charts.pariwisata = new Chart(document.getElementById('chartPariwisata'), {
-            type:'bar', data:{ labels:m?d.pariwisataBar.short:d.pariwisataBar.labels, datasets:[{ label:'Sertifikat', data:d.pariwisataBar.data, backgroundColor:C.amber, borderRadius:5, barThickness:m?16:22 }] },
-            options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:{ x:{beginAtZero:true}, y:{grid:{display:false}} } }
+            type:'bar', data:{ labels:d.pariwisataBar.labels, datasets:[{ label:'Sertifikat', data:d.pariwisataBar.data, backgroundColor:C.amber, borderRadius:4 }] },
+            options:{ indexAxis:'x', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:{ y:{beginAtZero:true, grid:{color:GRID}}, x:{grid:{display:false}, ticks:{font:{size:9}}} } }
         });
 
         charts.lphLine = new Chart(document.getElementById('chartLPHLine'), {
-            type:'line', data:{ labels:slice(d.lph.years,state.period), datasets:[ { label:'Jumlah LPH', ...makeLine(slice(d.lph.lph,state.period),C.violet) }, { label:'Auditor', ...makeLine(slice(d.lph.auditor,state.period),C.cyan) } ]},
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:legendCfg(), tooltip:tooltipCfg() }, scales:lineScale('') }
+            type:'line', data:{
+                labels:slice(d.lph.years,state.period),
+                datasets:[
+                    { label:'LPH', data:slice(d.lph.lph,state.period), borderColor:C.violet, backgroundColor:C.violet, tension:0.4, borderWidth:2, pointRadius:3 },
+                    { label:'Auditor', data:slice(d.lph.auditor,state.period), borderColor:C.cyan, backgroundColor:C.cyan, tension:0.4, borderWidth:2, pointRadius:3 }
+                ]
+            },
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'top', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() }, scales:lineScale('') }
         });
 
         charts.lphPie = new Chart(document.getElementById('chartLPHPie'), {
-            type:'doughnut', data:{ labels:d.lphKomposisi.labels, datasets:[{data:d.lphKomposisi.data,backgroundColor:d.lphKomposisi.colors,borderWidth:3}] },
-            options:{ responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{ legend:barLegendCfg(), tooltip:tooltipCfg() } }
+            type:'doughnut', data:{ labels:d.lphKomposisi.labels, datasets:[{ data:d.lphKomposisi.data, backgroundColor:d.lphKomposisi.colors, borderWidth:0 }] },
+            options:{ responsive:true, maintainAspectRatio:false, cutout:'70%', plugins:{ legend:{position:'bottom', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() } }
         });
 
-        charts.rphPie = new Chart(document.getElementById('chartRPHPie'), {
-            type:'doughnut', data:{ labels:d.rphKomposisi.labels, datasets:[{data:d.rphKomposisi.data,backgroundColor:d.rphKomposisi.colors,borderWidth:3}] },
-            options:{ responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{ legend:barLegendCfg(), tooltip:tooltipCfg() } }
+        charts.rphGrowth = new Chart(document.getElementById('chartRPHGrowth'), {
+            type:'line', data:{ labels:slice(d.rph_growth.years,state.period), datasets:[makeLine(slice(d.rph_growth.values,state.period),C.rose)] },
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
         });
 
-        const yrs = slice(d.umk.years,state.period);
-        const reg = slice(d.umk.reguler,state.period);
-        const sd  = slice(d.umk.selfDeclare,state.period);
-        const tot = reg.map((v,i)=>v+sd[i]);
-        charts.umk = new Chart(document.getElementById('chartUMK'), {
-            type:'line', data:{ labels:yrs, datasets:[ { label:'SH Reguler', ...makeLine(reg,C.teal) }, { label:'Self-Declare', ...makeLine(sd,C.orange) }, { label:'Total', ...makeLine(tot,C.slate,false,true) } ]},
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:legendCfg(), tooltip:tooltipCfg() }, scales:lineScale('K') }
+        charts.umkmPerkembangan = new Chart(document.getElementById('chartUMK'), {
+            type:'line', data:{ labels:slice(d.umkm_perkembangan.years,state.period), datasets:[makeLine(slice(d.umkm_perkembangan.values,state.period),C.teal)] },
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutUs;
 use App\Models\Article;
 use App\Models\Event;
 use App\Models\GalleryItem;
@@ -9,6 +10,7 @@ use App\Models\HalalLocation;
 use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
 use App\Models\OrganizationMember;
+use App\Models\Milestone;
 use App\Models\Regulation;
 use App\Models\SectorItem;
 use App\Models\SiteSetting;
@@ -190,21 +192,23 @@ class PublicContentController extends Controller
     public function dataIndex(Request $request, LandingPageService $service): View
     {
         $data = $service->getHomepageData();
+        $statsData = $service->getStatisticsData();
 
         return view('public.data.index', [
             'statistics' => $data['statistics'] ?? [],
             'dashboard_data' => $data['dashboard_data'] ?? [],
+            'statsData' => $statsData,
         ]);
     }
 
     public function organizationStructure(): View
     {
         $setting = SiteSetting::query()->first();
-        
+
         $kneksExecutive = OrganizationMember::where('category', 'kneks')
             ->whereNull('parent_id')
             ->first();
-            
+
         $kdeksExecutive = OrganizationMember::where('category', 'kdeks')
             ->whereNull('parent_id')
             ->first();
@@ -218,7 +222,21 @@ class PublicContentController extends Controller
 
     public function memberShow(string $id): View
     {
-        // For dummy purposes, we just return the view
-        return view('public.profile.member_detail', ['id' => $id]);
+        $member = OrganizationMember::findOrFail($id);
+
+        return view('public.profile.member_detail', [
+            'member' => $member,
+        ]);
+    }
+
+    public function about(): View
+    {
+        $aboutUs = AboutUs::query()->first();
+        $milestones = Milestone::query()->orderBy('sort_order')->get();
+
+        return view('public.about', [
+            'aboutUs' => $aboutUs,
+            'milestones' => $milestones,
+        ]);
     }
 }

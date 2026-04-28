@@ -9,7 +9,7 @@
         <a href="{{ route($routePrefix.'.index') }}" class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">Kembali</a>
     </div>
 
-    <form method="POST" action="{{ $mode === 'create' ? route($routePrefix.'.store') : route($routePrefix.'.update', $item->id) }}" enctype="multipart/form-data" class="admin-card grid gap-6 rounded-[1.75rem] p-8">
+    <form method="POST" action="{{ $mode === 'create' ? route($routePrefix.'.store') : route($routePrefix.'.update', $item->id) }}" enctype="multipart/form-data" class="admin-card grid gap-10 rounded-[1.75rem] p-8">
         @csrf
         @if($mode === 'edit')
             @method('PUT')
@@ -22,16 +22,16 @@
                 $value = old($name, data_get($item, $name));
             @endphp
 
-            <div>
+            <div class="{{ $type === 'richtext' ? 'mb-16' : '' }}">
                 @if($type !== 'checkbox')
-                    <label class="mb-2 block text-sm font-bold text-slate-700">{{ $field['label'] }}</label>
+                    <label class="mb-2.5 block text-sm font-bold text-slate-700">{{ $field['label'] }}</label>
                 @endif
 
                 @if($type === 'textarea')
-                    <textarea name="{{ $name }}" rows="4" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif class="admin-input">{{ $value }}</textarea>
+                    <textarea name="{{ $name }}" rows="4" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif class="admin-input">{{ is_array($value) ? json_encode($value, JSON_PRETTY_PRINT) : $value }}</textarea>
                 @elseif($type === 'richtext')
-                    <input type="hidden" id="input-{{ $name }}" name="{{ $name }}" value="{{ $value }}">
-                    <div data-richtext data-input="input-{{ $name }}" class="admin-editor"></div>
+                    <input type="hidden" id="input-{{ $name }}" name="{{ $name }}" value="{{ is_array($value) ? json_encode($value) : $value }}">
+                    <div data-richtext data-input="input-{{ $name }}" class="admin-editor mb-12"></div>
                 @elseif($type === 'map-picker')
                     <div
                         data-map-picker
@@ -71,7 +71,7 @@
                         type="{{ $type }}"
                         name="{{ $name }}"
                         @if(isset($field['id'])) id="{{ $field['id'] }}" @endif
-                        value="{{ $type === 'datetime-local' && $value ? \Illuminate\Support\Carbon::parse($value)->format('Y-m-d\TH:i') : $value }}"
+                        value="{{ $type === 'datetime-local' && $value ? \Illuminate\Support\Carbon::parse($value)->format('Y-m-d\TH:i') : (is_array($value) ? json_encode($value) : $value) }}"
                         @if(isset($field['step'])) step="{{ $field['step'] }}" @endif
                         class="admin-input"
                     >

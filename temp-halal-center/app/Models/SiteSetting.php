@@ -28,6 +28,8 @@ class SiteSetting extends Model
         'watermark_text',
         'watermark_image_path',
         'watermark_opacity',
+        'about_description',
+        'about_focus',
         'visitor_count',
     ];
 

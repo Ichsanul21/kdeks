@@ -60,6 +60,8 @@
             'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
             'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle'],
             'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square'],
+            'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info'],
+            'admin.milestones.index' => ['label' => 'Timeline / Milestone', 'icon' => 'history'],
             'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
         ];
 

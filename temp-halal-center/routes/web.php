@@ -61,9 +61,7 @@ Route::get('/siaran-pers', function () {
     return view('public.siaran-pers-placeholder');
 })->name('siaran-pers');
 
-Route::get('/profile/tentang-kami', function () {
-    return view('public.about');
-})->name('about');
+Route::get('/profile/tentang-kami', [PublicContentController::class, 'about'])->name('about');
 
 Route::get('/profile/struktur-organisasi', [PublicContentController::class, 'organizationStructure'])->name('profile.organization');
 Route::get('/profile/anggota/{id}', [PublicContentController::class, 'memberShow'])->name('profile.member');
@@ -102,6 +100,9 @@ Route::middleware(['auth', 'role:admin|editor|developer'])->prefix('admin')->as(
     Route::resource('gallery-items', GalleryItemController::class)->except(['show']);
     Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
     Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
+    Route::get('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'edit'])->name('about-us.index');
+    Route::put('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'update'])->name('about-us.update');
+    Route::resource('milestones', \App\Http\Controllers\Admin\MilestoneController::class)->except(['show']);
     Route::post('sehati-registrations/{sehati_registration}/approve', [SehatiRegistrationController::class, 'approve'])->name('sehati-registrations.approve');
     Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
     Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');

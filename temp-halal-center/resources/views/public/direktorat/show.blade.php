@@ -50,8 +50,7 @@
                                     prose-p:text-slate-600 prose-p:leading-relaxed
                                     prose-li:text-slate-600 prose-li:leading-relaxed
                                     prose-strong:text-slate-900 prose-strong:font-bold
-                                    prose-ol:list-decimal prose-ol:pl-4
-                                    prose-ul:list-disc prose-ul:pl-4
+                                    prose-ol:list-decimal prose-ul:list-disc
                                     prose-li:marker:text-emerald-500">
                                 {!! $sector->content !!}
                             </div>

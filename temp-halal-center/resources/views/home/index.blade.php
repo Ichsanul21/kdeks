@@ -91,22 +91,22 @@
             <div class="relative z-10 mx-auto max-w-7xl px-6">
                 <div class="grid items-center gap-10 lg:grid-cols-[7fr_3fr] lg:gap-14">
                     <div class="flex flex-col gap-6">
-                        <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-7xl xl:leading-[1.2]">
+                        <h1 class="font-heading text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl md:leading-[1.15] lg:text-6xl lg:leading-[1.2] xl:text-5xl xl:leading-[1.2]">
                             Komite Daerah
-                            <span class="text-gradient md:block">Keuangan dan Ekonomi</span>
-                            Syariah Kaltim
+                            <span class="text-gradient md:block">Ekonomi dan Keuangan Syariah</span>
+                            Kalimantan Timur
                         </h1>
 
                         <div class="max-w-xl text-base font-medium leading-relaxed text-slate-500 lg:max-w-2xl xl:max-w-none sm:text-lg [&_p]:inline [&_p]:m-0">
                             {!! data_get($setting, 'short_description', 'Portal resmi KDEKS Kalimantan Timur untuk layanan sertifikasi halal, direktori produk, dokumen, dan pemetaan ekosistem syariah regional.') !!}
                         </div>
 
-                        <div class="mt-2 flex flex-wrap gap-4">
-                            <a href="{{ route('about') }}" class="flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
+                        <div class="mt-2 flex flex-col md:flex-row gap-4">
+                            <a href="{{ route('about') }}" class="flex w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-slate-900 px-8 py-4 font-bold text-white shadow-md transition-all hover:bg-slate-800">
                                 Lihat Selengkapnya
                                 <i data-lucide="arrow-right" class="h-4 w-4"></i>
                             </a>
-                            <button id="btnPenyebaranData" type="button" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
+                            <button id="btnPenyebaranData" type="button" class="flex w-full md:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
                                 <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
                                 Penyebaran data KDEKS KalTim
                             </button>
@@ -268,7 +268,7 @@
                     </div>
                 </div>
 
-                <div class="relative">
+                <div class="relative" id="webgismap">
                     <div class="absolute inset-x-0 -top-10 bottom-10 rounded-full bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-[100px] opacity-80"></div>
                     <div class="relative flex min-h-[500px] w-full flex-col overflow-hidden rounded-[2.5rem] border border-white bg-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl md:h-[600px]">
                         <div class="pointer-events-none absolute inset-x-5 top-5 z-[500] flex flex-col gap-3 sm:left-8 sm:right-auto sm:top-8 sm:w-80">
@@ -340,6 +340,10 @@
         <section id="direktori" class="border-t border-slate-100 bg-white py-24">
             <div class="mx-auto max-w-7xl px-6">
                 <div class="grid gap-16 lg:grid-cols-2">
+
+                    {{-- =============================================
+                         DATA PRODUK
+                         =============================================
                     <div class="flex h-full flex-col">
                         <div class="mb-8 flex items-end justify-between">
                             <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
@@ -360,17 +364,16 @@
                             @endforeach
                         </div>
                     </div>
+                    ============================================= --}}
 
+                    {{-- SISI KIRI: DOKUMEN (4 DATA) --}}
                     <div id="data" class="flex h-full flex-col">
                         <div class="mb-8 flex items-end justify-between">
-                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen & Regulasi</h2>
-                            <div class="flex gap-4">
-                                <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Dokumen</a>
-                                <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Regulasi</a>
-                            </div>
+                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Dokumen</h2>
+                            <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
                         </div>
                         <div class="flex flex-1 flex-col gap-4">
-                            @foreach($resources->take(2) as $resource)
+                            @foreach($resources->take(4) as $resource)
                                 <a href="{{ route('resources.show', $resource->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
                                         <i data-lucide="file-text" class="h-5 w-5"></i>
@@ -382,8 +385,17 @@
                                     <i data-lucide="download" class="h-4 w-4 shrink-0 self-center text-slate-400 transition group-hover:text-emerald-600"></i>
                                 </a>
                             @endforeach
+                        </div>
+                    </div>
 
-                            @foreach($regulations->take(2) as $regulation)
+                    {{-- SISI KANAN: REGULASI (4 DATA) --}}
+                    <div id="regulasi" class="flex h-full flex-col">
+                        <div class="mb-8 flex items-end justify-between">
+                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Regulasi</h2>
+                            <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
+                        </div>
+                        <div class="flex flex-1 flex-col gap-4">
+                            @foreach($regulations->take(4) as $regulation)
                                 <a href="{{ route('regulations.show', $regulation->slug) }}" class="group flex flex-1 items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
                                         <i data-lucide="scale" class="h-5 w-5"></i>
@@ -397,6 +409,7 @@
                             @endforeach
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -720,7 +733,7 @@
             var btnPenyebaran = document.getElementById('btnPenyebaranData');
             if (btnPenyebaran) {
                 btnPenyebaran.addEventListener('click', function() {
-                    var target = document.getElementById('webgis');
+                    var target = document.getElementById('webgismap');
                     if (target) {
                         var rect = target.getBoundingClientRect();
                         var targetY = window.pageYOffset + rect.top - NAVBAR_HEIGHT - 16;

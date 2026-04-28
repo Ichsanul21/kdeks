@@ -232,7 +232,7 @@
                     <i data-lucide="building-2" class="h-4 w-4"></i>
                 </div>
                 <p id="stat1" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">0</p>
-                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">Pelaku Usaha Halal</p>
+                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">UMKM Halal</p>
             </div>
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
@@ -240,7 +240,7 @@
                     <i data-lucide="utensils-crossed" class="h-4 w-4"></i>
                 </div>
                 <p id="stat2" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">0</p>
-                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">UMKM Halal</p>
+                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">Produk Halal Terdaftar</p>
             </div>
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
@@ -248,7 +248,7 @@
                     <i data-lucide="map-pin" class="h-4 w-4"></i>
                 </div>
                 <p id="stat3" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">0</p>
-                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">RPH Halal Beroperasi</p>
+                <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">Lembaga Pendamping Aktif</p>
             </div>
         </div>
 
@@ -388,12 +388,31 @@
                     </div>
                     <div>
                         <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Indikator Ekonomi Islam
-                            Global</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">SGIE 2025 | Skor per sektor (0–100)</p>
+                            Kalimantan Timur</h2>
+                        <p class="text-[10px] text-slate-400 sm:text-xs">Banyaknya per kategori (Makanan, Wisata, Ponpes, dll)</p>
                     </div>
                 </div>
                 <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
                     <div class="h-[280px] sm:h-[380px]"><canvas id="chartSGIE"></canvas></div>
+                </div>
+            </div>
+
+            {{-- ============================================ --}}
+            {{-- 1b. PONDOK PESANTREN --}}
+            {{-- ============================================ --}}
+            <div class="mb-8 w-full">
+                <div class="mb-4 flex items-center gap-3">
+                    <div
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                        <i data-lucide="home" class="h-4 w-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Perkembangan Pondok Pesantren</h2>
+                        <p class="text-[10px] text-slate-400 sm:text-xs">Statistik pertumbuhan pondok pesantren di Kalimantan Timur</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
+                    <div class="h-[260px] sm:h-[320px]"><canvas id="chartPonpes"></canvas></div>
                 </div>
             </div>
 
@@ -407,20 +426,14 @@
                             data-lucide="trending-up" class="h-4 w-4"></i></div>
                     <div>
                         <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Industri Produk Halal</h2>
-                        <p id="descIndustri" class="text-[10px] text-slate-400 sm:text-xs">Perkembangan sertifikasi & nilai
-                            ekspor produk halal <span class="font-semibold text-slate-600">Kalimantan Timur</span></p>
+                        <p id="descIndustri" class="text-[10px] text-slate-400 sm:text-xs">Perkembangan sertifikasi halal terbit <span class="font-semibold text-slate-600">Kalimantan Timur</span></p>
                     </div>
                 </div>
-                <div class="grid gap-4 md:grid-cols-2">
+                <div class="grid gap-4 md:grid-cols-1">
                     <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
                         <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
                             Jumlah Sertifikasi Halal Terbit</p>
                         <div class="h-[220px] sm:h-[280px]"><canvas id="chartSertifikasi"></canvas></div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Nilai Ekspor Produk Halal (Juta USD)</p>
-                        <div class="h-[220px] sm:h-[280px]"><canvas id="chartEkspor"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -449,18 +462,8 @@
                     </div>
                     <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
                         <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Sebaran UMKM Halal per Provinsi</p>
-                        <div id="panelPariwisata"
-                            class="relative h-[320px] overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-emerald-50/40">
-                            <svg viewBox="0 0 500 400" class="absolute inset-0 h-full w-full opacity-10">
-                                <path
-                                    d="M180,80 Q220,40 280,60 Q320,50 350,80 Q380,100 370,150 Q360,200 340,240 Q310,280 280,300 Q240,320 200,300 Q170,280 160,240 Q140,200 150,150 Q155,110 180,80Z"
-                                    fill="none" stroke="currentColor" stroke-width="2" />
-                            </svg>
-                            <div
-                                class="relative z-10 flex h-full flex-col justify-center gap-2.5 px-4 py-4 sm:gap-3 sm:px-6">
-                            </div>
-                        </div>
+                            Sebaran UMKM Halal per Kabupaten/Kota</p>
+                        <div class="h-[320px]"><canvas id="chartUmkmSebaran"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -505,50 +508,32 @@
                             data-lucide="warehouse" class="h-4 w-4"></i></div>
                     <div>
                         <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Modernisasi RPH Halal</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Jumlah RPH halal berdasarkan pengelola & sebaran
-                            per provinsi</p>
+                        <p class="text-[10px] text-slate-400 sm:text-xs">Perkembangan jumlah RPH halal di Kalimantan Timur</p>
                     </div>
                 </div>
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Jumlah RPH Halal berdasarkan Pengelola</p>
-                        <div class="h-[260px] sm:h-[300px]"><canvas id="chartRPHPie"></canvas></div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Sebaran RPH Halal per Provinsi</p>
-                        <div id="panelRPH"
-                            class="relative h-[260px] overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-rose-50/40 sm:h-[300px]">
-                            <svg viewBox="0 0 500 400" class="absolute inset-0 h-full w-full opacity-10">
-                                <path
-                                    d="M180,80 Q220,40 280,60 Q320,50 350,80 Q380,100 370,150 Q360,200 340,240 Q310,280 280,300 Q240,320 200,300 Q170,280 160,240 Q140,200 150,150 Q155,110 180,80Z"
-                                    fill="none" stroke="currentColor" stroke-width="2" />
-                            </svg>
-                            <div class="relative z-10 grid h-full grid-cols-2 gap-2.5 px-4 py-4 sm:gap-3 sm:px-5 sm:py-5">
-                            </div>
-                        </div>
-                    </div>
+                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
+                    <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
+                        Perkembangan RPH Halal (Year-over-Year)</p>
+                    <div class="h-[260px] sm:h-[320px]"><canvas id="chartRPHGrowth"></canvas></div>
                 </div>
             </div>
 
 
             {{-- ============================================ --}}
-            {{-- 6. SERTIFIKASI HALAL UMK --}}
+            {{-- 6. SERTIFIKASI HALAL UMKM --}}
             {{-- ============================================ --}}
             <div class="mb-8">
                 <div class="mb-4 flex items-center gap-3">
                     <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-100 text-teal-600"><i
                             data-lucide="badge-check" class="h-4 w-4"></i></div>
                     <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Sertifikasi Halal UMK</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">SH Terbit (Reguler/Self-Declare), jumlah pendamping
-                            & lembaga PPH</p>
+                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Sertifikasi Halal UMKM</h2>
+                        <p class="text-[10px] text-slate-400 sm:text-xs">Perkembangan jumlah UMKM halal di Kalimantan Timur</p>
                     </div>
                 </div>
                 <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
                     <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                        Perkembangan Sertifikasi Halal UMK per Tahun</p>
+                        Perkembangan Sertifikasi Halal UMKM per Tahun</p>
                     <div class="h-[260px] sm:h-[340px]"><canvas id="chartUMK"></canvas></div>
                     <div
                         class="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-4 sm:mt-5 sm:grid-cols-3 sm:gap-3 sm:pt-5">
@@ -1819,7 +1804,7 @@
                         <div>
                             <div
                                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider mb-3">
-                                <i data-lucide="utensils-crossioned" class="h-3 w-3"></i>
+                                <i data-lucide="utensils-crossed" class="h-3 w-3"></i>
                                 <span>Zona KHAS (Kuliner Halal Aman & Sehat)</span>
                             </div>
                             <h2 class="font-heading text-xl font-bold text-slate-900 sm:text-2xl">Pengembangan Zona KHAS
@@ -4558,6 +4543,7 @@
 
     <script>
         window.SERVER_DATA = @json($dashboard_data ?? []);
+        window.STATS_DATA = @json($statsData ?? []);
     </script>
     @vite(['resources/js/data_statistik.js'])
 

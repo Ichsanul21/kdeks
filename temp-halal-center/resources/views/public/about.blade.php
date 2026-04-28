@@ -9,14 +9,6 @@
         </div>
 
         <div class="relative z-10 mx-auto max-w-7xl px-6">
-            {{-- <nav class="mb-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-                <a href="{{ route('home') }}" class="transition hover:text-emerald-600">Beranda</a>
-                <i data-lucide="chevron-right" class="h-3 w-3"></i>
-                <span class="text-emerald-600">Profil</span>
-                <i data-lucide="chevron-right" class="h-3 w-3"></i>
-                <span class="text-slate-500">Tentang Kami</span>
-            </nav> --}}
-
             <div class="max-w-4xl">
                 <h1 class="font-heading text-4xl font-extrabold leading-tight text-slate-900 md:text-5xl lg:text-6xl">
                     Membangun <span class="text-gradient">Ekonomi Syariah</span><br>
@@ -56,37 +48,10 @@
 
                             <div
                                 class="prose prose-emerald prose-lg max-w-none prose-p:text-slate-600 prose-p:leading-relaxed prose-strong:text-slate-900">
-                                <p>
-                                    Komite Daerah Ekonomi dan Keuangan Syariah (KDEKS) merupakan bagian dari upaya
-                                    pemerintah Indonesia untuk memperkuat ekonomi syariah di tingkat nasional dan daerah.
-                                    Pembentukan KDEKS ini terkait erat dengan perkembangan ekonomi syariah yang semakin
-                                    penting di Indonesia, serta dorongan untuk memperluas implementasi ekonomi syariah ke
-                                    berbagai daerah di seluruh Indonesia.
-                                </p>
-                                <p>
-                                    KDEKS Kalimantan Timur dibentuk berdasarkan Keputusan Gubernur Kalimantan Timur.
-                                    Pembentukan KDEKS merupakan salah satu langkah strategis untuk memastikan bahwa
-                                    kebijakan dan inisiatif ekonomi syariah yang digagas oleh KNEKS dapat diterapkan secara
-                                    efektif di daerah-daerah, dengan melibatkan pemerintah daerah, lembaga keuangan syariah,
-                                    industri halal, serta masyarakat lokal.
-                                </p>
-                                <p>
-                                    Latar belakang pembentukan KDEKS merupakan sebuah kebijakan untuk memperkuat ekonomi
-                                    syariah di Indonesia dimulai dengan pembentukan Komite Nasional Keuangan Syariah (KNKS)
-                                    pada tahun 2016, yang kemudian bertransformasi menjadi KNEKS pada tahun 2020.
-                                    Selanjutnya, untuk mendorong perkembangan ekonomi syariah secara lebih luas dan
-                                    menyeluruh, baik di sektor keuangan maupun industri halal, perlu adanya koordinasi di
-                                    tingkat daerah.
-                                </p>
-                                <p>
-                                    Oleh karena itu, KDEKS dibentuk sebagai lembaga yang memiliki peran dalam mendukung
-                                    implementasi strategi ekonomi syariah di daerah.
-                                </p>
+                                {!! $aboutUs->description ?? '<p>Komite Daerah Ekonomi dan Keuangan Syariah (KDEKS) merupakan bagian dari upaya pemerintah Indonesia untuk memperkuat ekonomi syariah di tingkat nasional dan daerah.</p>' !!}
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
                 <!-- Sidebar -->
@@ -95,21 +60,21 @@
                     <div class="rounded-[2.5rem] bg-emerald-600 p-8 text-white shadow-xl shadow-emerald-600/20">
                         <h3 class="mb-6 font-heading text-xl font-bold">Fokus Utama KDEKS</h3>
                         <ul class="space-y-4">
-                            <li class="flex items-start gap-3">
-                                <i data-lucide="check-circle" class="h-5 w-5 shrink-0 text-emerald-200"></i>
-                                <span class="text-sm font-medium leading-relaxed">Penguatan koordinasi antar pemangku
-                                    kepentingan di daerah.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i data-lucide="check-circle" class="h-5 w-5 shrink-0 text-emerald-200"></i>
-                                <span class="text-sm font-medium leading-relaxed">Implementasi inisiatif ekonomi syariah di
-                                    sektor industri halal.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i data-lucide="check-circle" class="h-5 w-5 shrink-0 text-emerald-200"></i>
-                                <span class="text-sm font-medium leading-relaxed">Pengembangan lembaga keuangan syariah di
-                                    Kalimantan Timur.</span>
-                            </li>
+                            @if($aboutUs && $aboutUs->focus)
+                                @foreach(explode("\n", str_replace("\r", "", $aboutUs->focus)) as $focusItem)
+                                    @if(trim($focusItem))
+                                        <li class="flex items-start gap-3">
+                                            <i data-lucide="check-circle" class="h-5 w-5 shrink-0 text-emerald-200"></i>
+                                            <span class="text-sm font-medium leading-relaxed">{{ $focusItem }}</span>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            @else
+                                <li class="flex items-start gap-3">
+                                    <i data-lucide="check-circle" class="h-5 w-5 shrink-0 text-emerald-200"></i>
+                                    <span class="text-sm font-medium leading-relaxed">Penguatan koordinasi antar pemangku kepentingan.</span>
+                                </li>
+                            @endif
                         </ul>
                     </div>
 
@@ -128,6 +93,7 @@
             </div>
         </div>
     </section>
+
     {{-- ===== ROADMAP / MILESTONE ===== --}}
     <section class="relative pb-24 overflow-hidden">
         {{-- Background decoration --}}
@@ -147,100 +113,8 @@
 
                 <div class="space-y-12 md:space-y-16">
 
-                    @php
-                    $milestones = [
-                        [
-                            'year' => '2016',
-                            'sub'  => '',
-                            'title'=> 'Pendirian KNKS',
-                            'color'=> 'emerald',
-                            'icon' => 'landmark',
-                            'items'=> [
-                                'Peraturan Presiden No. 91 Tahun 2016 Tgl. 08/11/2016 tentang Komite Nasional Keuangan Syariah',
-                                'KNKS bertujuan mendukung pembangunan ekonomi nasional & mendorong percepatan pengembangan sektor keuangan syariah, perlu memperkuat koordinasi, sinkronisasi & sinergi antara otoritas, kementerian/lembaga, & pemangku kepentingan lain di sektor keuangan syariah',
-                            ],
-                        ],
-                        [
-                            'year' => '2020',
-                            'sub'  => '',
-                            'title'=> 'Transformasi Menjadi KNEKS',
-                            'color'=> 'cyan',
-                            'icon' => 'refresh-cw',
-                            'items'=> [
-                                'Peraturan Presiden No. 28 Tahun 2020 Tgl. 07/02/2020 tentang Komite Nasional Ekonomi & Keuangan Syariah',
-                                'KNEKS adalah lembaga nonstruktural yang dipimpin oleh Presiden sebagai ketua dan Wakil Presiden sebagai Ketua Harian yang bertujuan meningkatkan pembangunan ekosistem ekonomi & keuangan syariah guna mendukung pembangunan ekonomi nasional',
-                            ],
-                        ],
-                        [
-                            'year' => '2021',
-                            'sub'  => '30 November',
-                            'title'=> 'Rapat Pleno I KNEKS',
-                            'color'=> 'blue',
-                            'icon' => 'users',
-                            'items'=> [
-                                'Komite Daerah Ekonomi & Keuangan Syariah (KDEKS) ditetapkan sebagai salah satu dari 13 Program Prioritas oleh Ketua Harian KNEKS',
-                            ],
-                        ],
-                        [
-                            'year' => '2022',
-                            'sub'  => '30 Mei',
-                            'title'=> 'Rapat Pleno II KNEKS',
-                            'color'=> 'violet',
-                            'icon' => 'mic',
-                            'items'=> [
-                                '"Kita akan membangun kelembagaannya (KNEKS) sampai ke daerah dengan membangun KDEKS di semua provinsi" Arahan Wakil Presiden RI selaku Ketua Harian KNEKS',
-                            ],
-                        ],
-                        [
-                            'year' => '2022',
-                            'sub'  => '20 Desember',
-                            'title'=> 'Rapat Pleno III KNEKS',
-                            'color'=> 'violet',
-                            'icon' => 'file-text',
-                            'items'=> [
-                                '"Pengintegrasian rencana pengembangan ekonomi & keuangan syariah ke dalam rencana pembangunan nasional dan daerah, termasuk penyusunan Masterplan Ekonomi dan Keuangan Syariah Indonesia (MEKSI), sebagai kelanjutan Masterplan sebelumnya" Arahan Wakil Presiden RI selaku Ketua Harian KNEKS',
-                            ],
-                        ],
-                        [
-                            'year' => '2023',
-                            'sub'  => '04 Agustus',
-                            'title'=> 'Pengukuhan KDEKS Prov. Kaltim Periode 2023–2025',
-                            'color'=> 'emerald',
-                            'icon' => 'award',
-                            'items'=> [],
-                        ],
-                        [
-                            'year' => '2023',
-                            'sub'  => '25 September',
-                            'title'=> 'Dukungan Kemendagri – Ekonomi Syariah',
-                            'color'=> 'amber',
-                            'icon' => 'book-open',
-                            'items'=> [
-                                'Peraturan Menteri Dalam Negeri No. 15 Tahun 2023 Tgl. 25/09/2023 tentang Pedoman Penyusunan Anggaran Pendapatan & Belanja Daerah Tahun Anggaran 2024',
-                            ],
-                        ],
-                        [
-                            'year' => '2024',
-                            'sub'  => '20 September',
-                            'title'=> 'Dukungan Kemendagri – Ekonomi Syariah',
-                            'color'=> 'amber',
-                            'icon' => 'book-open',
-                            'items'=> [
-                                'Peraturan Menteri Dalam Negeri No. 15 Tahun 2023 Tgl. 20/09/2024 tentang Pedoman Penyusunan Anggaran Pendapatan & Belanja Daerah Tahun Anggaran 2025',
-                            ],
-                        ],
-                        [
-                            'year' => '2024',
-                            'sub'  => '',
-                            'title'=> 'Agenda Strategis Wapres Gibran',
-                            'color'=> 'rose',
-                            'icon' => 'book-marked',
-                            'items'=> [
-                                '"Dalam buku setebal sekitar seratus halaman tersebut, dijelaskan berbagai agenda, termasuk penurunan prevalensi stunting, akselerasi pertumbuhan ekonomi dan keuangan syariah, pemberdayaan ekonomi pesantren, reformasi birokrasi, serta percepatan pembangunan dan peningkatan kesejahteraan di Papua. Buku ini menjadi panduan bagi Wapres Gibran untuk melanjutkan program-program strategis yang telah dicanangkan, dengan fokus pada perbaikan di berbagai sektor."',
-                            ],
-                        ],
-                    ];
 
+                    @php
                     $colorMap = [
                         'emerald' => ['bg' => 'bg-emerald-500', 'ring' => 'ring-emerald-200', 'badge_bg' => 'bg-emerald-50', 'badge_text' => 'text-emerald-700', 'badge_border' => 'border-emerald-200', 'card_border' => 'border-emerald-100', 'dot' => 'bg-emerald-400'],
                         'cyan'    => ['bg' => 'bg-cyan-500',    'ring' => 'ring-cyan-200',    'badge_bg' => 'bg-cyan-50',    'badge_text' => 'text-cyan-700',    'badge_border' => 'border-cyan-200',    'card_border' => 'border-cyan-100',    'dot' => 'bg-cyan-400'],
@@ -253,7 +127,8 @@
 
                     @foreach($milestones as $i => $m)
                         @php
-                            $c = $colorMap[$m['color']];
+                            $colorKey = $m->color ?: 'emerald';
+                            $c = $colorMap[$colorKey] ?? $colorMap['emerald'];
                             $isRight = $i % 2 === 0;
                         @endphp
 
@@ -262,7 +137,7 @@
                             {{-- ─── CENTER NODE (desktop) ─── --}}
                             <div class="hidden md:flex absolute left-1/2 top-5 -translate-x-1/2 z-10 flex-col items-center">
                                 <div class="flex h-11 w-11 items-center justify-center rounded-full {{ $c['bg'] }} text-white shadow-lg ring-4 {{ $c['ring'] }}">
-                                    <i data-lucide="{{ $m['icon'] }}" class="h-4.5 w-4.5 h-5 w-5"></i>
+                                    <i data-lucide="{{ $m->icon }}" class="h-5 w-5"></i>
                                 </div>
                             </div>
 
@@ -271,12 +146,12 @@
                                 <div class="flex items-center gap-2 md:flex-col md:items-{{ $isRight ? 'end' : 'start' }} md:gap-1 pt-4">
                                     {{-- Mobile node --}}
                                     <div class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-full {{ $c['bg'] }} text-white shadow ring-4 {{ $c['ring'] }}">
-                                        <i data-lucide="{{ $m['icon'] }}" class="h-4 w-4"></i>
+                                        <i data-lucide="{{ $m->icon }}" class="h-4 w-4"></i>
                                     </div>
                                     <div>
-                                        <span class="inline-block rounded-full {{ $c['badge_bg'] }} border {{ $c['badge_border'] }} px-3 py-1 text-xs font-extrabold {{ $c['badge_text'] }}">{{ $m['year'] }}</span>
-                                        @if($m['sub'])
-                                            <p class="mt-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ $m['sub'] }}</p>
+                                        <span class="inline-block rounded-full {{ $c['badge_bg'] }} border {{ $c['badge_border'] }} px-3 py-1 text-xs font-extrabold {{ $c['badge_text'] }}">{{ $m->year }}</span>
+                                        @if($m->sub_title)
+                                            <p class="mt-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ $m->sub_title }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -284,18 +159,28 @@
 
                             {{-- ─── CARD ─── --}}
                             <div class="md:w-[calc(50%-2.5rem)] {{ $isRight ? 'md:pl-16' : 'md:pr-16' }}">
-                                <div class="rounded-2xl border {{ $c['card_border'] }} bg-white p-5 shadow-sm transition hover:shadow-md">
-                                    <h3 class="font-heading text-base font-extrabold text-slate-900">{{ $m['title'] }}</h3>
-                                    @if(!empty($m['items']))
-                                        <ul class="mt-3 space-y-2">
-                                            @foreach($m['items'] as $item)
-                                                <li class="flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
-                                                    <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full {{ $c['dot'] }}"></span>
-                                                    <span>{{ $item }}</span>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                <div class="rounded-2xl border {{ $c['card_border'] }} bg-white shadow-sm transition hover:shadow-md overflow-hidden">
+
+                                    {{-- Placeholder foto — hanya muncul jika milestone punya key 'image' --}}
+                                    @if($m->image_path)
+                                        <div class="h-44 w-full flex-shrink-0 overflow-hidden">
+                                            <img src="{{ asset('storage/'.$m->image_path) }}" alt="{{ $m->title }}" class="h-full w-full object-cover">
+                                        </div>
                                     @endif
+
+                                    <div class="p-5">
+                                        <h3 class="font-heading text-base font-extrabold text-slate-900">{{ $m->title }}</h3>
+                                        @if(!empty($m->items))
+                                            <ul class="mt-3 space-y-2">
+                                                @foreach($m->items as $item)
+                                                    <li class="flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
+                                                        <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full {{ $c['dot'] }}"></span>
+                                                        <span>{{ $item }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
