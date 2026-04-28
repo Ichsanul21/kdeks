@@ -45,7 +45,7 @@
                                 <div>
                                     <p class="text-sm font-bold text-slate-900">Email</p>
                                     <p class="mt-1 text-sm font-medium text-slate-500">
-                                        {{ data_get($setting, 'email', 'kontak@kdeks-kaltim.go.id') }}
+                                        {{ data_get($setting, 'email', 'diskominfo@kaltimprov.go.id') }}
                                     </p>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
 
                     <!-- Google Maps Embed -->
                     <div
-                        class="flex-1 overflow-hidden rounded-3xl border border-white/80 bg-slate-100 shadow-sm transition hover:shadow-md min-h-[200px]">
+                        class="flex-1 overflow-hidden rounded-3xl border border-white/80 bg-slate-100 shadow-xl transition hover:shadow-md min-h-[200px]">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.665746820167!2d117.1367558747235!3d-0.5010741994940161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67fa0cf3b5609%3A0x9efc250dd531e8b4!2sKantor%20Gubernur%20Kalimantan%20Timur!5e0!3m2!1sid!2sid!4v1776652709502!5m2!1sid!2sid"
                             width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
@@ -93,50 +93,47 @@
                             @csrf
                             <div class="grid gap-5 md:grid-cols-2">
                                 <div class="space-y-2">
-                                    <label for="name" class="text-xs font-bold uppercase tracking-wider text-slate-400">Nama
+                                    <label for="name" class="text-xs font-bold uppercase tracking-wider text-slate-700">Nama
                                         Lengkap</label>
                                     <input type="text" id="name" name="name" required
-                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm font-semibold outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-                                        placeholder="Lorem Ipsum">
+                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
+                                        placeholder="Tomi Ariyanto">
                                 </div>
                                 <div class="space-y-2">
-                                    <label for="email"
-                                        class="text-xs font-bold uppercase tracking-wider text-slate-400">Alamat
+                                    <label for="email" class="text-xs font-bold uppercase tracking-wider text-slate-700">Alamat
                                         Email</label>
                                     <input type="email" id="email" name="email" required
-                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm font-semibold outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-                                        placeholder="lorem@example.com">
+                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
+                                        placeholder="tomi@example.com">
                                 </div>
                             </div>
 
                             <div class="grid gap-5 md:grid-cols-2">
                                 <div class="space-y-2">
-                                    <label for="phone"
-                                        class="text-xs font-bold uppercase tracking-wider text-slate-400">Nomor
+                                    <label for="phone" class="text-xs font-bold uppercase tracking-wider text-slate-700">Nomor
                                         Telepon</label>
                                     <input type="text" id="phone" name="phone"
-                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm font-semibold outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-                                        placeholder="0812...">
+                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
+                                        placeholder="0812">
                                 </div>
                                 <div class="space-y-2">
-                                    <label for="subject"
-                                        class="text-xs font-bold uppercase tracking-wider text-slate-400">Subjek</label>
+                                    <label for="subject" class="text-xs font-bold uppercase tracking-wider text-slate-700">Subjek</label>
                                     <input type="text" id="subject" name="subject" required
-                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm font-semibold outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                        class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
                                         placeholder="Pertanyaan Layanan">
                                 </div>
                             </div>
 
                             <div class="space-y-2">
-                                <label for="message" class="text-xs font-bold uppercase tracking-wider text-slate-400">Tulis
+                                <label for="message" class="text-xs font-bold uppercase tracking-wider text-slate-700">Tulis
                                     Pesan</label>
                                 <textarea id="message" name="message" rows="5" required
-                                    class="w-full resize-none rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm font-semibold outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                    class="w-full resize-none rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
                                     placeholder="Apa yang ingin Anda sampaikan?"></textarea>
                             </div>
 
                             <button type="submit"
-                                class="group flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 py-5 font-bold text-white shadow-xl transition hover:bg-slate-800 active:scale-95">
+                                class="group flex w-full items-center justify-center gap-2 rounded-2xl py-5 font-bold text-white shadow-xl transition active:scale-95 bg-emerald-500 hover:bg-emerald-400">
                                 Kirim Pesan
                                 <i data-lucide="send"
                                     class="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>

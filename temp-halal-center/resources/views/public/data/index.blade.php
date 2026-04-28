@@ -432,7 +432,7 @@
                 <div class="grid gap-4 md:grid-cols-1">
                     <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
                         <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Jumlah Sertifikasi Halal Terbit</p>
+                            Perkembangan Sertifikasi Halal Terbit</p>
                         <div class="h-[220px] sm:h-[280px]"><canvas id="chartSertifikasi"></canvas></div>
                     </div>
                 </div>

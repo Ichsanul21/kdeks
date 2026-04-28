@@ -236,7 +236,7 @@
         </section>
 
         {{-- ===== SEKTOR EKONOMI SYARIAH ===== --}}
-        <section id="sektor" class="bg-white py-24 border-b border-slate-100">
+        <section id="sektor" class="bg-white py-12 md:py-24 border-b border-slate-100">
             <div class="mx-auto max-w-7xl px-6">
                 <div>
                     <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>

@@ -256,10 +256,10 @@
                 </span>
                 <i data-lucide="arrow-right" class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5"></i>
             </button>
-            <button onclick="openModal('sehatiModal'); toggleMobileMenu()" class="flex w-full items-center justify-center gap-2.5 rounded-2xl bg-emerald-500 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:bg-emerald-400 hover:shadow-emerald-400/30 active:scale-[0.98]">
+            {{-- <button onclick="openModal('sehatiModal'); toggleMobileMenu()" class="flex w-full items-center justify-center gap-2.5 rounded-2xl bg-emerald-500 py-4 text-[15px] font-bold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:bg-emerald-400 hover:shadow-emerald-400/30 active:scale-[0.98]">
                 <i data-lucide="shield-check" class="h-[18px] w-[18px]"></i>
                 Daftar Sertifikasi Halal
-            </button>
+            </button> --}}
         </div>
     </div>
 </div>
