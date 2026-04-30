@@ -31,7 +31,7 @@ class DemoContentSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'superadmin']);
         $editorRole = Role::firstOrCreate(['name' => 'editor']);
         $developerRole = Role::firstOrCreate(['name' => 'developer']);
 
@@ -39,7 +39,8 @@ class DemoContentSeeder extends Seeder
             ['email' => 'admin@halalcenter.test'],
             ['name' => 'Halal Center Admin', 'password' => Hash::make('password')]
         );
-        $admin->syncRoles([$adminRole]);
+        $admin->syncRoles([$superAdminRole]);
+
 
         User::updateOrCreate(
             ['email' => 'editor@halalcenter.test'],

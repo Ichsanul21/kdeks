@@ -28,7 +28,7 @@
                 @endif
 
                 @if($type === 'textarea')
-                    <textarea name="{{ $name }}" rows="4" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif class="admin-input">{{ is_array($value) ? json_encode($value, JSON_PRETTY_PRINT) : $value }}</textarea>
+                    <textarea name="{{ $name }}" rows="4" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif @if(isset($field['placeholder'])) placeholder="{{ $field['placeholder'] }}" @endif class="admin-input">{{ is_array($value) ? json_encode($value, JSON_PRETTY_PRINT) : $value }}</textarea>
                 @elseif($type === 'richtext')
                     <input type="hidden" id="input-{{ $name }}" name="{{ $name }}" value="{{ is_array($value) ? json_encode($value) : $value }}">
                     <div data-richtext data-input="input-{{ $name }}" class="admin-editor mb-12"></div>
@@ -73,6 +73,7 @@
                         @if(isset($field['id'])) id="{{ $field['id'] }}" @endif
                         value="{{ $type === 'datetime-local' && $value ? \Illuminate\Support\Carbon::parse($value)->format('Y-m-d\TH:i') : (is_array($value) ? json_encode($value) : $value) }}"
                         @if(isset($field['step'])) step="{{ $field['step'] }}" @endif
+                        @if(isset($field['placeholder'])) placeholder="{{ $field['placeholder'] }}" @endif
                         class="admin-input"
                     >
                 @endif

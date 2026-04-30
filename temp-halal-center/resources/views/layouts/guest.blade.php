@@ -33,7 +33,7 @@
                                     <i data-lucide="file-check-2" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <div>
-                                    <span class="text-sm font-semibold text-slate-800">Pengajuan SEHATI</span>
+                                    <span class="text-sm font-semibold text-slate-800">Pengajuan Sertifikasi Halal</span>
                                     <p class="mt-0.5 text-xs leading-relaxed text-slate-400">Pantau dan proses pengajuan dari registrasi hingga pensertifikasiatan</p>
                                 </div>
                             </div>

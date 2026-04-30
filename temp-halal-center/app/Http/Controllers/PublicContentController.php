@@ -11,6 +11,7 @@ use App\Models\HalalProduct;
 use App\Models\KnowledgeResource;
 use App\Models\OrganizationMember;
 use App\Models\Milestone;
+use App\Models\PressRelease;
 use App\Models\Regulation;
 use App\Models\SectorItem;
 use App\Models\SiteSetting;
@@ -237,6 +238,36 @@ class PublicContentController extends Controller
         return view('public.about', [
             'aboutUs' => $aboutUs,
             'milestones' => $milestones,
+        ]);
+    }
+
+    public function pressReleasesIndex(Request $request): View
+    {
+        $videoId = $request->get('v');
+        
+        $streaming = PressRelease::where('status', 'streaming')->latest()->first();
+
+        if ($videoId) {
+            $featured = PressRelease::find($videoId);
+        } else {
+            $featured = $streaming ?? PressRelease::where('is_featured', true)->latest()->first() 
+                        ?? PressRelease::latest()->first();
+        }
+
+        if (!$featured && !$videoId) {
+            $featured = PressRelease::latest()->first();
+        }
+
+        $releases = PressRelease::query()
+            ->when($featured, fn($q) => $q->where('id', '!=', $featured->id))
+            ->orderByRaw("CASE WHEN status = 'streaming' THEN 0 ELSE 1 END")
+            ->latest()
+            ->paginate(10);
+
+        return view('public.siaran-pers', [
+            'featured' => $featured,
+            'streaming' => $streaming,
+            'releases' => $releases,
         ]);
     }
 }

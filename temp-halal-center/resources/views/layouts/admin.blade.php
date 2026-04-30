@@ -38,36 +38,50 @@
 <body class="admin-body antialiased selection:bg-emerald-500 selection:text-white">
     @include('components.watermark-overlay', ['setting' => $setting ?? null])
     @php
-        $adminNavigation = [
-            'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard'],
-            'admin.sehati-registrations.index' => ['label' => 'Pengajuan SEHATI', 'icon' => 'file-check-2'],
-            'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin'],
-            'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package'],
-            'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned'],
-            'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open'],
-            'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper'],
-            // 'admin.events.index' => ['label' => 'Kegiatan & Event', 'icon' => 'calendar'],
-            // 'admin.gallery-items.index' => ['label' => 'Galeri Foto', 'icon' => 'image'],
-            'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation'],
-            'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor'],
-            'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2'],
-            'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users'],
-            'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map'],
-            'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles'],
-            'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business'],
-            'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network'],
-            'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone'],
-            'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale'],
-            'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle'],
-            'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square'],
-            'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info'],
-            'admin.milestones.index' => ['label' => 'Timeline / Milestone', 'icon' => 'history'],
-            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings'],
+        $user = auth()->user();
+        $isDeveloper = $user?->hasRole('developer');
+        $isSuperAdmin = $user?->hasRole('superadmin');
+        $isEditor = $user?->hasRole('editor');
+
+        // Define all possible navigation items
+        $allNavigation = [
+            'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard', 'roles' => ['developer', 'superadmin', 'editor']],
+            
+            // Management Section (Advanced)
+            'admin.users.index' => ['label' => 'Manajemen Pengguna', 'icon' => 'user-cog', 'roles' => ['developer', 'superadmin']],
+            'admin.sehati-registrations.index' => ['label' => 'Pengajuan Sertifikasi', 'icon' => 'file-check-2', 'roles' => ['developer', 'superadmin']],
+            'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin', 'roles' => ['developer', 'superadmin']],
+            'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package', 'roles' => ['developer', 'superadmin']],
+            'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned', 'roles' => ['developer', 'superadmin']],
+            'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2', 'roles' => ['developer', 'superadmin']],
+            'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users', 'roles' => ['developer', 'superadmin']],
+            'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map', 'roles' => ['developer', 'superadmin']],
+            'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles', 'roles' => ['developer', 'superadmin']],
+            'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone', 'roles' => ['developer', 'superadmin']],
+            
+            // CMS Section (Editor accessible)
+            'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.milestones.index' => ['label' => 'Timeline / Milestone', 'icon' => 'history', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.press-releases.index' => ['label' => 'Siaran Pers', 'icon' => 'video', 'roles' => ['developer', 'superadmin', 'editor']],
+            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings', 'roles' => ['developer', 'superadmin', 'editor']],
+            
+            // Developer Only
+            'admin.watermark-settings.edit' => ['label' => 'Watermark', 'icon' => 'shield-alert', 'roles' => ['developer']],
         ];
 
-        if (auth()->user()?->hasRole('developer')) {
-            $adminNavigation['admin.watermark-settings.edit'] = ['label' => 'Watermark', 'icon' => 'shield-alert'];
-        }
+        // Filter based on roles
+        $adminNavigation = array_filter($allNavigation, function($item) use ($user) {
+            return $user?->hasAnyRole($item['roles']);
+        });
     @endphp
 
     @if(!request()->has('is_iframe'))
@@ -120,6 +134,7 @@
                             <p class="truncate text-sm font-bold text-slate-900">{{ Auth::user()->name ?? 'Admin KDEKS' }}</p>
                             <p class="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{{ Auth::user()?->getRoleNames()->first() ?? 'Administrator' }}</p>
                         </div>
+
                         <i data-lucide="log-out" class="h-4 w-4 shrink-0 text-slate-400 transition hover:text-red-500 lg:[.sidebar-mini_&]:hidden"></i>
                     </button>
                 </form>

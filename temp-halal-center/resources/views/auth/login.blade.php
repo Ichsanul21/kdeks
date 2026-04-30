@@ -2,7 +2,7 @@
     <div class="mb-8">
         <p class="text-[10px] font-extrabold uppercase tracking-[0.24em] text-emerald-600">Akses Admin</p>
         <h2 class="mt-3 font-heading text-3xl font-extrabold tracking-tight text-slate-900">Masuk ke dashboard KDEKS Kaltim</h2>
-        <p class="mt-3 text-sm font-medium leading-7 text-slate-500">Gunakan akun resmi Anda untuk mengelola pengajuan SEHATI, WebGIS, direktori produk, dan dokumen kelembagaan.</p>
+        <p class="mt-3 text-sm font-medium leading-7 text-slate-500">Gunakan akun resmi Anda untuk mengelola pengajuan Sertifikasi Halal, WebGIS, direktori produk, dan dokumen kelembagaan.</p>
     </div>
 
     <x-auth-session-status class="mb-6" :status="session('status')" />

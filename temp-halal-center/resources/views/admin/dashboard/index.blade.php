@@ -25,13 +25,29 @@
         .animate-grow { animation: growUp 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
     </style>
 
+    @php
+        $cards = [];
+        if ($isEditor) {
+            $cards = [
+                ['label' => 'Berita & Publikasi', 'value' => $stats['articles'] ?? 0, 'icon' => 'newspaper', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'route' => route('admin.articles.index')],
+                ['label' => 'Pustaka Dokumen', 'value' => $stats['resources'] ?? 0, 'icon' => 'folder-open', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.knowledge-resources.index')],
+                ['label' => 'Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'messages-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
+                ['label' => 'Banner Beranda', 'value' => $stats['banners'] ?? 0, 'icon' => 'monitor', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.banners.index')],
+                ['label' => 'Siaran Pers', 'value' => $stats['press_releases'] ?? 0, 'icon' => 'video', 'bg' => 'bg-rose-50', 'iconColor' => 'text-rose-600', 'route' => route('admin.press-releases.index')],
+            ];
+        } else {
+            $cards = [
+                ['label' => 'Total UMKM', 'value' => $stats['umkms'] ?? 0, 'icon' => 'store', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'route' => route('admin.umkms.index')],
+                ['label' => 'Sertifikasi Halal', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
+                ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati_pending'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.sehati-registrations.index', ['search' => 'baru'])],
+                ['label' => 'Pesan Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'message-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
+                ['label' => 'Siaran Pers', 'value' => $stats['press_releases'] ?? 0, 'icon' => 'video', 'bg' => 'bg-rose-50', 'iconColor' => 'text-rose-600', 'route' => route('admin.press-releases.index')],
+            ];
+        }
+    @endphp
+
     <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        @foreach([
-            ['label' => 'Total UMKM', 'value' => $stats['umkms'] ?? 0, 'icon' => 'store', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'route' => route('admin.umkms.index')],
-            ['label' => 'Sertifikasi Halal', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
-            ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati_pending'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.sehati-registrations.index', ['search' => 'baru'])],
-            ['label' => 'Pesan Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'message-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
-        ] as $card)
+        @foreach($cards as $card)
             <a href="{{ $card['route'] }}" class="admin-card group animate-fade-in-up stagger-{{ $loop->iteration }} relative overflow-hidden rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/50">
                 <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-slate-50 opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <div class="mb-4 flex items-start justify-between relative z-10">
@@ -50,12 +66,12 @@
         @endforeach
     </div>
 
-    <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div class="admin-card animate-fade-in-up stagger-1 rounded-[1.75rem] p-6 lg:col-span-2">
+    <div class="mb-8 grid grid-cols-1 gap-6 {{ $isEditor ? '' : 'lg:grid-cols-3' }}">
+        <div class="admin-card animate-fade-in-up stagger-1 rounded-[1.75rem] p-6 {{ $isEditor ? '' : 'lg:col-span-2' }}">
             <div class="mb-8 flex items-center justify-between">
                 <div>
-                    <h3 class="font-heading text-lg font-bold text-slate-900">Performa Ekosistem Halal</h3>
-                    <p class="text-xs font-medium text-slate-500">Visualisasi sebaran data pendaftaran dan kemitraan.</p>
+                    <h3 class="font-heading text-lg font-bold text-slate-900">{{ $isEditor ? 'Ringkasan Konten CMS' : 'Performa Ekosistem Halal' }}</h3>
+                    <p class="text-xs font-medium text-slate-500">{{ $isEditor ? 'Jumlah data konten yang Anda kelola saat ini.' : 'Visualisasi sebaran data pendaftaran dan kemitraan.' }}</p>
                 </div>
                 <div class="flex gap-2">
                     <div class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-1.5 text-[10px] font-bold text-slate-600">
@@ -66,13 +82,23 @@
             </div>
 
             @php
-                $chartValues = [
-                    ['label' => 'UMKM', 'value' => $stats['umkms'] ?? 0, 'color' => 'bg-emerald-500 shadow-emerald-200'],
-                    ['label' => 'Produk', 'value' => $stats['products'] ?? 0, 'color' => 'bg-cyan-500 shadow-cyan-200'],
-                    ['label' => 'SEHATI', 'value' => $stats['sehati'] ?? 0, 'color' => 'bg-blue-500 shadow-blue-200'],
-                    ['label' => 'Mitra', 'value' => $stats['lph_partners'] ?? 0, 'color' => 'bg-indigo-500 shadow-indigo-200'],
-                    ['label' => 'Berita', 'value' => $stats['articles'] ?? 0, 'color' => 'bg-slate-500 shadow-slate-200'],
-                ];
+                if ($isEditor) {
+                    $chartValues = [
+                        ['label' => 'Berita', 'value' => $stats['articles'] ?? 0, 'color' => 'bg-emerald-500 shadow-emerald-200'],
+                        ['label' => 'Pustaka', 'value' => $stats['resources'] ?? 0, 'color' => 'bg-cyan-500 shadow-cyan-200'],
+                        ['label' => 'Regulasi', 'value' => $stats['regulations'] ?? 0, 'color' => 'bg-blue-500 shadow-blue-200'],
+                        ['label' => 'FAQ', 'value' => $stats['faqs'] ?? 0, 'color' => 'bg-indigo-500 shadow-indigo-200'],
+                        ['label' => 'Kegiatan', 'value' => $stats['events'] ?? 0, 'color' => 'bg-slate-500 shadow-slate-200'],
+                    ];
+                } else {
+                    $chartValues = [
+                        ['label' => 'UMKM', 'value' => $stats['umkms'] ?? 0, 'color' => 'bg-emerald-500 shadow-emerald-200'],
+                        ['label' => 'Produk', 'value' => $stats['products'] ?? 0, 'color' => 'bg-cyan-500 shadow-cyan-200'],
+                        ['label' => 'Sertifikat', 'value' => $stats['sehati'] ?? 0, 'color' => 'bg-blue-500 shadow-blue-200'],
+                        ['label' => 'Mitra', 'value' => $stats['lph_partners'] ?? 0, 'color' => 'bg-indigo-500 shadow-indigo-200'],
+                        ['label' => 'Berita', 'value' => $stats['articles'] ?? 0, 'color' => 'bg-slate-500 shadow-slate-200'],
+                    ];
+                }
                 $chartMax = collect($chartValues)->max('value') ?: 1;
             @endphp
 
@@ -97,6 +123,7 @@
             </div>
         </div>
 
+        @if(!$isEditor)
         <div class="admin-card animate-fade-in-up stagger-2 rounded-[1.75rem] p-6">
             <div class="mb-6">
                 <h3 class="font-heading text-lg font-bold text-slate-900">Sebaran Wilayah</h3>
@@ -114,13 +141,15 @@
                 @endif
             </div>
         </div>
+        @endif
     </div>
 
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-6 {{ $isEditor ? '' : 'lg:grid-cols-2' }}">
         {{-- Table Sehati --}}
+        @if(!$isEditor)
         <div class="admin-card animate-fade-in-up stagger-3 overflow-hidden rounded-[1.75rem]">
             <div class="flex items-center justify-between border-b border-slate-100 p-6">
-                <h3 class="font-heading text-lg font-bold text-slate-900">SEHATI Terbaru</h3>
+                <h3 class="font-heading text-lg font-bold text-slate-900">Sertifikat Halal Terbaru</h3>
                 <a href="{{ route('admin.sehati-registrations.index') }}" class="text-xs font-bold text-emerald-600">Lihat Semua</a>
             </div>
             <div class="overflow-x-auto">
@@ -157,6 +186,7 @@
                 </table>
             </div>
         </div>
+        @endif
 
         {{-- Table Buku Tamu --}}
         <div class="admin-card animate-fade-in-up stagger-4 overflow-hidden rounded-[1.75rem]">
@@ -190,6 +220,7 @@
             </div>
         </div>
     </div>
+
 
     @if($topRegions->isNotEmpty())
     <script>

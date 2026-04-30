@@ -10,6 +10,7 @@ use App\Models\KnowledgeResource;
 use App\Models\LphPartner;
 use App\Models\Mentor;
 use App\Models\PotentialItem;
+use App\Models\PressRelease;
 use App\Models\ProgramSlide;
 use App\Models\Region;
 use App\Models\Regulation;
@@ -24,7 +25,10 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $latestSehatiRegistrations = SehatiRegistration::query()
+        $user = auth()->user();
+        $isEditor = $user->hasRole('editor') && !$user->hasAnyRole(['developer', 'superadmin']);
+
+        $latestSehatiRegistrations = $isEditor ? collect() : SehatiRegistration::query()
             ->with('lphPartner')
             ->latest()
             ->limit(5)
@@ -35,33 +39,43 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $topRegions = Region::query()
+        $topRegions = $isEditor ? collect() : Region::query()
             ->orderByDesc('halal_msmes_count')
             ->limit(5)
             ->get();
 
+        $stats = [
+            'slides' => ProgramSlide::count(),
+            'articles' => Article::count(),
+            'resources' => KnowledgeResource::count(),
+            'regulations' => Regulation::count(),
+            'events' => Event::count(),
+            'consultations' => ConsultationRequest::count(),
+            'banners' => \App\Models\Banner::count(),
+            'faqs' => \App\Models\FrequentlyAskedQuestion::count(),
+            'press_releases' => PressRelease::count(),
+        ];
+
+        if (!$isEditor) {
+            $stats['regions'] = Region::count();
+            $stats['umkms'] = Umkm::count();
+            $stats['products'] = UmkmProduk::count();
+            $stats['mentors'] = Mentor::count();
+            $stats['lph_partners'] = LphPartner::count();
+            $stats['potential_items'] = PotentialItem::count();
+            $stats['sector_items'] = SectorItem::count();
+            $stats['sehati'] = SehatiRegistration::count();
+            $stats['sehati_pending'] = SehatiRegistration::query()->where('status', 'baru')->count();
+        }
+
         return view('admin.dashboard.index', [
-            'stats' => [
-                'slides' => ProgramSlide::count(),
-                'articles' => Article::count(),
-                'regions' => Region::count(),
-                'umkms' => Umkm::count(),
-                'products' => UmkmProduk::count(),
-                'mentors' => Mentor::count(),
-                'lph_partners' => LphPartner::count(),
-                'potential_items' => PotentialItem::count(),
-                'sector_items' => SectorItem::count(),
-                'resources' => KnowledgeResource::count(),
-                'regulations' => Regulation::count(),
-                'events' => Event::count(),
-                'sehati' => SehatiRegistration::count(),
-                'sehati_pending' => SehatiRegistration::query()->where('status', 'baru')->count(),
-                'consultations' => ConsultationRequest::count(),
-            ],
+            'stats' => $stats,
             'latestSehatiRegistrations' => $latestSehatiRegistrations,
             'latestConsultations' => $latestConsultations,
             'topRegions' => $topRegions,
             'siteSetting' => SiteSetting::first(),
+            'isEditor' => $isEditor,
         ]);
     }
+
 }

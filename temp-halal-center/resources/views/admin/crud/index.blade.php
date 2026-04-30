@@ -54,6 +54,30 @@
                                         <span class="inline-flex items-center rounded-full @if(data_get($item, 'izin_status') === 'disetujui') bg-emerald-50 text-emerald-600 @else bg-rose-50 text-rose-600 @endif px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
                                             {{ $val }}
                                         </span>
+                                    @elseif($column['key'] === 'is_featured')
+                                        @if($val)
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 ring-1 ring-amber-200">
+                                                <i data-lucide="star" class="h-3 w-3 fill-amber-500"></i>
+                                                Unggulan
+                                            </span>
+                                        @else
+                                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">-</span>
+                                        @endif
+                                    @elseif($column['key'] === 'status' && $routePrefix === 'admin.press-releases')
+                                        @if($val === 'streaming')
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-600 ring-1 ring-rose-200">
+                                                <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500"></span>
+                                                Streaming
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+                                                Arsip
+                                            </span>
+                                        @endif
+                                    @elseif($column['key'] === 'video_url')
+                                        <div class="max-w-[150px] truncate" title="{{ $val }}">
+                                            <span class="font-medium text-slate-500">{{ $val }}</span>
+                                        </div>
                                     @else
                                         <span class="font-medium text-slate-700">{{ $val }}</span>
                                     @endif
@@ -74,6 +98,16 @@
                                             <input type="hidden" name="decision" value="no">
                                             <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500 text-white transition hover:bg-rose-600" title="Tolak">
                                                 <i data-lucide="x" class="h-4 w-4"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    @if($routePrefix === 'admin.press-releases' && $item->status === 'streaming')
+                                        <form method="POST" action="{{ route('admin.press-releases.finish-stream', $item->id) }}" style="display: contents;">
+                                            @csrf
+                                            <button type="submit" class="inline-flex h-9 px-3 items-center justify-center gap-2 rounded-lg bg-rose-100 text-rose-600 font-bold text-[10px] uppercase tracking-wider transition hover:bg-rose-500 hover:text-white" title="Selesaikan Live Streaming">
+                                                <i data-lucide="stop-circle" class="h-4 w-4"></i>
+                                                Selesai
                                             </button>
                                         </form>
                                     @endif
