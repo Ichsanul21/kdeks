@@ -2,7 +2,7 @@
     $sehatiErrors = $errors->sehatiRegistration ?? new \Illuminate\Support\MessageBag();
 @endphp
 
-<!-- SEHATI Registration Modal -->
+<!-- Sertifikasi Registration Modal -->
 <div id="sehatiModal" class="fixed inset-0 z-[100] hidden" @if($sehatiErrors->any()) data-open-on-load="true" @endif>
     <div id="sehatiBackdrop" class="absolute inset-0 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('sehatiModal')"></div>
     <div class="pointer-events-none absolute inset-0 flex items-start justify-center overflow-y-auto px-4 pb-10 pt-20">
@@ -168,6 +168,50 @@
             <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">Produk Halal</span>
         </div>
         <div id="searchResults" class="mt-5 grid gap-3 sm:grid-cols-2"></div>
+    </div>
+</div>
+
+<!-- Gallery Detail Modal -->
+<div id="galleryModal" class="fixed inset-0 z-[100] hidden">
+    <div id="galleryBackdrop" class="absolute inset-0 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity" onclick="closeModal('galleryModal')"></div>
+    <div class="pointer-events-none absolute inset-0 flex items-center justify-center p-4 sm:p-6">
+        <div id="galleryContent" class="pointer-events-auto w-full max-w-2xl scale-95 overflow-hidden rounded-[2.5rem] bg-white opacity-0 shadow-2xl transition-all">
+            <div class="relative flex flex-col">
+                <button onclick="closeModal('galleryModal')" class="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-slate-600 shadow-sm backdrop-blur-md transition hover:bg-white hover:text-rose-600">
+                    <i data-lucide="x" class="h-5 w-5"></i>
+                </button>
+                <!-- Media Section -->
+                <div id="galleryModalMedia" class="w-full bg-slate-50 p-4">
+                    <!-- Dynamic content -->
+                </div>
+
+                <!-- Info Section -->
+                <div class="flex w-full flex-col p-8 pt-4">
+                    <div class="flex items-center justify-between">
+                        <span id="galleryModalSector" class="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600">Direktorat</span>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 id="galleryModalTitle" class="font-heading text-2xl font-extrabold leading-tight text-slate-900">Judul Kegiatan</h3>
+                        <div class="mt-4 flex items-center gap-2 text-slate-400">
+                            <i data-lucide="calendar" class="h-4 w-4"></i>
+                            <span id="galleryModalDate" class="text-xs font-bold uppercase tracking-widest">01 Januari 2024</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex-1 overflow-y-auto">
+                        <p id="galleryModalCaption" class="text-sm font-medium leading-relaxed text-slate-500">
+                            Deskripsi lengkap mengenai kegiatan yang didokumentasikan.
+                        </p>
+                    </div>
+
+                    <!-- <div class="mt-8 border-t border-slate-100 pt-8">
+                        <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Arsip Dokumentasi</p>
+                        <p class="mt-1 text-xs font-medium text-slate-500">Komite Daerah Ekonomi dan Keuangan Syariah (KDEKS) Kalimantan Timur.</p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

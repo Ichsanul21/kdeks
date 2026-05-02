@@ -9,7 +9,7 @@ use App\Models\SehatiRegistration;
 class SehatiRegistrationController extends BaseCrudController
 {
     protected string $modelClass = SehatiRegistration::class;
-    protected string $pageTitle = 'Pendaftaran SEHATI';
+    protected string $pageTitle = 'Pendaftaran Sertifikasi';
     protected string $routePrefix = 'admin.sehati-registrations';
     protected string $requestClass = SehatiRegistrationRequest::class;
     protected array $searchColumns = ['owner_name', 'business_name', 'product_name', 'phone', 'status'];

@@ -15,6 +15,7 @@ class GalleryItemRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'sector_item_id' => ['nullable', 'exists:sector_items,id'],
             'media_type' => ['required', 'in:image,video'],
             'caption' => ['nullable', 'string'],
             'external_video_url' => ['nullable', 'url'],

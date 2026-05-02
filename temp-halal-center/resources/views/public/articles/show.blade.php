@@ -22,11 +22,44 @@
         </div>
 
         @if($article->document_path)
-            <div class="mt-10">
-                <a href="{{ route('documents.download', ['type' => 'article', 'id' => $article->id]) }}"
-                    class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white">
-                    Unduh Dokumen Pendukung
-                </a>
+            <div class="mt-12 rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+                <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Dokumen Pendukung</h3>
+                        <p class="mt-1 text-sm text-slate-500">Lihat atau unduh dokumen pendukung untuk artikel ini.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="{{ route('documents.download', ['type' => 'article', 'id' => $article->id]) }}"
+                            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Unduh Dokumen
+                        </a>
+                        <a href="{{ route('documents.view', ['type' => 'article', 'id' => $article->id]) }}" target="_blank"
+                            class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50">
+                            Buka Fullscreen
+                        </a>
+                    </div>
+                </div>
+                
+                @if(strtolower(pathinfo($article->document_path, PATHINFO_EXTENSION)) === 'pdf')
+                    <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <iframe src="{{ route('documents.view', ['type' => 'article', 'id' => $article->id]) }}#toolbar=0" class="h-[600px] w-full" frameborder="0"></iframe>
+                    </div>
+                @else
+                    <div class="mt-8 flex items-center gap-4 rounded-2xl border border-dashed border-slate-300 bg-white p-6">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-900">{{ basename($article->document_path) }}</p>
+                            <p class="text-xs text-slate-500">Klik tombol unduh untuk melihat dokumen ini.</p>
+                        </div>
+                    </div>
+                @endif
             </div>
         @endif
 

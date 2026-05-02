@@ -97,4 +97,114 @@
             </div>
         </div>
     </section>
+    @if($galleryItems->count() > 0)
+    <section class="relative bg-slate-50 py-24">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="mb-12 flex items-end justify-between">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-extrabold uppercase tracking-[0.24em] text-emerald-600">Dokumentasi</p>
+                    <h2 class="mt-4 font-heading text-3xl font-extrabold text-slate-900 md:text-4xl">Galeri Kegiatan</h2>
+                    <p class="mt-4 text-sm font-medium text-slate-500">Kumpulan dokumentasi kegiatan dari Direktorat {{ $sector->title }}.</p>
+                </div>
+                <a href="{{ route('gallery.index') }}" class="group flex items-center gap-2 text-sm font-bold text-emerald-600 transition hover:text-emerald-500">
+                    Lihat Semua
+                    <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                @foreach($galleryItems as $item)
+                    <article 
+                        class="group cursor-pointer overflow-hidden rounded-[2rem] border border-white bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10"
+                        onclick="showGalleryDetail({{ json_encode([
+                            'title' => $item->title,
+                            'caption' => $item->caption,
+                            'media_type' => $item->media_type,
+                            'media_url' => $item->media_type === 'image' && $item->media_path ? \Illuminate\Support\Facades\Storage::url($item->media_path) : $item->external_video_url,
+                            'recorded_at' => optional($item->recorded_at)->translatedFormat('d F Y'),
+                            'sector' => $sector->title
+                        ]) }})"
+                    >
+                        <div class="relative aspect-video overflow-hidden">
+                            @if($item->media_type === 'image' && $item->media_path)
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url($item->media_path) }}" alt="{{ $item->title }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            @elseif($item->media_type === 'video' && $item->external_video_url)
+                                <div class="flex h-full w-full items-center justify-center bg-slate-900">
+                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
+                                        <i data-lucide="play" class="h-5 w-5 fill-white text-white"></i>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="flex h-full w-full items-center justify-center bg-slate-50 text-slate-300">
+                                    <i data-lucide="image" class="h-12 w-12"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-heading text-lg font-bold text-slate-900 line-clamp-1 group-hover:text-emerald-600 transition-colors">{{ $item->title }}</h3>
+                            <div class="mt-4 flex items-center gap-2 text-slate-400">
+                                <i data-lucide="calendar" class="h-3.5 w-3.5"></i>
+                                <span class="text-[10px] font-bold uppercase tracking-wider">{{ optional($item->recorded_at)->translatedFormat('d F Y') }}</span>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showGalleryDetail(data) {
+            const modal = document.getElementById('galleryModal');
+            const title = document.getElementById('galleryModalTitle');
+            const caption = document.getElementById('galleryModalCaption');
+            const date = document.getElementById('galleryModalDate');
+            const sector = document.getElementById('galleryModalSector');
+            const mediaContainer = document.getElementById('galleryModalMedia');
+
+            if(!modal || !title || !caption || !date || !sector || !mediaContainer) return;
+
+            title.innerText = data.title;
+            caption.innerText = data.caption || 'Tidak ada deskripsi.';
+            date.innerText = data.recorded_at;
+            sector.innerText = data.sector;
+
+            mediaContainer.innerHTML = '';
+            if (data.media_type === 'image') {
+                const img = document.createElement('img');
+                img.src = data.media_url;
+                img.className = 'w-full max-h-[50vh] rounded-2xl object-cover shadow-lg';
+                mediaContainer.appendChild(img);
+            } else if (data.media_type === 'video') {
+                if (data.media_url.includes('youtube.com') || data.media_url.includes('youtu.be')) {
+                    let videoId = '';
+                    if (data.media_url.includes('youtube.com')) {
+                        videoId = new URL(data.media_url).searchParams.get('v');
+                    } else {
+                        videoId = data.media_url.split('/').pop();
+                    }
+                    mediaContainer.innerHTML = `
+                        <div class="relative aspect-video overflow-hidden rounded-2xl shadow-lg">
+                            <iframe src="https://www.youtube.com/embed/${videoId}" class="absolute inset-0 h-full w-full border-0" allowfullscreen></iframe>
+                        </div>
+                    `;
+                } else {
+                    mediaContainer.innerHTML = `
+                        <div class="flex flex-col items-center justify-center rounded-2xl bg-slate-900 p-12 text-center text-white">
+                            <i data-lucide="external-link" class="mb-4 h-12 w-12 text-emerald-400"></i>
+                            <h4 class="text-lg font-bold">Video Eksternal</h4>
+                            <p class="mt-2 text-sm text-slate-400">Video ini dihosting di platform eksternal.</p>
+                            <a href="${data.media_url}" target="_blank" class="mt-6 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold transition hover:bg-emerald-400">Buka Video</a>
+                        </div>
+                    `;
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            }
+
+            if (typeof window.openModal === 'function') {
+                window.openModal('galleryModal');
+            }
+        }
+    </script>
+    @endif
 @endsection

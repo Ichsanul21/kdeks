@@ -20,6 +20,7 @@ class KnowledgeResource extends Model
         'external_url',
         'is_featured',
         'published_at',
+        'sector_item_id',
     ];
 
     protected function casts(): array
@@ -37,5 +38,10 @@ class KnowledgeResource extends Model
                 'source' => 'title',
             ],
         ];
+    }
+
+    public function directorate()
+    {
+        return $this->belongsTo(SectorItem::class, 'sector_item_id');
     }
 }

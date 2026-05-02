@@ -6,6 +6,13 @@
     <section class="mx-auto max-w-4xl px-6 pb-20 pt-28">
         <a href="{{ route('resources.index') }}" class="text-sm font-bold text-emerald-600">← Kembali ke pustaka</a>
         <h1 class="mt-6 font-heading text-4xl font-extrabold text-slate-900">{{ $resource->title }}</h1>
+        @if($resource->directorate)
+            <div class="mt-4">
+                <span class="inline-flex h-6 items-center rounded-lg bg-emerald-50 px-3 text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                    {{ $resource->directorate->title }}
+                </span>
+            </div>
+        @endif
         <div class="prose prose-slate mt-8 max-w-none">
             {!! $resource->content ?: '<p>Konten dokumen belum tersedia.</p>' !!}
         </div>

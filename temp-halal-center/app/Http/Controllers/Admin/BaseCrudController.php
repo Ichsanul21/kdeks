@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseCrudController extends Controller
 {
@@ -30,7 +31,7 @@ abstract class BaseCrudController extends Controller
     protected ?string $publicShowRoute = null;
     protected ?string $publicShowRouteKey = 'slug';
 
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
         $query = $this->indexQuery();
 
@@ -44,14 +45,18 @@ abstract class BaseCrudController extends Controller
 
         $items = $query->latest()->paginate(12)->withQueryString();
 
+        $user = auth()->user();
+        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin']);
+
         return view('admin.crud.index', [
-            'pageTitle' => $this->pageTitle,
-            'routePrefix' => $this->routePrefix,
-            'items' => $items,
-            'tableColumns' => $this->tableColumns,
-            'publicIndexRoute' => $this->publicIndexRoute,
-            'publicShowRoute' => $this->publicShowRoute,
+            'pageTitle'          => $this->pageTitle,
+            'routePrefix'        => $this->routePrefix,
+            'items'              => $items,
+            'tableColumns'       => $this->tableColumns,
+            'publicIndexRoute'   => $this->publicIndexRoute,
+            'publicShowRoute'    => $this->publicShowRoute,
             'publicShowRouteKey' => $this->publicShowRouteKey,
+            'isAdminDirektorat'  => $isAdminDirektorat,
         ]);
     }
 
@@ -104,6 +109,9 @@ abstract class BaseCrudController extends Controller
 
     protected function formView(Model $item, string $mode): View
     {
+        $user = auth()->user();
+        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin']);
+
         return view('admin.crud.form', [
             'pageTitle' => $this->pageTitle,
             'routePrefix' => $this->routePrefix,
@@ -114,12 +122,30 @@ abstract class BaseCrudController extends Controller
             'privateFileFields' => $this->privateFileFields,
             'publicShowRoute' => $this->publicShowRoute,
             'publicShowRouteKey' => $this->publicShowRouteKey,
+            'isAdminDirektorat' => $isAdminDirektorat,
         ]);
     }
 
     protected function indexQuery()
     {
-        return $this->modelClass::query();
+        $query = $this->modelClass::query();
+        $user = auth()->user();
+
+        // Data filtering for AdminDirektorat
+        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+            $tableName = (new $this->modelClass())->getTable();
+            
+            // Special case for SectorItem model (Direktorat management)
+            if ($this->modelClass === \App\Models\SectorItem::class) {
+                $query->where('id', $user->sector_item_id);
+            } 
+            // Generic case: check if table has sector_item_id column
+            else if (\Illuminate\Support\Facades\Schema::hasColumn($tableName, 'sector_item_id')) {
+                $query->where('sector_item_id', $user->sector_item_id);
+            }
+        }
+
+        return $query;
     }
 
     protected function resolvedFields(): array
@@ -153,6 +179,15 @@ abstract class BaseCrudController extends Controller
         foreach ($this->resolvedFields() as $field) {
             if (($field['type'] ?? null) === 'checkbox') {
                 $validated[$field['name']] = request()->boolean($field['name']);
+            }
+        }
+
+        // Force sector_item_id for AdminDirektorat
+        $user = auth()->user();
+        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+            $tableName = (new $this->modelClass())->getTable();
+            if (\Illuminate\Support\Facades\Schema::hasColumn($tableName, 'sector_item_id')) {
+                $validated['sector_item_id'] = $user->sector_item_id;
             }
         }
 

@@ -22,6 +22,7 @@ class RegulationRequest extends FormRequest
             'external_url' => ['nullable', 'url'],
             'is_featured' => ['nullable', 'boolean'],
             'document_path' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'sector_item_id' => ['nullable', 'exists:sector_items,id'],
         ];
     }
 }

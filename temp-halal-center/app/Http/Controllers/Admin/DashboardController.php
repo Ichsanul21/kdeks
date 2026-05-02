@@ -26,7 +26,7 @@ class DashboardController extends Controller
     public function index(): View
     {
         $user = auth()->user();
-        $isEditor = $user->hasRole('editor') && !$user->hasAnyRole(['developer', 'superadmin']);
+        $isEditor = $user->hasAnyRole(['editor', 'AdminDirektorat']) && !$user->hasAnyRole(['developer', 'superadmin']);
 
         $latestSehatiRegistrations = $isEditor ? collect() : SehatiRegistration::query()
             ->with('lphPartner')

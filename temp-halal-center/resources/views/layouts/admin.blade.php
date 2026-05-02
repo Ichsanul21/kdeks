@@ -15,6 +15,7 @@
         }
     </script>
     <style>
+        [x-cloak] { display: none !important; }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -42,46 +43,93 @@
         $isDeveloper = $user?->hasRole('developer');
         $isSuperAdmin = $user?->hasRole('superadmin');
         $isEditor = $user?->hasRole('editor');
+        $isAdminDirektorat = $user?->hasRole('AdminDirektorat');
 
         // Define all possible navigation items
-        $allNavigation = [
-            'admin.dashboard' => ['label' => 'Dashboard', 'icon' => 'layout-dashboard', 'roles' => ['developer', 'superadmin', 'editor']],
-            
-            // Management Section (Advanced)
-            'admin.users.index' => ['label' => 'Manajemen Pengguna', 'icon' => 'user-cog', 'roles' => ['developer', 'superadmin']],
-            'admin.sehati-registrations.index' => ['label' => 'Pengajuan Sertifikasi', 'icon' => 'file-check-2', 'roles' => ['developer', 'superadmin']],
-            'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin', 'roles' => ['developer', 'superadmin']],
-            'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package', 'roles' => ['developer', 'superadmin']],
-            'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned', 'roles' => ['developer', 'superadmin']],
-            'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2', 'roles' => ['developer', 'superadmin']],
-            'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users', 'roles' => ['developer', 'superadmin']],
-            'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map', 'roles' => ['developer', 'superadmin']],
-            'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles', 'roles' => ['developer', 'superadmin']],
-            'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone', 'roles' => ['developer', 'superadmin']],
-            
-            // CMS Section (Editor accessible)
-            'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.consultation-requests.index' => ['label' => 'Buku Tamu', 'icon' => 'messages-square', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.milestones.index' => ['label' => 'Timeline / Milestone', 'icon' => 'history', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.press-releases.index' => ['label' => 'Siaran Pers', 'icon' => 'video', 'roles' => ['developer', 'superadmin', 'editor']],
-            'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings', 'roles' => ['developer', 'superadmin', 'editor']],
-            
-            // Developer Only
-            'admin.watermark-settings.edit' => ['label' => 'Watermark', 'icon' => 'shield-alert', 'roles' => ['developer']],
+        $navigationMenu = [
+            [
+                'route' => 'admin.dashboard',
+                'label' => 'Dashboard',
+                'icon' => 'layout-dashboard',
+                'roles' => ['developer', 'superadmin', 'AdminDirektorat']
+            ],
+            [
+                'label' => 'Statistik',
+                'icon' => 'bar-chart-2',
+                'items' => [
+                    'admin.sehati-registrations.index' => ['label' => 'Sertifikasi', 'icon' => 'file-check-2', 'roles' => ['developer', 'superadmin']],
+                    'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin', 'roles' => ['developer', 'superadmin']],
+                    'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package', 'roles' => ['developer', 'superadmin']],
+                    'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned', 'roles' => ['developer', 'superadmin']],
+                    'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2', 'roles' => ['developer', 'superadmin']],
+                    'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users', 'roles' => ['developer', 'superadmin']],
+                    'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map', 'roles' => ['developer', 'superadmin']],
+                    'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles', 'roles' => ['developer', 'superadmin']],
+                    'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone', 'roles' => ['developer', 'superadmin']],
+                ]
+            ],
+            [
+                'label' => 'Modul CMS',
+                'icon' => 'layout-template',
+                'items' => [
+                    'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                    'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                    'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                    'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                    'admin.gallery-items.index' => ['label' => 'Galeri', 'icon' => 'image', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                ]
+            ],
+            [
+                'label' => 'Pengaturan Web',
+                'icon' => 'settings-2',
+                'items' => [
+                    'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation', 'roles' => ['developer', 'superadmin']],
+                    'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor', 'roles' => ['developer', 'superadmin']],
+                    'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network', 'roles' => ['developer', 'superadmin']],
+                    'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle', 'roles' => ['developer', 'superadmin']],
+                    'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info', 'roles' => ['developer', 'superadmin']],
+                    'admin.milestones.index' => ['label' => 'Timeline', 'icon' => 'history', 'roles' => ['developer', 'superadmin']],
+                    'admin.press-releases.index' => ['label' => 'Siaran Pers', 'icon' => 'video', 'roles' => ['developer', 'superadmin']],
+                    'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings', 'roles' => ['developer', 'superadmin']],
+                ]
+            ],
+            [
+                'route' => 'admin.consultation-requests.index',
+                'label' => 'Buku Tamu',
+                'icon' => 'messages-square',
+                'roles' => ['developer', 'superadmin']
+            ],
+            [
+                'route' => 'admin.users.index',
+                'label' => 'Manajemen Pengguna',
+                'icon' => 'user-cog',
+                'roles' => ['developer', 'superadmin']
+            ],
+            [
+                'route' => 'admin.watermark-settings.edit',
+                'label' => 'Watermark',
+                'icon' => 'shield-alert',
+                'roles' => ['developer']
+            ],
         ];
 
         // Filter based on roles
-        $adminNavigation = array_filter($allNavigation, function($item) use ($user) {
-            return $user?->hasAnyRole($item['roles']);
-        });
+        $filteredMenu = [];
+        foreach ($navigationMenu as $menuItem) {
+            if (isset($menuItem['items'])) {
+                $filteredItems = array_filter($menuItem['items'], function($item) use ($user) {
+                    return $user?->hasAnyRole($item['roles']);
+                });
+                if (!empty($filteredItems)) {
+                    $menuItem['items'] = $filteredItems;
+                    $filteredMenu[] = $menuItem;
+                }
+            } else {
+                if ($user?->hasAnyRole($menuItem['roles'])) {
+                    $filteredMenu[] = $menuItem;
+                }
+            }
+        }
     @endphp
 
     @if(!request()->has('is_iframe'))
@@ -106,19 +154,57 @@
                 <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400 lg:[.sidebar-mini_&]:hidden">Menu Utama</p>
 
                 <div class="space-y-1">
-                    @foreach($adminNavigation as $route => $item)
-                        @php
-                            $active = request()->routeIs($route) || ($route !== 'admin.dashboard' && str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route)));
-                        @endphp
-                        <a href="{{ route($route) }}" class="admin-nav-link relative lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $active ? 'admin-nav-link-active' : '' }}">
-                            <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
-                                <i data-lucide="{{ $item['icon'] }}" data-sidebar-tooltip="{{ $item['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block"></i>
-                                <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $item['label'] }}</span>
-                                @if($route === 'admin.sehati-registrations.index' && ($adminNewSehatiCount ?? 0) > 0)
-                                    <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600 lg:[.sidebar-mini_&]:hidden">{{ $adminNewSehatiCount }}</span>
-                                @endif
-                            </span>
-                        </a>
+                    @foreach($filteredMenu as $menuItem)
+                        @if(isset($menuItem['items']))
+                            @php
+                                $isGroupActive = false;
+                                foreach($menuItem['items'] as $route => $item) {
+                                    if (request()->routeIs($route) || str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route))) {
+                                        $isGroupActive = true;
+                                        break;
+                                    }
+                                }
+                            @endphp
+                            <div x-data="{ open: {{ $isGroupActive ? 'true' : 'false' }} }" class="mb-1">
+                                <button @click="open = !open" class="admin-nav-link relative w-full flex items-center justify-between lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $isGroupActive ? 'bg-slate-100 text-emerald-600 font-bold' : '' }}">
+                                    <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
+                                        <i data-lucide="{{ $menuItem['icon'] }}" data-sidebar-tooltip="{{ $menuItem['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block {{ $isGroupActive ? 'text-emerald-600' : '' }}"></i>
+                                        <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $menuItem['label'] }}</span>
+                                    </span>
+                                    <span class="transition-transform duration-200 lg:[.sidebar-mini_&]:hidden" :class="open ? 'rotate-180' : ''">
+                                        <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400"></i>
+                                    </span>
+                                </button>
+                                <div x-show="open" x-cloak x-transition.opacity.duration.200ms class="mt-1 space-y-1 px-3 lg:[.sidebar-mini_&]:hidden">
+                                    @foreach($menuItem['items'] as $route => $item)
+                                        @php
+                                            $active = request()->routeIs($route) || str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route));
+                                        @endphp
+                                        <a href="{{ route($route) }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors {{ $active ? 'bg-emerald-50 text-emerald-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                                            <div class="h-1.5 w-1.5 rounded-full {{ $active ? 'bg-emerald-500' : 'bg-slate-300' }}"></div>
+                                            <span>{{ $item['label'] }}</span>
+                                            @if($route === 'admin.sehati-registrations.index' && ($adminNewSertifikasiCount ?? 0) > 0)
+                                                <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{{ $adminNewSertifikasiCount }}</span>
+                                            @endif
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            @php
+                                $route = $menuItem['route'];
+                                $active = request()->routeIs($route) || ($route !== 'admin.dashboard' && str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route)));
+                            @endphp
+                            <a href="{{ route($route) }}" class="admin-nav-link relative mb-1 lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $active ? 'admin-nav-link-active' : '' }}">
+                                <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
+                                    <i data-lucide="{{ $menuItem['icon'] }}" data-sidebar-tooltip="{{ $menuItem['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block"></i>
+                                    <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $menuItem['label'] }}</span>
+                                    @if($route === 'admin.sehati-registrations.index' && ($adminNewSertifikasiCount ?? 0) > 0)
+                                        <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600 lg:[.sidebar-mini_&]:hidden">{{ $adminNewSertifikasiCount }}</span>
+                                    @endif
+                                </span>
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -161,9 +247,9 @@
                     <div class="flex items-center gap-3 border-r border-slate-200 pr-4">
                         <button class="relative rounded-lg p-2 text-slate-400 transition hover:bg-slate-50 hover:text-slate-900">
                             <i data-lucide="bell" class="h-5 w-5"></i>
-                            @if(($adminNewSehatiCount ?? 0) > 0)
+                            @if(($adminNewSertifikasiCount ?? 0) > 0)
                                 <span class="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
-                                    {{ $adminNewSehatiCount }}
+                                    {{ $adminNewSertifikasiCount }}
                                 </span>
                             @endif
                         </button>
@@ -294,5 +380,6 @@
         });
     </script>
     @endif
+    @stack('scripts')
 </body>
 </html>

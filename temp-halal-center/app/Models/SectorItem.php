@@ -34,4 +34,8 @@ class SectorItem extends Model
             ],
         ];
     }
+    public function galleryItems()
+    {
+        return $this->hasMany(GalleryItem::class, 'sector_item_id');
+    }
 }

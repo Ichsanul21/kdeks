@@ -33,15 +33,13 @@
                 ['label' => 'Pustaka Dokumen', 'value' => $stats['resources'] ?? 0, 'icon' => 'folder-open', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.knowledge-resources.index')],
                 ['label' => 'Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'messages-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
                 ['label' => 'Banner Beranda', 'value' => $stats['banners'] ?? 0, 'icon' => 'monitor', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.banners.index')],
-                ['label' => 'Siaran Pers', 'value' => $stats['press_releases'] ?? 0, 'icon' => 'video', 'bg' => 'bg-rose-50', 'iconColor' => 'text-rose-600', 'route' => route('admin.press-releases.index')],
             ];
         } else {
             $cards = [
                 ['label' => 'Total UMKM', 'value' => $stats['umkms'] ?? 0, 'icon' => 'store', 'bg' => 'bg-emerald-50', 'iconColor' => 'text-emerald-600', 'route' => route('admin.umkms.index')],
-                ['label' => 'Sertifikasi Halal', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
+                ['label' => 'Sertifikasi', 'value' => $stats['sehati'] ?? 0, 'icon' => 'file-check-2', 'bg' => 'bg-blue-50', 'iconColor' => 'text-blue-600', 'route' => route('admin.sehati-registrations.index')],
                 ['label' => 'Menunggu Verifikasi', 'value' => $stats['sehati_pending'] ?? 0, 'icon' => 'clock', 'bg' => 'bg-amber-50', 'iconColor' => 'text-amber-600', 'route' => route('admin.sehati-registrations.index', ['search' => 'baru'])],
                 ['label' => 'Pesan Buku Tamu', 'value' => $stats['consultations'] ?? 0, 'icon' => 'message-square', 'bg' => 'bg-cyan-50', 'iconColor' => 'text-cyan-600', 'route' => route('admin.consultation-requests.index')],
-                ['label' => 'Siaran Pers', 'value' => $stats['press_releases'] ?? 0, 'icon' => 'video', 'bg' => 'bg-rose-50', 'iconColor' => 'text-rose-600', 'route' => route('admin.press-releases.index')],
             ];
         }
     @endphp
@@ -145,11 +143,11 @@
     </div>
 
     <div class="grid grid-cols-1 gap-6 {{ $isEditor ? '' : 'lg:grid-cols-2' }}">
-        {{-- Table Sehati --}}
+        {{-- Table Sertifikasi --}}
         @if(!$isEditor)
         <div class="admin-card animate-fade-in-up stagger-3 overflow-hidden rounded-[1.75rem]">
             <div class="flex items-center justify-between border-b border-slate-100 p-6">
-                <h3 class="font-heading text-lg font-bold text-slate-900">Sertifikat Halal Terbaru</h3>
+                <h3 class="font-heading text-lg font-bold text-slate-900">Sertifikasi Terbaru</h3>
                 <a href="{{ route('admin.sehati-registrations.index') }}" class="text-xs font-bold text-emerald-600">Lihat Semua</a>
             </div>
             <div class="overflow-x-auto">

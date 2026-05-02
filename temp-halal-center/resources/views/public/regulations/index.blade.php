@@ -10,6 +10,13 @@
                 <a href="{{ route('regulations.show', $regulation->slug) }}" class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
                     <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-600">{{ $regulation->regulation_type }}</p>
                     <h2 class="mt-3 text-lg font-extrabold text-slate-900">{{ $regulation->title }}</h2>
+                    @if($regulation->directorate)
+                        <div class="mt-2 flex items-center gap-2">
+                            <span class="inline-flex h-5 items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
+                                {{ $regulation->directorate->title }}
+                            </span>
+                        </div>
+                    @endif
                     <p class="mt-3 text-sm leading-7 text-slate-500">{{ \Illuminate\Support\Str::limit(strip_tags($regulation->summary), 140) }}</p>
                 </a>
             @endforeach

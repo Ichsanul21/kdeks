@@ -19,6 +19,7 @@ class RegulationController extends BaseCrudController
         ['key' => 'regulation_type', 'label' => 'Jenis'],
         ['key' => 'regulation_number', 'label' => 'Nomor'],
         ['key' => 'issued_at', 'label' => 'Tanggal'],
+        ['key' => 'directorate.title', 'label' => 'Direktorat'],
     ];
     protected array $privateFileFields = ['document_path'];
     protected array $formFields = [
@@ -31,4 +32,41 @@ class RegulationController extends BaseCrudController
         ['name' => 'is_featured', 'label' => 'Featured', 'type' => 'checkbox'],
         ['name' => 'document_path', 'label' => 'Dokumen Regulasi', 'type' => 'file'],
     ];
+
+    protected function resolvedFields(): array
+    {
+        $fields = $this->formFields;
+        $user = auth()->user();
+        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin']);
+        $isAdminDirektorat = $user->hasRole('AdminDirektorat');
+
+        $directorates = \App\Models\SectorItem::orderBy('title')->pluck('title', 'id')->toArray();
+
+        // Add directorate field at the beginning or end
+        $fields[] = [
+            'name' => 'sector_item_id',
+            'label' => 'Direktorat',
+            'type' => 'select',
+            'options' => $directorates,
+            'required' => false,
+            'readonly' => $isAdminDirektorat && !$isSuperAdmin,
+        ];
+
+        return $fields;
+    }
+
+    public function create(): \Illuminate\View\View
+    {
+        $item = new $this->modelClass();
+        $user = auth()->user();
+        if ($user->hasRole('AdminDirektorat') && !$user->hasAnyRole(['developer', 'superadmin'])) {
+            $item->sector_item_id = $user->sector_item_id;
+        }
+        return $this->formView($item, 'create');
+    }
+
+    protected function indexQuery()
+    {
+        return parent::indexQuery()->with('directorate');
+    }
 }

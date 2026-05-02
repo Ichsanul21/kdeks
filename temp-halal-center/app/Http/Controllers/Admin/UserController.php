@@ -29,17 +29,41 @@ class UserController extends BaseCrudController
         ['name' => 'email', 'label' => 'Email', 'type' => 'email'],
         ['name' => 'password', 'label' => 'Kata Sandi', 'type' => 'password'],
         ['name' => 'password_confirmation', 'label' => 'Konfirmasi Kata Sandi', 'type' => 'password'],
-        ['name' => 'role', 'label' => 'Peran / Role', 'type' => 'select', 'options' => []],
+        ['name' => 'role', 'label' => 'Peran / Role', 'type' => 'select', 'options' => [], 'id' => 'role-select'],
+        ['name' => 'sector_item_id', 'label' => 'Direktorat', 'type' => 'select', 'options' => [], 'id' => 'directorate-container'],
     ];
+
+    protected function indexQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::indexQuery();
+
+        if (!auth()->user()->hasRole('developer')) {
+            $query->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'developer');
+            });
+        }
+
+        return $query;
+    }
 
     protected function resolvedFields(): array
     {
         $fields = $this->formFields;
-        $roles = Role::all()->pluck('name', 'name')->toArray();
+        
+        $rolesQuery = Role::query();
+        if (!auth()->user()->hasRole('developer')) {
+            $rolesQuery->where('name', '!=', 'developer');
+        }
+        $roles = $rolesQuery->pluck('name', 'name')->toArray();
+        
+        $sectors = \App\Models\SectorItem::where('is_active', true)->orderBy('sort_order')->pluck('title', 'id')->toArray();
 
         foreach ($fields as &$field) {
             if ($field['name'] === 'role') {
                 $field['options'] = $roles;
+            }
+            if ($field['name'] === 'sector_item_id') {
+                $field['options'] = $sectors;
             }
         }
 
@@ -54,6 +78,7 @@ class UserController extends BaseCrudController
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->password = Hash::make($validated['password']);
+        $user->sector_item_id = $validated['role'] === 'AdminDirektorat' ? $validated['sector_item_id'] : null;
         $user->save();
 
         $user->syncRoles([$validated['role']]);
@@ -73,6 +98,7 @@ class UserController extends BaseCrudController
             $user->password = Hash::make($validated['password']);
         }
         
+        $user->sector_item_id = $validated['role'] === 'AdminDirektorat' ? $validated['sector_item_id'] : null;
         $user->save();
 
         $user->syncRoles([$validated['role']]);

@@ -6,7 +6,14 @@
     <section class="mx-auto max-w-4xl px-6 pb-20 pt-28">
         <a href="{{ route('regulations.index') }}" class="text-sm font-bold text-emerald-600">← Kembali ke regulasi</a>
         <h1 class="mt-6 font-heading text-4xl font-extrabold text-slate-900">{{ $regulation->title }}</h1>
-        <p class="mt-4 text-sm font-medium text-slate-500">{{ $regulation->regulation_number }} · {{ optional($regulation->issued_at)->translatedFormat('d F Y') }}</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+            <p class="text-sm font-medium text-slate-500">{{ $regulation->regulation_number }} · {{ optional($regulation->issued_at)->translatedFormat('d F Y') }}</p>
+            @if($regulation->directorate)
+                <span class="inline-flex h-6 items-center rounded-lg bg-emerald-50 px-3 text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                    {{ $regulation->directorate->title }}
+                </span>
+            @endif
+        </div>
         <div class="prose prose-slate mt-8 max-w-none">
             <p>{{ $regulation->summary ?: 'Ringkasan regulasi belum tersedia.' }}</p>
         </div>

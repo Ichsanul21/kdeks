@@ -23,6 +23,7 @@ class KnowledgeResourceRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
             'thumbnail_path' => ['nullable', 'image', 'max:4096'],
             'document_path' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx', 'max:20480'],
+            'sector_item_id' => ['nullable', 'exists:sector_items,id'],
         ];
     }
 }

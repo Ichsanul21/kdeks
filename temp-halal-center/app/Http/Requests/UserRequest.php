@@ -21,6 +21,7 @@ class UserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
             'password' => [$userId ? 'nullable' : 'required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'exists:roles,name'],
+            'sector_item_id' => ['required_if:role,AdminDirektorat', 'nullable', 'exists:sector_items,id'],
         ];
     }
 

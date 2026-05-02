@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+    @php $isAdminDirektorat = $isAdminDirektorat ?? false; @endphp
     <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
             <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">Content Management</p>

@@ -27,6 +27,7 @@ class ArticleRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
             'cover_image_path' => ['nullable', 'image', 'max:4096'],
             'document_path' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx', 'max:10240'],
+            'sector_item_id' => ['nullable', 'exists:sector_items,id'],
         ];
     }
 }

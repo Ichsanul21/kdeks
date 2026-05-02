@@ -23,6 +23,7 @@
                     <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl backdrop-blur-xl">
                         <a href="{{ route('about') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Tentang Kami</a>
                         <a href="{{ route('profile.organization') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Struktur Organisasi</a>
+                        <a href="{{ route('gallery.index') }}" class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-600">Galeri</a>
                     </div>
                 </div>
             </div>
@@ -150,6 +151,7 @@
                     <div class="ml-[52px] mt-1 flex flex-col gap-0.5 pb-2">
                         <a href="{{ route('about') }}" onclick="toggleMobileMenu()" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-emerald-50/70 hover:text-emerald-600 active:scale-[0.98]">Tentang Kami</a>
                         <a href="{{ route('profile.organization') }}" onclick="toggleMobileMenu()" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-emerald-50/70 hover:text-emerald-600 active:scale-[0.98]">Struktur Organisasi</a>
+                        <a href="{{ route('gallery.index') }}" onclick="toggleMobileMenu()" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-emerald-50/70 hover:text-emerald-600 active:scale-[0.98]">Galeri</a>
                     </div>
                 </div>
             </div>

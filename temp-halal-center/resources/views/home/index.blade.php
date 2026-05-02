@@ -242,12 +242,18 @@
                     <h2 class="text-center font-heading text-3xl font-extrabold tracking-tight text-slate-900">Sektor Ekonomi Syariah</h2>
                     <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-5">
                         @foreach($sectorItems as $item)
-                            <a href="{{ route('direktorat.show', $item->slug) }}" class="group relative block rounded-[1.75rem] border border-emerald-200 p-6 transition hover:shadow-md hover:border-emerald-400">
-                                <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                            <a href="{{ route('direktorat.show', $item->slug) }}" class="group relative flex flex-col rounded-[1.75rem] border border-emerald-200 p-6 transition hover:shadow-md hover:border-emerald-400 min-h-[220px]">
+                                <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-emerald-500 group-hover:text-white shrink-0">
                                     <i data-lucide="{{ $item->icon_key }}" class="h-5 w-5"></i>
                                 </div>
                                 <h4 class="mb-1 text-base font-bold text-slate-900 transition-colors group-hover:text-emerald-700">{{ $item->title }}</h4>
-                                <p class="text-xs leading-relaxed text-slate-500">{{ $item->summary }}</p>
+                                <p class="text-xs leading-relaxed text-slate-500 line-clamp-3">{{ $item->summary }}</p>
+                                
+                                <div class="mt-auto pt-4 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                                    <span>Lihat Detail</span>
+                                    <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                                </div>
+
                                 <span class="absolute top-4 right-4 flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-slate-50 transition-all duration-200 group-hover:border-emerald-300 group-hover:bg-emerald-50">
                                     <i data-lucide="arrow-up-right" class="h-3.5 w-3.5 text-slate-400 transition-colors duration-200 group-hover:text-emerald-600"></i>
                                 </span>

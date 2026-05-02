@@ -59,7 +59,7 @@ class PublicContentController extends Controller
     public function galleryIndex(): View
     {
         return view('public.gallery.index', [
-            'galleryItems' => GalleryItem::query()->latest('recorded_at')->paginate(12),
+            'galleryItems' => GalleryItem::query()->with('sectorItem')->latest('recorded_at')->paginate(12),
         ]);
     }
 
@@ -128,13 +128,13 @@ class PublicContentController extends Controller
     public function resourcesIndex(): View
     {
         return view('public.resources.index', [
-            'resources' => KnowledgeResource::query()->latest('published_at')->paginate(12),
+            'resources' => KnowledgeResource::query()->with('directorate')->latest('published_at')->paginate(12),
         ]);
     }
 
     public function resourceShow(string $slug): View
     {
-        $resource = KnowledgeResource::query()->where('slug', $slug)->firstOrFail();
+        $resource = KnowledgeResource::query()->with('directorate')->where('slug', $slug)->firstOrFail();
 
         return view('public.resources.show', [
             'resource' => $resource,
@@ -144,13 +144,13 @@ class PublicContentController extends Controller
     public function regulationsIndex(): View
     {
         return view('public.regulations.index', [
-            'regulations' => Regulation::query()->latest('issued_at')->paginate(12),
+            'regulations' => Regulation::query()->with('directorate')->latest('issued_at')->paginate(12),
         ]);
     }
 
     public function regulationShow(string $slug): View
     {
-        $regulation = Regulation::query()->where('slug', $slug)->firstOrFail();
+        $regulation = Regulation::query()->with('directorate')->where('slug', $slug)->firstOrFail();
 
         return view('public.regulations.show', [
             'regulation' => $regulation,
@@ -180,8 +180,15 @@ class PublicContentController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $galleryItems = \App\Models\GalleryItem::query()
+            ->where('sector_item_id', $sector->id)
+            ->latest('recorded_at')
+            ->limit(6)
+            ->get();
+
         return view('public.direktorat.show', [
             'sector' => $sector,
+            'galleryItems' => $galleryItems,
             'otherSectors' => SectorItem::query()
                 ->where('is_active', true)
                 ->whereKeyNot($sector->id)

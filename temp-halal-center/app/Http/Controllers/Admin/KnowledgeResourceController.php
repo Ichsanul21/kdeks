@@ -18,6 +18,7 @@ class KnowledgeResourceController extends BaseCrudController
         ['key' => 'title', 'label' => 'Judul'],
         ['key' => 'type', 'label' => 'Tipe'],
         ['key' => 'published_at', 'label' => 'Publikasi'],
+        ['key' => 'directorate.title', 'label' => 'Direktorat'],
     ];
     protected array $publicFileFields = ['thumbnail_path'];
     protected array $privateFileFields = ['document_path'];
@@ -32,4 +33,41 @@ class KnowledgeResourceController extends BaseCrudController
         ['name' => 'thumbnail_path', 'label' => 'Thumbnail', 'type' => 'image'],
         ['name' => 'document_path', 'label' => 'Dokumen', 'type' => 'file'],
     ];
+
+    protected function resolvedFields(): array
+    {
+        $fields = $this->formFields;
+        $user = auth()->user();
+        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin']);
+        $isAdminDirektorat = $user->hasRole('AdminDirektorat');
+
+        $directorates = \App\Models\SectorItem::orderBy('title')->pluck('title', 'id')->toArray();
+
+        // Add directorate field
+        $fields[] = [
+            'name' => 'sector_item_id',
+            'label' => 'Direktorat',
+            'type' => 'select',
+            'options' => $directorates,
+            'required' => false,
+            'readonly' => $isAdminDirektorat && !$isSuperAdmin,
+        ];
+
+        return $fields;
+    }
+
+    public function create(): \Illuminate\View\View
+    {
+        $item = new $this->modelClass();
+        $user = auth()->user();
+        if ($user->hasRole('AdminDirektorat') && !$user->hasAnyRole(['developer', 'superadmin'])) {
+            $item->sector_item_id = $user->sector_item_id;
+        }
+        return $this->formView($item, 'create');
+    }
+
+    protected function indexQuery()
+    {
+        return parent::indexQuery()->with('directorate');
+    }
 }

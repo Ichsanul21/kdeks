@@ -53,7 +53,7 @@ class HomeController extends Controller
             'status' => 'new',
         ]);
 
-        return redirect()->route('home')->with('status', 'Pendaftaran SEHATI berhasil dikirim.');
+        return redirect()->route('home')->with('status', 'Pendaftaran Sertifikasi berhasil dikirim.');
     }
 
     public function downloadDocument(string $type, int $id)

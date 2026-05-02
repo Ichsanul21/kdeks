@@ -78,54 +78,59 @@ Route::get('/halaman/{slug}', function ($slug) {
     return view('public.placeholder', compact('title'));
 })->name('page.placeholder');
 
-Route::middleware(['auth', 'role:developer|superadmin|editor'])->prefix('admin')->as('admin.')->group(function (): void {
+Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    // CMS Modules (Access for Everyone: Developer, Superadmin, Editor)
-    Route::resource('knowledge-resources', KnowledgeResourceController::class)->except(['show']);
-    Route::resource('articles', AdminArticleController::class)->except(['show']);
-    Route::resource('program-slides', ProgramSlideController::class)->except(['show']);
-    Route::resource('banners', BannerController::class)->except(['show']);
-    Route::resource('organization-members', OrganizationMemberController::class)->except(['show']);
-    Route::resource('sector-items', SectorItemController::class)->except(['show']);
-    Route::resource('regulations', RegulationController::class)->except(['show']);
-    Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
-    Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
-    Route::get('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'edit'])->name('about-us.index');
-    Route::put('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'update'])->name('about-us.update');
-    Route::resource('milestones', \App\Http\Controllers\Admin\MilestoneController::class)->except(['show']);
-    Route::resource('press-releases', PressReleaseController::class)->except(['show']);
-    Route::post('press-releases/{press_release}/finish-stream', [PressReleaseController::class, 'finishStream'])->name('press-releases.finish-stream');
-    Route::resource('site-settings', SiteSettingController::class)->except(['show']);
-});
 
-Route::middleware(['auth', 'role:developer|superadmin'])->prefix('admin')->as('admin.')->group(function (): void {
-    // Advanced Management (Developer and Superadmin Only)
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
-    Route::resource('regions', RegionController::class)->except(['show']);
-    Route::resource('lph-partners', LphPartnerController::class)->except(['show']);
-    Route::resource('halal-locations', HalalLocationController::class)->except(['show']);
-    Route::resource('potential-items', PotentialItemController::class)->except(['show']);
-    Route::resource('certification-paths', CertificationPathController::class)->except(['show']);
-    Route::resource('halal-products', HalalProductController::class)->except(['show']);
-    Route::resource('mentors', MentorController::class)->except(['show']);
-    Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
-    Route::post('sehati-registrations/{sehati_registration}/approve', [SehatiRegistrationController::class, 'approve'])->name('sehati-registrations.approve');
-    
-    Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');
-    Route::get('umkms/export', [UmkmController::class, 'export'])->name('umkms.export');
-    Route::resource('umkms', UmkmController::class)->except(['show']);
-    Route::get('umkms/{umkm}/produks/create', [UmkmProdukController::class, 'create'])->name('umkms.produks.create');
-    Route::post('umkms/{umkm}/produks', [UmkmProdukController::class, 'store'])->name('umkms.produks.store');
-    Route::get('umkms/{umkm}/produks/{produk}/edit', [UmkmProdukController::class, 'edit'])->name('umkms.produks.edit');
-    Route::put('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'update'])->name('umkms.produks.update');
-    Route::delete('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'destroy'])->name('umkms.produks.destroy');
-});
+    // Admin Direktorat Access (Gallery, Article, Document, Regulation, Sector/Directorate)
+    Route::middleware(['role:developer|superadmin|AdminDirektorat'])->group(function () {
+        Route::resource('articles', AdminArticleController::class)->except(['show']);
+        Route::resource('sector-items', SectorItemController::class)->except(['show']);
+        Route::resource('knowledge-resources', KnowledgeResourceController::class)->except(['show']);
+        Route::resource('regulations', RegulationController::class)->except(['show']);
+        Route::resource('gallery-items', GalleryItemController::class)->except(['show']);
+    });
 
+    // Super Admin & Developer Access (Everything except Watermark for Super Admin)
+    Route::middleware(['role:developer|superadmin'])->group(function () {
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
+        Route::resource('program-slides', ProgramSlideController::class)->except(['show']);
+        Route::resource('banners', BannerController::class)->except(['show']);
+        Route::resource('organization-members', OrganizationMemberController::class)->except(['show']);
+        Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
+        Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
+        Route::get('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'edit'])->name('about-us.index');
+        Route::put('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'update'])->name('about-us.update');
+        Route::resource('milestones', \App\Http\Controllers\Admin\MilestoneController::class)->except(['show']);
+        Route::resource('press-releases', PressReleaseController::class)->except(['show']);
+        Route::post('press-releases/{press_release}/finish-stream', [PressReleaseController::class, 'finishStream'])->name('press-releases.finish-stream');
+        Route::resource('site-settings', SiteSettingController::class)->except(['show']);
 
-Route::middleware(['auth', 'role:developer'])->prefix('admin')->as('admin.')->group(function (): void {
-    Route::get('/watermark-settings', [WatermarkSettingController::class, 'edit'])->name('watermark-settings.edit');
-    Route::put('/watermark-settings', [WatermarkSettingController::class, 'update'])->name('watermark-settings.update');
+        // Advanced Management
+        Route::resource('regions', RegionController::class)->except(['show']);
+        Route::resource('lph-partners', LphPartnerController::class)->except(['show']);
+        Route::resource('halal-locations', HalalLocationController::class)->except(['show']);
+        Route::resource('potential-items', PotentialItemController::class)->except(['show']);
+        Route::resource('certification-paths', CertificationPathController::class)->except(['show']);
+        Route::resource('halal-products', HalalProductController::class)->except(['show']);
+        Route::resource('mentors', MentorController::class)->except(['show']);
+        Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
+        Route::post('sehati-registrations/{sehati_registration}/approve', [SehatiRegistrationController::class, 'approve'])->name('sehati-registrations.approve');
+        
+        Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');
+        Route::get('umkms/export', [UmkmController::class, 'export'])->name('umkms.export');
+        Route::resource('umkms', UmkmController::class)->except(['show']);
+        Route::get('umkms/{umkm}/produks/create', [UmkmProdukController::class, 'create'])->name('umkms.produks.create');
+        Route::post('umkms/{umkm}/produks', [UmkmProdukController::class, 'store'])->name('umkms.produks.store');
+        Route::get('umkms/{umkm}/produks/{produk}/edit', [UmkmProdukController::class, 'edit'])->name('umkms.produks.edit');
+        Route::put('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'update'])->name('umkms.produks.update');
+        Route::delete('umkms/{umkm}/produks/{produk}', [UmkmProdukController::class, 'destroy'])->name('umkms.produks.destroy');
+    });
+
+    // Developer Only Access (Watermark)
+    Route::middleware(['role:developer'])->group(function () {
+        Route::get('/watermark-settings', [WatermarkSettingController::class, 'edit'])->name('watermark-settings.edit');
+        Route::put('/watermark-settings', [WatermarkSettingController::class, 'update'])->name('watermark-settings.update');
+    });
 });
 
 Route::middleware('auth')->group(function () {

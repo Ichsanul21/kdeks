@@ -19,6 +19,7 @@ class Regulation extends Model
         'document_path',
         'external_url',
         'is_featured',
+        'sector_item_id',
     ];
 
     protected function casts(): array
@@ -36,5 +37,10 @@ class Regulation extends Model
                 'source' => 'title',
             ],
         ];
+    }
+
+    public function directorate()
+    {
+        return $this->belongsTo(SectorItem::class, 'sector_item_id');
     }
 }
