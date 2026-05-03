@@ -264,6 +264,8 @@
             </div>
         </section>
 
+
+
         {{-- ===== PETA SEBARAN HALAL ===== --}}
         <section id="webgis" class="relative z-10 bg-white py-24">
             <div class="mx-auto max-w-7xl px-6">
@@ -451,6 +453,31 @@
             </div>
         </section>
 
+        {{-- ===== KDEKS MEMBERS ===== --}}
+        <section id="members" class="bg-white py-20 border-t border-slate-100 overflow-hidden">
+            <div class="mx-auto max-w-7xl px-6 mb-12">
+                <h2 class="text-center font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">Anggota Member KDEKS Kalimantan Timur</h2>
+            </div>
+            
+            <div class="relative flex overflow-x-hidden">
+                <div class="animate-marquee flex items-center">
+                    @php
+                        $logos = [
+                            'kaltim.png', 'bi.png', 'ojk.png', 'kemenag.png', 'bpd.png', 'mui.png', 
+                            'baznas.jpg', 'bwi.png', 'mes.webp', 'uin.png', 'unmul.webp', 'kadin.webp', 'bsi.png', 'pegadaian.png'
+                        ];
+                    @endphp
+                    
+                    {{-- Loop twice for infinite effect --}}
+                    @foreach(array_merge($logos, $logos) as $logo)
+                        <div class="mx-14 flex-shrink-0">
+                            <img src="{{ asset('assets/img/logo/' . $logo) }}" alt="Logo Member" class="h-20 w-auto object-contain">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
         {{-- ===== FAQ ===== --}}
         <section id="faq" class="border-t border-slate-100 bg-white py-24">
             <div class="mx-auto max-w-5xl px-6">
@@ -583,6 +610,21 @@
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             transform: translate3d(0, 0, 0);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .animate-marquee {
+            animation: marquee 40s linear infinite;
+            display: flex;
+            width: max-content;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
         }
     </style>
 
