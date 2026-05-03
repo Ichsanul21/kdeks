@@ -108,7 +108,7 @@
                             </a>
                             <button id="btnPenyebaranData" type="button" class="flex w-full md:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
                                 <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
-                                Penyebaran data KDEKS KalTim
+                                Penyebaran Data KDEKS KalTim
                             </button>
                         </div>
                     </div>
@@ -348,31 +348,6 @@
         <section id="direktori" class="border-t border-slate-100 bg-white py-24">
             <div class="mx-auto max-w-7xl px-6">
                 <div class="grid gap-16 lg:grid-cols-2">
-
-                    {{-- =============================================
-                         DATA PRODUK
-                         =============================================
-                    <div class="flex h-full flex-col">
-                        <div class="mb-8 flex items-end justify-between">
-                            <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Data Produk</h2>
-                            <a href="{{ route('products.index') }}" class="text-sm font-bold text-emerald-600">Lihat semua</a>
-                        </div>
-                        <div class="flex flex-1 flex-col gap-4">
-                            @foreach($featuredProducts->take(4) as $product)
-                                <a href="#" class="group flex flex-1 cursor-pointer items-center gap-4 rounded-2xl border border-emerald-200 p-5 transition hover:border-emerald-300 hover:shadow-sm">
-                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50">
-                                        <i data-lucide="package" class="h-5 w-5 text-slate-400"></i>
-                                    </div>
-                                    <div class="flex flex-1 flex-col justify-center">
-                                        <h4 class="text-sm font-bold text-slate-900 transition group-hover:text-emerald-600">{{ $product->nama_produk }}</h4>
-                                        <p class="mt-1 text-[11px] font-medium text-slate-500">{{ $product->umkm?->nama_umkm ?? 'Produk UMKM' }}</p>
-                                    </div>
-                                    <span class="self-center rounded bg-emerald-50 px-2.5 py-1 text-[9px] font-bold uppercase text-emerald-600">Terverifikasi</span>
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    ============================================= --}}
 
                     {{-- SISI KIRI: DOKUMEN (4 DATA) --}}
                     <div id="data" class="flex h-full flex-col">
@@ -1022,9 +997,17 @@
                                 : '';
                             const waNumber = location.nomor_wa ? location.nomor_wa.replace(/[^0-9]/g, '') : '';
 
-                            const waHtml = waNumber
-                                ? `<a href="https://wa.me/${waNumber.startsWith('0') ? '62' + waNumber.substring(1) : waNumber}?text=Halo%20${encodeURIComponent(escapeHtml(location.name))}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1.5 text-center text-[10px] font-bold text-emerald-600 transition hover:bg-emerald-100">WhatsApp</a>`
-                                : '';
+                            // ==========================================
+                            // COMMENTED OUT WHATSAPP BUTTON
+                            // Untuk mengaktifkan kembali, hapus tanda komentar di bawah ini
+                            // ==========================================
+                            // const waHtml = waNumber
+                            //     ? `<a href="https://wa.me/${waNumber.startsWith('0') ? '62' + waNumber.substring(1) : waNumber}?text=Halo%20${encodeURIComponent(escapeHtml(location.name))}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1.5 text-center text-[10px] font-bold text-emerald-600 transition hover:bg-emerald-100">WhatsApp</a>`
+                            //     : '';
+                            
+                            // Karena waHtml di-comment, kita set string kosong agar tidak error
+                            const waHtml = '';
+                            // ==========================================
 
                             const navHtml = `<a href="https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-blue-50 px-2 py-1.5 text-center text-[10px] font-bold text-blue-600 transition hover:bg-blue-100">Rute Lokasi</a>`;
 
@@ -1168,7 +1151,7 @@
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
             <div class="relative w-full overflow-hidden">
-                <img src="{{ asset('assets/img/popup/kalafest.png') }}" alt="Kalafest" class="w-full h-auto block">
+                <img src="{{ asset('assets/img/popup/kalafest.jpeg') }}" alt="Kalafest" class="w-full h-auto block">
             </div>
         </div>
     </div>

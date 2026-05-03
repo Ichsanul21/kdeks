@@ -57,7 +57,7 @@
                                 <div>
                                     <p class="text-sm font-bold text-slate-900">Telepon / WhatsApp</p>
                                     <p class="mt-1 text-sm font-medium text-slate-500">
-                                        {{ data_get($setting, 'phone', '+62 812-XXXX-XXXX') }}
+                                        {{ data_get($setting, 'phone', '+62 8XX-XXXX-XXXX') }}
                                     </p>
                                 </div>
                             </div>

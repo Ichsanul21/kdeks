@@ -10,26 +10,36 @@
                 </p>
             </div>
             <div>
-                <h4 class="mb-4 text-sm font-extrabold text-slate-900">Layanan Publik</h4>
+                <h4 class="mb-4 text-sm font-extrabold text-slate-900">Layanan Utama</h4>
                 <ul class="space-y-2 text-xs font-medium text-slate-500">
-                    <li><a href="{{ route('home') }}#sehati" class="transition hover:text-emerald-600">Pendaftaran Sertifikasi</a></li>
-                    <li><a href="{{ route('products.index') }}" class="transition hover:text-emerald-600">Direktori Produk</a></li>
-                    <li><a href="{{ route('home') }}#webgis" class="transition hover:text-emerald-600">Peta Sebaran UMKM</a></li>
+                    <li><a href="{{ route('home') }}#webgis" class="transition hover:text-emerald-600">Pemetaan Wilayah</a></li>
+                    <li><a href="{{ route('home') }}#sektor" class="transition hover:text-emerald-600">Sektor Ekonomi Syariah</a></li>
+                    <li><a href="{{ route('resources.index') }}" class="transition hover:text-emerald-600">Ruang Pengetahuan</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="mb-4 text-sm font-extrabold text-slate-900">Informasi</h4>
                 <ul class="space-y-2 text-xs font-medium text-slate-500">
-                    <li><a href="{{ route('articles.index') }}" class="transition hover:text-emerald-600">Berita & Publikasi</a></li>
-                    <li><a href="{{ route('resources.index') }}" class="transition hover:text-emerald-600">Dokumen & Regulasi</a></li>
-
+                    <li><a href="{{ route('articles.index') }}" class="transition hover:text-emerald-600">Berita Terkini</a></li>
+                    <li><a href="{{ route('siaran-pers') }}" class="transition hover:text-emerald-600">Siaran Pers</a></li>
+                    <li><a href="{{ route('regulations.index') }}" class="transition hover:text-emerald-600">Regulasi & Dokumen</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="mb-4 text-sm font-extrabold text-slate-900">Pusat Bantuan</h4>
-                <a href="{{ data_get($setting, 'consultation_url', '#') }}" class="flex w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-2 text-left text-xs font-bold shadow-sm transition hover:border-emerald-500">
-                    Hubungi Call Center
-                    <i data-lucide="phone" class="h-3 w-3 text-emerald-500"></i>
+                <ul class="space-y-2 text-xs font-medium text-slate-500">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="mail" class="h-3.5 w-3.5 text-slate-400"></i>
+                        <span>{{ data_get($setting, 'email', 'diskominfo@kaltimprov.go.id') }}</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="phone" class="h-3.5 w-3.5 text-slate-400"></i>
+                        <span>{{ data_get($setting, 'phone', '+62 8XX-XXXX-XXXX') }}</span>
+                    </li>
+                </ul>
+                <a href="{{ route('contact') }}" class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3.5 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700">
+                    <i data-lucide="message-square" class="h-4 w-4"></i>
+                    <span>Kontak Kami</span>
                 </a>
             </div>
         </div>

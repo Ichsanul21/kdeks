@@ -1,14 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
-    @php $isAdminDirektorat = $isAdminDirektorat ?? false; @endphp
+    @php 
+        $isAdminDirektorat = $isAdminDirektorat ?? false; 
+        $isDirectorateManagement = $routePrefix === 'admin.sector-items';
+    @endphp
     <div class="mb-8 flex items-center justify-between">
         <div>
             <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">{{ $mode === 'create' ? 'Tambah Data' : 'Edit Data' }}</p>
             <h2 class="mt-2 font-heading text-3xl font-extrabold text-slate-900 md:text-4xl">{{ $pageTitle }}</h2>
         </div>
         <div class="flex items-center gap-3">
-            @if($isAdminDirektorat && $mode === 'edit')
+            @if($isAdminDirektorat && $mode === 'edit' && $isDirectorateManagement)
                 {{-- Toggle edit mode button for AdminDirektorat --}}
                 <button
                     type="button"
@@ -77,7 +80,7 @@
                         <p data-map-status class="text-xs font-medium text-slate-500">Klik peta untuk mengisi latitude dan longitude, lalu gunakan tombol alamat jika dibutuhkan.</p>
                     </div>
                 @elseif($type === 'select')
-                    <select name="{{ $name }}" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif @if(isset($field['readonly']) && $field['readonly']) disabled @endif @if(isset($field['disabled']) && $field['disabled']) disabled @endif class="admin-input {{ isset($field['readonly']) && $field['readonly'] ? 'bg-slate-50 opacity-70 cursor-not-allowed' : '' }}">
+                    <select name="{{ $name }}" @if(isset($field['id'])) id="{{ $field['id'] }}" @endif @if(isset($field['readonly']) && $field['readonly']) disabled data-always-disabled @endif @if(isset($field['disabled']) && $field['disabled']) disabled data-always-disabled @endif class="admin-input {{ isset($field['readonly']) && $field['readonly'] ? 'bg-slate-50 opacity-70 cursor-not-allowed' : '' }}">
                         <option value="">Pilih salah satu</option>
                         @foreach(($field['options'] ?? []) as $optionValue => $optionLabel)
                             <option value="{{ $optionValue }}" @selected((string) $value === (string) $optionValue)>{{ $optionLabel }}</option>
@@ -104,8 +107,8 @@
                         value="{{ $type === 'datetime-local' && $value ? \Illuminate\Support\Carbon::parse($value)->format('Y-m-d\TH:i') : (is_array($value) ? json_encode($value) : $value) }}"
                         @if(isset($field['step'])) step="{{ $field['step'] }}" @endif
                         @if(isset($field['placeholder'])) placeholder="{{ $field['placeholder'] }}" @endif
-                        @if(isset($field['readonly']) && $field['readonly']) readonly @endif
-                        @if(isset($field['disabled']) && $field['disabled']) disabled @endif
+                        @if(isset($field['readonly']) && $field['readonly']) readonly data-always-disabled @endif
+                        @if(isset($field['disabled']) && $field['disabled']) disabled data-always-disabled @endif
                         class="admin-input {{ isset($field['readonly']) && $field['readonly'] ? 'bg-slate-50' : '' }}"
                     >
                 @endif
@@ -140,7 +143,7 @@
         </div>
     </form>
 
-    @if($isAdminDirektorat)
+    @if($isAdminDirektorat && $isDirectorateManagement)
     {{-- Locked overlay hint --}}
     <div id="locked-notice" class="mt-4 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -173,8 +176,8 @@
             toggleDirectorate();
         }
 
-        // --- AdminDirektorat edit mode toggle ---
-        @if($isAdminDirektorat ?? false)
+        // --- AdminDirektorat edit mode toggle (Only for Directorate Management) ---
+        @if($isAdminDirektorat && $isDirectorateManagement)
         const form = document.getElementById('crud-form');
         const submitBtn = document.getElementById('submit-btn');
         const formActions = document.getElementById('form-actions');
@@ -189,6 +192,11 @@
         function setFormLocked(locked) {
             if (!form) return;
             form.querySelectorAll(FIELD_SELECTORS).forEach(function(el) {
+                if (el.hasAttribute('data-always-disabled')) {
+                    el.disabled = true;
+                    el.classList.add('opacity-60', 'cursor-not-allowed');
+                    return;
+                }
                 el.disabled = locked;
                 if (locked) {
                     el.classList.add('opacity-60', 'cursor-not-allowed');
