@@ -1159,4 +1159,52 @@
             window.setTimeout(bootLandingMap, 400);
         })();
     </script>
+
+    {{-- ===== WELCOME POPUP MODAL ===== --}}
+    <div id="welcomePopup" class="fixed inset-0 z-[99999] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeWelcomePopup()"></div>
+        <div class="relative w-full max-w-lg transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all modal-animate-in">
+            <button onclick="closeWelcomePopup()" class="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-md hover:bg-black/40 transition-all">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+            <div class="relative w-full overflow-hidden">
+                <img src="{{ asset('assets/img/popup/kalafest.png') }}" alt="Kalafest" class="w-full h-auto block">
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-animate-in {
+            animation: modalIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+    </style>
+
+    <script>
+        function showWelcomePopup() {
+            const popup = document.getElementById('welcomePopup');
+            if (popup) {
+                popup.classList.remove('hidden');
+                popup.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+                if (window.lucide) window.lucide.createIcons();
+            }
+        }
+
+        function closeWelcomePopup() {
+            const popup = document.getElementById('welcomePopup');
+            if (popup) {
+                popup.classList.add('hidden');
+                popup.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(showWelcomePopup, 1200); 
+        });
+    </script>
 @endsection
