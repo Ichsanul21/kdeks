@@ -409,18 +409,27 @@
                 </div>
                 <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                     @foreach($featuredArticles->take(4) as $article)
-                        <a href="{{ route('articles.show', $article->slug) }}" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            @if($article->cover_image_path)
-                                <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
-                            @else
-                                <div class="h-48 w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center">
-                                    <i data-lucide="layout-grid" class="h-10 w-10 text-emerald-200"></i>
-                                </div>
-                            @endif
-                            <div class="p-5">
+                        <a href="{{ route('articles.show', $article->slug) }}" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
+                            <div class="overflow-hidden h-48 w-full shrink-0">
+                                @if($article->cover_image_path)
+                                    <img src="{{ asset('storage/'.$article->cover_image_path) }}" alt="{{ $article->title }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                @else
+                                    <div class="h-full w-full bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                        <i data-lucide="layout-grid" class="h-10 w-10 text-emerald-200"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="p-5 flex flex-col flex-1 bg-white relative z-10">
                                 <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em]">{{ strtoupper($article->type) }}</p>
-                                <h3 class="mt-3 text-base font-extrabold text-slate-900">{{ $article->title }}</h3>
-                                <p class="mt-3 text-sm leading-7 text-slate-500">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 110) }}</p>
+                                <h3 class="mt-3 text-base font-extrabold text-slate-900 line-clamp-3">{{ $article->title }}</h3>
+                                <p class="mt-3 text-sm leading-relaxed text-slate-500 line-clamp-4">{{ $article->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($article->body), 250) }}</p>
+                                <div class="mt-auto pt-4 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                                    <span>Baca Berita</span>
+                                    <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-colors duration-200 group-hover:bg-emerald-500">
+                                <i data-lucide="arrow-up-right" class="h-4 w-4 text-slate-500 transition-colors duration-200 group-hover:text-white"></i>
                             </div>
                         </a>
                     @endforeach
