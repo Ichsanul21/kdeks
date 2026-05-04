@@ -53,7 +53,7 @@
         <main class="mx-auto max-w-7xl px-5 sm:px-6 pb-20 sm:pb-24 pt-12 sm:pt-16">
             {{-- Header Section --}}
             <div class="mb-12 sm:mb-16 flex flex-col items-center text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight px-2">
+                <h1 class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight whitespace-nowrap px-2">
                     Gerakan Kaltim <span class="text-gradient">Berwakaf Digital</span>
                 </h1>
                 <p class="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg font-medium leading-relaxed text-slate-500 px-4">
@@ -63,7 +63,7 @@
 
             {{-- Cards Grid --}}
             <div class="relative w-full">
-                {{-- Decorative elements (hidden on very small screens to save resources/layout) --}}
+                {{-- Decorative elements --}}
                 <div class="hidden sm:block absolute -left-20 top-1/2 -z-10 h-72 w-72 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[80px]"></div>
                 <div class="hidden sm:block absolute -right-20 top-1/3 -z-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-[80px]"></div>
 
@@ -82,13 +82,10 @@
                             <p class="mt-3 sm:mt-4 text-sm leading-relaxed text-slate-500 line-clamp-3">
                                 Ternak domba sebagai investasi berkah untuk mendukung pendidikan santri dan meningkatkan kesejahteraan umat
                             </p>
-                            <div class="mt-auto pt-6 sm:pt-8 flex items-center justify-between">
-                                <div class="flex items-center gap-2 text-xs font-bold text-emerald-600">
+                            <div class="mt-auto pt-6 sm:pt-8">
+                                <div class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all duration-300 group-hover:bg-emerald-700 group-hover:shadow-md">
                                     <span>Berwakaf</span>
-                                    <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-all duration-300 group-hover:bg-emerald-600 group-hover:text-white">
-                                    <i data-lucide="arrow-up-right" class="h-5 w-5"></i>
+                                    <i data-lucide="arrow-right" class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"></i>
                                 </div>
                             </div>
                         </div>
@@ -107,13 +104,10 @@
                             <p class="mt-3 sm:mt-4 text-sm leading-relaxed text-slate-500 line-clamp-3">
                                 Wakaf Produktif Minimarket dan Penginapan Syariah di Kota Samarinda dikelola oleh Perwakilan Badan Wakaf Indonesia provinsi Kalimantan Timur
                             </p>
-                            <div class="mt-auto pt-6 sm:pt-8 flex items-center justify-between">
-                                <div class="flex items-center gap-2 text-xs font-bold text-emerald-600">
+                            <div class="mt-auto pt-6 sm:pt-8">
+                                <div class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all duration-300 group-hover:bg-emerald-700 group-hover:shadow-md">
                                     <span>Berwakaf</span>
-                                    <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-all duration-300 group-hover:bg-emerald-600 group-hover:text-white">
-                                    <i data-lucide="arrow-up-right" class="h-5 w-5"></i>
+                                    <i data-lucide="arrow-right" class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"></i>
                                 </div>
                             </div>
                         </div>
@@ -132,13 +126,10 @@
                             <p class="mt-3 sm:mt-4 text-sm leading-relaxed text-slate-500 line-clamp-3">
                                 Peternakan ayam petelur sebagai investasi berkah dan program kemandirian pondok pesantren Al Qur'an DPU Kaltim
                             </p>
-                            <div class="mt-auto pt-6 sm:pt-8 flex items-center justify-between">
-                                <div class="flex items-center gap-2 text-xs font-bold text-emerald-600">
+                            <div class="mt-auto pt-6 sm:pt-8">
+                                <div class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all duration-300 group-hover:bg-emerald-700 group-hover:shadow-md">
                                     <span>Berwakaf</span>
-                                    <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1"></i>
-                                </div>
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-all duration-300 group-hover:bg-emerald-600 group-hover:text-white">
-                                    <i data-lucide="arrow-up-right" class="h-5 w-5"></i>
+                                    <i data-lucide="arrow-right" class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"></i>
                                 </div>
                             </div>
                         </div>
