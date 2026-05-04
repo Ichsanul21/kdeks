@@ -517,7 +517,7 @@
                     @php
                         $logos = [
                             'kaltim.png', 'bi.png', 'ojk.png', 'kemenag.png', 'bpd.png', 'mui.png', 
-                            'baznas.jpg', 'bwi.png', 'mes.webp', 'uin.png', 'unmul.webp', 'kadin.webp', 'bsi.png', 'pegadaian.png'
+                            'baznas.png', 'bwi.png', 'mes.webp', 'uin.png', 'unmul.webp', 'kadin.webp', 'bsi.png', 'pegadaian.png'
                         ];
                     @endphp
                     

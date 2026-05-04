@@ -277,4 +277,9 @@ class PublicContentController extends Controller
             'releases' => $releases,
         ]);
     }
+
+    public function wakafIndex(): View
+    {
+        return view('public.wakaf.index');
+    }
 }

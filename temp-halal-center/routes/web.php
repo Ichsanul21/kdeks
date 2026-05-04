@@ -61,6 +61,7 @@ Route::get('/direktorat/{slug}', [PublicContentController::class, 'direktoratSho
 Route::get('/siaran-pers', [PublicContentController::class, 'pressReleasesIndex'])->name('siaran-pers');
 
 Route::get('/profile/tentang-kami', [PublicContentController::class, 'about'])->name('about');
+Route::get('/wakaf', [PublicContentController::class, 'wakafIndex'])->name('wakaf.index');
 
 Route::get('/profile/struktur-organisasi', [PublicContentController::class, 'organizationStructure'])->name('profile.organization');
 Route::get('/profile/anggota/{id}', [PublicContentController::class, 'memberShow'])->name('profile.member');
