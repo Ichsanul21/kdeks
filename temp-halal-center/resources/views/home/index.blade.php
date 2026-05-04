@@ -428,6 +428,75 @@
             </div>
         </section>
 
+        {{-- ===== LEMBAGA WAKAF ===== --}}
+        <section id="wakaf" class="bg-white py-24 border-t border-slate-100">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="mb-10 text-center">
+                    <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Lembaga Wakaf</h2>
+                    <p class="mt-2 text-sm font-medium text-slate-500">Program pemberdayaan dan investasi berkah melalui instrumen wakaf produktif di Kalimantan Timur.</p>
+                </div>
+                
+                <div class="grid gap-6 md:grid-cols-3">
+                    {{-- Card 1 --}}
+                    <a href="https://mitra.satuwakaf.id/dombaistiqomah" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
+                        <div class="overflow-hidden h-56 w-full shrink-0">
+                            <img src="{{ asset('assets/img/wakaf/wakaf1.jpeg') }}" alt="TERNAK DOMBA PROGRAM KEMANDIRIAN PONDOK PESANTREN ISTIQOMAH SAMARINDA" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1 bg-white relative z-10">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em] line-clamp-2">MPW PWM Muhammadiyah Kalimantan Timur</p>
+                            <h3 class="mt-3 text-base font-extrabold text-slate-900 line-clamp-3">TERNAK DOMBA PROGRAM KEMANDIRIAN PONDOK PESANTREN ISTIQOMAH SAMARINDA</h3>
+                            <p class="mt-3 text-sm leading-relaxed text-slate-500 line-clamp-4">Ternak domba sebagai investasi berkah untuk mendukung pendidikan santri dan meningkatkan kesejahteraan umat</p>
+                            <div class="mt-auto pt-4 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                                <span>Lihat Detail Wakaf</span>
+                                <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-colors duration-200 group-hover:bg-emerald-500">
+                            <i data-lucide="arrow-up-right" class="h-4 w-4 text-slate-500 transition-colors duration-200 group-hover:text-white"></i>
+                        </div>
+                    </a>
+
+                    {{-- Card 2 --}}
+                    <a href="https://mitra.satuwakaf.id/minimarketBwi" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
+                        <div class="overflow-hidden h-56 w-full shrink-0">
+                            <img src="{{ asset('assets/img/wakaf/wakaf2.jpeg') }}" alt="WAKAF PRODUKTIF BANGUNAN MINIMARKET PRODUK HALAL DAN HOTEL SYARIAH" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1 bg-white relative z-10">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em] line-clamp-2">Perwakilan Badan Wakaf Indonesia Provinsi Kalimantan Timur</p>
+                            <h3 class="mt-3 text-base font-extrabold text-slate-900 line-clamp-3">WAKAF PRODUKTIF BANGUNAN MINIMARKET PRODUK HALAL DAN HOTEL SYARIAH</h3>
+                            <p class="mt-3 text-sm leading-relaxed text-slate-500 line-clamp-4">Wakaf Produktif Minimarket dan Penginapan Syariah di Kota Samarinda dikelola oleh Perwakilan Badan Wakaf Indonesia provinsi Kalimantan Timur</p>
+                            <div class="mt-auto pt-4 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                                <span>Lihat Detail Wakaf</span>
+                                <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-colors duration-200 group-hover:bg-emerald-500">
+                            <i data-lucide="arrow-up-right" class="h-4 w-4 text-slate-500 transition-colors duration-200 group-hover:text-white"></i>
+                        </div>
+                    </a>
+
+                    {{-- Card 3 --}}
+                    <a href="https://mitra.satuwakaf.id/ayampetelurDPU" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
+                        <div class="overflow-hidden h-56 w-full shrink-0">
+                            <img src="{{ asset('assets/img/wakaf/wakaf3.jpeg') }}" alt="Wakaf Produktif Peternakan Ayam Petelur di Pondok Pesantren Al Qur'an DPU Kaltim" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1 bg-white relative z-10">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 sm:tracking-[0.24em] line-clamp-2">Yayasan Dana Peduli Ummat Kalimantan Timur</p>
+                            <h3 class="mt-3 text-base font-extrabold text-slate-900 line-clamp-3">Wakaf Produktif Peternakan Ayam Petelur di Pondok Pesantren Al Qur'an DPU Kaltim di Kota Samarinda</h3>
+                            <p class="mt-3 text-sm leading-relaxed text-slate-500 line-clamp-4">Peternakan ayam petelur sebagai investasi berkah dan program kemandirian pondok pesantren Al Qur'an DPU Kaltim dan meningkatkan kesejahteraan umat</p>
+                            <div class="mt-auto pt-4 flex items-center gap-1 text-[10px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                                <span>Lihat Detail Wakaf</span>
+                                <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-colors duration-200 group-hover:bg-emerald-500">
+                            <i data-lucide="arrow-up-right" class="h-4 w-4 text-slate-500 transition-colors duration-200 group-hover:text-white"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         {{-- ===== KDEKS MEMBERS ===== --}}
         <section id="members" class="bg-white py-20 border-t border-slate-100 overflow-hidden">
             <div class="mx-auto max-w-7xl px-6 mb-12">

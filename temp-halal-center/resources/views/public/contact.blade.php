@@ -97,14 +97,14 @@
                                         Lengkap</label>
                                     <input type="text" id="name" name="name" required
                                         class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
-                                        placeholder="Tomi Ariyanto">
+                                        placeholder="John Doe">
                                 </div>
                                 <div class="space-y-2">
                                     <label for="email" class="text-xs font-bold uppercase tracking-wider text-slate-700">Alamat
                                         Email</label>
                                     <input type="email" id="email" name="email" required
                                         class="w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-300"
-                                        placeholder="tomi@example.com">
+                                        placeholder="johndoe@example.com">
                                 </div>
                             </div>
 
