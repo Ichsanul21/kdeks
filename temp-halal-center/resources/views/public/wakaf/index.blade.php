@@ -53,6 +53,13 @@
         <main class="mx-auto max-w-7xl px-5 sm:px-6 pb-20 sm:pb-24 pt-12 sm:pt-16">
             {{-- Header Section --}}
             <div class="mb-12 sm:mb-16 flex flex-col items-center text-center">
+                
+                {{-- Logos --}}
+                <div class="flex items-center justify-center gap-6 sm:gap-8 mb-6">
+                    <img src="{{ asset('logo.png') }}" alt="Logo Client 1" class="h-10 sm:h-12 md:h-14 w-auto object-contain">
+                    <img src="{{ asset('logo2.png') }}" alt="Logo Client 2" class="h-10 sm:h-12 md:h-14 w-auto object-contain">
+                </div>
+
                 <h1 class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight whitespace-nowrap px-2">
                     Gerakan Kaltim <span class="text-gradient">Berwakaf Digital</span>
                 </h1>
