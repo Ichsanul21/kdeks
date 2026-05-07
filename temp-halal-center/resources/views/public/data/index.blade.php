@@ -217,7 +217,7 @@
         {{-- ============================================ --}}
         {{-- Quick Stats Cards --}}
         {{-- ============================================ --}}
-        <div id="statsDaerah" class="w-full mb-8 grid grid-cols-1 gap-4 xs:grid-cols-2 md:mb-10 md:grid-cols-4 md:gap-4">
+        <div id="statsDaerah" class="w-full mb-8 grid grid-cols-1 gap-4 xs:grid-cols-2 md:mb-10 md:grid-cols-3 md:gap-4">
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 sm:h-9 sm:w-9 sm:rounded-xl">
@@ -234,7 +234,7 @@
                 <p id="stat1" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">0</p>
                 <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">UMKM Halal</p>
             </div>
-            <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
+            <div class="hidden rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
                 <div
                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600 sm:h-9 sm:w-9 sm:rounded-xl">
                     <i data-lucide="utensils-crossed" class="h-4 w-4"></i>
@@ -327,237 +327,567 @@
                         <div class="pt-1">
                             <p class="px-4 pb-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Direktorat</p>
 
-                            <button data-kdeks-sub="industri-produk-halal" onclick="openDevModal(this)"
-                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                            <button data-kdeks-view="industri-produk-halal"
+                                class="kdeks-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition">
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-500">
                                     <i data-lucide="package" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <span class="text-[12px] font-semibold">Industri Produk Halal</span>
-                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
                             </button>
 
-                            <button data-kdeks-sub="jasa-keuangan-syariah" onclick="openDevModal(this)"
-                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                            <button data-kdeks-view="jasa-keuangan-syariah"
+                                class="kdeks-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition">
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-500">
                                     <i data-lucide="landmark" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <span class="text-[12px] font-semibold">Jasa Keuangan Syariah</span>
-                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
                             </button>
 
-                            <button data-kdeks-sub="keuangan-sosial-syariah" onclick="openDevModal(this)"
-                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                            <button data-kdeks-view="keuangan-sosial-syariah"
+                                class="kdeks-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition">
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-500">
                                     <i data-lucide="heart-handshake" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <span class="text-[12px] font-semibold">Keuangan Sosial Syariah</span>
-                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
                             </button>
 
-                            <button data-kdeks-sub="bisnis-kewirausahaan-syariah" onclick="openDevModal(this)"
-                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                            <button data-kdeks-view="bisnis-kewirausahaan-syariah"
+                                class="kdeks-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition">
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
                                     <i data-lucide="briefcase" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <span class="text-[12px] font-semibold">Bisnis & Kewirausahaan Syariah</span>
-                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
                             </button>
 
-                            <button data-kdeks-sub="infrastruktur-ekosistem-syariah" onclick="openDevModal(this)"
-                                class="kdeks-sub-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl">
+                            <button data-kdeks-view="infrastruktur-ekosistem-syariah"
+                                class="kdeks-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition">
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-500">
                                     <i data-lucide="layers" class="h-3.5 w-3.5"></i>
                                 </div>
                                 <span class="text-[12px] font-semibold">Infrastruktur Ekosistem Syariah</span>
-                                <i data-lucide="lock" class="ml-auto h-3 w-3 text-slate-300"></i>
                             </button>
                         </div>
                     </div>
                 </aside>
 
-                {{-- ===== Main KDEKS Content ===== --}}
                 <div class="flex-1 min-w-0 w-full">
-            {{-- ============================================ --}}
-            {{-- 1. SGIE --}}
-            {{-- ============================================ --}}
-            <div class="mb-8 w-full">
-                <div class="mb-4 flex items-center gap-3">
-                    <div
-                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
-                        <i data-lucide="globe" class="h-4 w-4"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Indikator Ekonomi Islam
-                            Kalimantan Timur</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Banyaknya per kategori (Makanan, Wisata, Ponpes, dll)</p>
-                    </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                    <div class="h-[280px] sm:h-[380px]"><canvas id="chartSGIE"></canvas></div>
-                </div>
-            </div>
+                    {{-- Dashboard KDEKS --}}
+                    <div id="kdeks-dashboard" class="kdeks-view-content">
+                        <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                            {{-- 1. Sertifikat Halal --}}
+                            <div class="col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                                        <i data-lucide="file-check-2" class="h-5 w-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Sertifikat Halal</h3>
+                                        {{-- Hide total --}}
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
+                                    <div class="p-3 rounded-xl bg-blue-50 border border-blue-100">
+                                        <p class="text-xl font-black text-blue-700">1.200</p>
+                                        <p class="text-[10px] font-bold text-blue-600 uppercase">Reguler</p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                                        <p class="text-xl font-black text-emerald-700">17.290</p>
+                                        <p class="text-[10px] font-bold text-emerald-600 uppercase">Self Declare</p>
+                                    </div>
+                                </div>
+                            </div>
 
-            {{-- ============================================ --}}
-            {{-- 1b. PONDOK PESANTREN --}}
-            {{-- ============================================ --}}
-            <div class="mb-8 w-full">
-                <div class="mb-4 flex items-center gap-3">
-                    <div
-                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
-                        <i data-lucide="home" class="h-4 w-4"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Perkembangan Pondok Pesantren</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Statistik pertumbuhan pondok pesantren di Kalimantan Timur</p>
-                    </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                    <div class="h-[260px] sm:h-[320px]"><canvas id="chartPonpes"></canvas></div>
-                </div>
-            </div>
+                            {{-- 2. Juru Sembelih --}}
+                            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center gap-4 mb-2">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                                        <i data-lucide="user-check" class="h-5 w-5"></i>
+                                    </div>
+                                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Juru Sembelih Halal</h3>
+                                </div>
+                                <p class="text-4xl font-black text-slate-900">111</p>
+                                <p class="text-[10px] text-slate-400 font-medium mt-2">Personil Tersertifikasi</p>
+                            </div>
 
-
-            {{-- ============================================ --}}
-            {{-- 2. INDUSTRI PRODUK HALAL --}}
-            {{-- ============================================ --}}
-            <div class="mb-8">
-                <div class="mb-4 flex items-center gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600"><i
-                            data-lucide="trending-up" class="h-4 w-4"></i></div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Industri Produk Halal</h2>
-                        <p id="descIndustri" class="text-[10px] text-slate-400 sm:text-xs">Perkembangan sertifikasi halal terbit <span class="font-semibold text-slate-600">Kalimantan Timur</span></p>
-                    </div>
-                </div>
-                <div class="grid gap-4 md:grid-cols-1">
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Perkembangan Sertifikasi Halal Terbit</p>
-                        <div class="h-[220px] sm:h-[280px]"><canvas id="chartSertifikasi"></canvas></div>
-                    </div>
-                </div>
-            </div>
-
-
-            {{-- ============================================ --}}
-            {{-- 3. PARIWISATA RAMAH MUSLIM --}}
-            {{-- ============================================ --}}
-            <div class="mb-8">
-                <div class="mb-4 flex items-center gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600"><i
-                            data-lucide="utensils-crossed" class="h-4 w-4"></i></div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Pariwisata Ramah Muslim</h2>
-                        <p id="descPariwisata" class="text-[10px] text-slate-400 sm:text-xs">UMKM bersertifikat halal di
-                            <span class="font-semibold text-slate-600">Kalimantan Timur</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p id="titlePariwisataBar"
-                            class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Jumlah Sertifikat per Kabupaten/Kota</p>
-                        <div class="h-[320px]"><canvas id="chartPariwisata"></canvas></div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Sebaran UMKM Halal per Kabupaten/Kota</p>
-                        <div class="h-[320px]"><canvas id="chartUmkmSebaran"></canvas></div>
-                    </div>
-                </div>
-            </div>
-
-
-            {{-- ============================================ --}}
-            {{-- 4. LPH --}}
-            {{-- ============================================ --}}
-            <div class="mb-8">
-                <div class="mb-4 flex items-center gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
-                        <i data-lucide="scan-search" class="h-4 w-4"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Lembaga Pemeriksa Halal (LPH)
-                        </h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Jumlah LPH, auditor, perkembangan tahunan, & jenis
-                            lembaga</p>
-                    </div>
-                </div>
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Perkembangan LPH & Auditor (Year-over-Year)</p>
-                        <div class="h-[260px] sm:h-[300px]"><canvas id="chartLPHLine"></canvas></div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                        <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                            Komposisi Jenis LPH</p>
-                        <div class="h-[260px] sm:h-[300px]"><canvas id="chartLPHPie"></canvas></div>
-                    </div>
-                </div>
-            </div>
-
-
-            {{-- ============================================ --}}
-            {{-- 5. MODERNISASI RPH HALAL --}}
-            {{-- ============================================ --}}
-            <div class="mb-8">
-                <div class="mb-4 flex items-center gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600"><i
-                            data-lucide="warehouse" class="h-4 w-4"></i></div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Modernisasi RPH Halal</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Perkembangan jumlah RPH halal di Kalimantan Timur</p>
-                    </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                    <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                        Perkembangan RPH Halal (Year-over-Year)</p>
-                    <div class="h-[260px] sm:h-[320px]"><canvas id="chartRPHGrowth"></canvas></div>
-                </div>
-            </div>
-
-
-            {{-- ============================================ --}}
-            {{-- 6. SERTIFIKASI HALAL UMKM --}}
-            {{-- ============================================ --}}
-            <div class="mb-8">
-                <div class="mb-4 flex items-center gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-100 text-teal-600"><i
-                            data-lucide="badge-check" class="h-4 w-4"></i></div>
-                    <div>
-                        <h2 class="font-heading text-base font-bold text-slate-900 sm:text-lg">Sertifikasi Halal UMKM</h2>
-                        <p class="text-[10px] text-slate-400 sm:text-xs">Perkembangan jumlah UMKM halal di Kalimantan Timur</p>
-                    </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-6">
-                    <p class="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:mb-4 sm:text-xs">
-                        Perkembangan Sertifikasi Halal UMKM per Tahun</p>
-                    <div class="h-[260px] sm:h-[340px]"><canvas id="chartUMK"></canvas></div>
-                    <div
-                        class="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-4 sm:mt-5 sm:grid-cols-3 sm:gap-3 sm:pt-5">
-                        <div
-                            class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 sm:block sm:border-0 sm:bg-transparent sm:text-center">
-                            <p id="umkInfo0" class="text-xl font-extrabold text-slate-900 sm:text-2xl">0</p>
-                            <p class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:ml-0 sm:mt-0.5">
-                                Pendamping PPH Aktif</p>
+                            {{-- 3 & 4. RPH & RPU --}}
+                            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-rose-600">
+                                        <i data-lucide="warehouse" class="h-5 w-5"></i>
+                                    </div>
+                                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Infrastruktur Halal</h3>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-semibold text-slate-600">RPH Halal</span>
+                                        <span class="text-lg font-black text-slate-900">8</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-semibold text-slate-600">RPU Halal</span>
+                                        <span class="text-lg font-black text-slate-900">35</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 sm:block sm:border-0 sm:bg-transparent sm:text-center">
-                            <p id="umkInfo1" class="text-xl font-extrabold text-slate-900 sm:text-2xl">0</p>
-                            <p class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:ml-0 sm:mt-0.5">
-                                Lembaga PPH Terdaftar</p>
+
+                        {{-- Perkembangan Historis Chart (DASHBOARD) --}}
+                        <div class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                            <div class="mb-6 flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Perkembangan Sertifikasi Halal</h3>
+                                    <p class="text-[10px] text-slate-400 mt-0.5 uppercase tracking-tight">Historis Terbit (2021-2025)</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Sertifikat Terbit</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="h-[250px] w-full">
+                                <canvas id="chartSertifikasiDashboard"></canvas>
+                            </div>
                         </div>
-                        <div
-                            class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 sm:block sm:border-0 sm:bg-transparent sm:text-center">
-                            <p id="umkInfo2" class="text-xl font-extrabold text-emerald-600 sm:text-2xl">0%</p>
-                            <p class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:ml-0 sm:mt-0.5">
-                                Tingkat Keberhasilan</p>
+
+                        <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+
+                            {{-- 5. Perbankan Syariah --}}
+                            <div class="col-span-1 md:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                                        <i data-lucide="landmark" class="h-5 w-5"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Jasa Keuangan Syariah</h3>
+                                </div>
+                                <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                            <span class="text-xs font-medium text-slate-500">Perbankan Syariah</span>
+                                            <span class="text-sm font-bold text-slate-900">11</span>
+                                        </div>
+                                        <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                            <span class="text-xs font-medium text-slate-500">BPR Syariah</span>
+                                            <span class="text-sm font-bold text-slate-900">1</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-xs font-medium text-slate-500">Asuransi Syariah</span>
+                                            <span class="text-sm font-bold text-slate-900">6</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                            <span class="text-xs font-medium text-slate-500">Multifinance Syariah</span>
+                                            <span class="text-sm font-bold text-slate-900">3</span>
+                                        </div>
+                                        <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                            <span class="text-xs font-medium text-slate-500">BMT</span>
+                                            <span class="text-sm font-bold text-slate-900">5</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-xs font-medium text-slate-500">Fintech Syariah</span>
+                                            <span class="text-sm font-bold text-slate-900">3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- 6 & 7. Wisata & Pesantren --}}
+                            <div class="col-span-1 md:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+                                                <i data-lucide="palmtree" class="h-4.5 w-4.5"></i>
+                                            </div>
+                                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Wisata Ramah Muslim</h3>
+                                        </div>
+                                        <p class="text-3xl font-black text-slate-900">3 <span class="text-sm font-bold text-slate-400 uppercase ml-1">Destinasi</span></p>
+                                        <div class="mt-3 flex flex-wrap gap-2">
+                                            <span class="px-2 py-1 rounded bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-600 uppercase">Samarinda</span>
+                                            <span class="px-2 py-1 rounded bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-600 uppercase">Balikpapan</span>
+                                            <span class="px-2 py-1 rounded bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-600 uppercase">Bontang</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col border-l border-slate-100 pl-8">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                                <i data-lucide="home" class="h-4.5 w-4.5"></i>
+                                            </div>
+                                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Pondok Pesantren</h3>
+                                        </div>
+                                        <p class="text-3xl font-black text-slate-900">30</p>
+                                        <p class="text-[10px] text-slate-400 font-medium mt-auto">Lembaga Terdaftar</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- 8. UMKM bersertifikat Halal --}}
+                            <div class="col-span-1 md:col-span-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                                            <i data-lucide="store" class="h-4.5 w-4.5"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Sebaran UMKM Bersertifikat Halal</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-5 border-t border-slate-50 pt-4">
+                                    <div class="flex flex-col gap-3">
+                                        <div class="border-l-2 border-emerald-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Samarinda</p><p class="text-sm font-black text-slate-800">3.319</p></div>
+                                        <div class="border-l-2 border-blue-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Balikpapan</p><p class="text-sm font-black text-slate-800">4.104</p></div>
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="border-l-2 border-violet-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Bontang</p><p class="text-sm font-black text-slate-800">756</p></div>
+                                        <div class="border-l-2 border-amber-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Kukar</p><p class="text-sm font-black text-slate-800">3.415</p></div>
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="border-l-2 border-rose-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Kutim</p><p class="text-sm font-black text-slate-800">726</p></div>
+                                        <div class="border-l-2 border-cyan-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Kubar</p><p class="text-sm font-black text-slate-800">176</p></div>
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="border-l-2 border-indigo-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Mahulu</p><p class="text-sm font-black text-slate-800">2</p></div>
+                                        <div class="border-l-2 border-teal-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Berau</p><p class="text-sm font-black text-slate-800">450</p></div>
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="border-l-2 border-sky-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">PPU</p><p class="text-sm font-black text-slate-800">882</p></div>
+                                        <div class="border-l-2 border-lime-500 pl-2.5"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Paser</p><p class="text-sm font-black text-slate-800">401</p></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div> {{-- /.rounded-2xl Sertifikasi UMK --}}
-            </div> {{-- /.mb-8 section UMK --}}
+
+                    {{-- View: Industri Produk Halal --}}
+                    <div id="kdeks-industri-produk-halal" class="kdeks-view-content hidden">
+                        <div class="mb-8">
+                            <div class="mb-6 flex items-center gap-4">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
+                                    <i data-lucide="package" class="h-6 w-6"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-xl font-bold text-slate-900">Industri Produk Halal</h2>
+                                    <p class="text-sm text-slate-500">Statistik sertifikasi, lembaga, dan infrastruktur pendukung industri halal.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                {{-- Card: Sertifikasi --}}
+                                 <div class="col-span-1 md:col-span-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Sertifikasi Halal</h3>
+                                            <p class="text-[10px] text-slate-400 mt-0.5 uppercase tracking-tight">Perkembangan Historis (2021-2025)</p>
+                                        </div>
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex items-center gap-1.5">
+                                                <div class="h-2 w-2 rounded-full bg-blue-500"></div>
+                                                <span class="text-[10px] font-bold text-slate-500 uppercase">Total Terbit</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-8 h-[240px] w-full">
+                                        <canvas id="chartSertifikasiHistoris"></canvas>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                            <p class="text-3xl font-black text-slate-900">18.490</p>
+                                            <p class="mt-1 text-xs font-bold text-slate-500 uppercase tracking-wide">Total Sertifikat</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-blue-50 border border-blue-100">
+                                            <p class="text-3xl font-black text-blue-700">1.200</p>
+                                            <p class="mt-1 text-xs font-bold text-blue-600 uppercase tracking-wide">Reguler</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100">
+                                            <p class="text-3xl font-black text-emerald-700">17.290</p>
+                                            <p class="mt-1 text-xs font-bold text-emerald-600 uppercase tracking-wide">Self Declare</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Card: Lembaga --}}
+                                {{-- Card: Lembaga (PIE CHART) --}}
+                                <div class="col-span-1 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">Lembaga</h3>
+                                    <div class="h-[180px] w-full">
+                                        <canvas id="chartIndustriLembaga"></canvas>
+                                    </div>
+                                    <div class="mt-4 space-y-2">
+                                        <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
+                                            <span>Lembaga P3H (LP3H)</span>
+                                            <span class="text-slate-900">5</span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
+                                            <span>LPH di Kaltim</span>
+                                            <span class="text-slate-900">4</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Card: Pendukung (Infrastruktur + Juru Sembelih) --}}
+                                <div class="col-span-1 md:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-6 text-sm font-bold uppercase tracking-wider text-slate-400">Infrastruktur & Sumber Daya</h3>
+                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div class="space-y-6">
+                                            <div class="flex items-center gap-4">
+                                                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-500">
+                                                    <i data-lucide="warehouse" class="h-6 w-6"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-3xl font-black text-slate-900">8</p>
+                                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">RPH Halal</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-4">
+                                                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+                                                    <i data-lucide="factory" class="h-6 w-6"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-3xl font-black text-slate-900">35</p>
+                                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">RPU Halal</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-center">
+                                            <div class="flex items-center gap-3 mb-3">
+                                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-200 text-slate-600">
+                                                    <i data-lucide="user-check" class="h-4 w-4"></i>
+                                                </div>
+                                                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Juru Sembelih Halal</span>
+                                            </div>
+                                            <p class="text-4xl font-black text-slate-900">111</p>
+                                            <p class="text-xs font-medium text-slate-400 mt-1 uppercase">Personil Tersertifikasi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- View: Jasa Keuangan Syariah --}}
+                    <div id="kdeks-jasa-keuangan-syariah" class="kdeks-view-content hidden">
+                        <div class="mb-8">
+                            <div class="mb-6 flex items-center gap-4">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
+                                    <i data-lucide="landmark" class="h-6 w-6"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-xl font-bold text-slate-900">Jasa Keuangan Syariah</h2>
+                                    <p class="text-sm text-slate-500">Statistik lembaga keuangan bank dan non-bank syariah.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                {{-- Card: Total --}}
+                                <div class="col-span-1 md:col-span-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-6 text-sm font-bold uppercase tracking-wider text-slate-400">Ikhtisar Lembaga</h3>
+                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div class="p-4 rounded-2xl bg-violet-50 border border-violet-100 flex items-center gap-4">
+                                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-violet-600 shadow-sm">
+                                                <i data-lucide="landmark" class="h-6 w-6"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-3xl font-black text-violet-700">29</p>
+                                                <p class="text-xs font-bold text-violet-600 uppercase tracking-wide">Total Lembaga Keuangan</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center gap-4">
+                                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-sm">
+                                                <i data-lucide="users" class="h-6 w-6"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-3xl font-black text-emerald-700">10</p>
+                                                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wide">Total KSPPS Syariah</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-span-1 md:col-span-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-6 text-sm font-bold uppercase tracking-wider text-slate-400">Perbankan Syariah</h3>
+                                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                        {{-- Group: Perbankan --}}
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">Perbankan Syariah</span>
+                                                <span class="text-sm font-black text-slate-900">11</span>
+                                            </div>
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">BPR Syariah</span>
+                                                <span class="text-sm font-black text-slate-900">1</span>
+                                            </div>
+                                        </div>
+                                        {{-- Group: Non-Bank --}}
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">Asuransi Syariah</span>
+                                                <span class="text-sm font-black text-slate-900">6</span>
+                                            </div>
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">Multifinance Syariah</span>
+                                                <span class="text-sm font-black text-slate-900">3</span>
+                                            </div>
+                                        </div>
+                                        {{-- Group: Mikro & Fintech --}}
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">BMT</span>
+                                                <span class="text-sm font-black text-slate-900">5</span>
+                                            </div>
+                                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <span class="text-xs font-semibold text-slate-600">Fintech Syariah</span>
+                                                <span class="text-sm font-black text-slate-900">3</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- View: Keuangan Sosial Syariah --}}
+                    <div id="kdeks-keuangan-sosial-syariah" class="kdeks-view-content hidden">
+                        <div class="mb-8">
+                            <div class="mb-6 flex items-center gap-4">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-100 text-rose-600">
+                                    <i data-lucide="heart-handshake" class="h-6 w-6"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-xl font-bold text-slate-900">Keuangan Sosial Syariah</h2>
+                                    <p class="text-sm text-slate-500">Pengelolaan Zakat, Infak, Sedekah (ZIS) dan Wakaf.</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 p-12 text-center">
+                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm text-slate-400 mb-4">
+                                    <i data-lucide="timer" class="h-8 w-8"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900">Data Sedang Diperbarui</h3>
+                                <p class="mt-2 text-sm text-slate-500 max-w-sm mx-auto">Kami sedang melakukan sinkronisasi data dengan lembaga ZIS dan Nazhir Wakaf di Kalimantan Timur.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- View: Bisnis & Kewirausahaan Syariah --}}
+                    <div id="kdeks-bisnis-kewirausahaan-syariah" class="kdeks-view-content hidden">
+                        <div class="mb-8">
+                            <div class="mb-6 flex items-center gap-4">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
+                                    <i data-lucide="briefcase" class="h-6 w-6"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-xl font-bold text-slate-900">Bisnis & Kewirausahaan Syariah</h2>
+                                    <p class="text-sm text-slate-500">Ekspor UMKM, Pariwisata, dan Inkubasi Bisnis.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                {{-- Ekspor --}}
+                                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">Ekspor UMKM Halal (2025)</h3>
+                                    <div class="p-6 rounded-2xl bg-amber-50 border border-amber-100">
+                                        <p class="text-3xl font-black text-amber-700">USD 58.772.861</p>
+                                        <div class="mt-2 flex items-center gap-2">
+                                            <span class="text-sm font-bold text-amber-600">31 Badan Usaha</span>
+                                            <span class="h-1 w-1 rounded-full bg-amber-300"></span>
+                                            <span class="text-xs text-amber-500 italic">Nilai Akumulatif</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Pariwisata --}}
+                                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">Pariwisata Ramah Muslim</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Samarinda</span>
+                                        <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Balikpapan</span>
+                                        <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Bontang</span>
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-500">Kategori bisnis syariah unggulan di wilayah destinasi wisata ramah muslim.</p>
+                                </div>
+
+                                {{-- Inkubasi --}}
+                                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <h3 class="mb-4 text-sm font-bold uppercase tracking-wider text-slate-400">Program Inkubasi Bisnis Syariah</h3>
+                                    <div class="space-y-3">
+                                        @php
+                                            $inkubasi = [
+                                                'Pusat Inkubasi Bisnis Syariah (PINBAS) MUI',
+                                                'Talenta Wirausaha BSI Balikpapan',
+                                                'Pelatihan UMKM Potensial Ekspor Disperindagkop UMKM Kaltim',
+                                                'Program Kewirausahaan Terpadu (PKT) Disperindagkop UMKM Kaltim',
+                                                'Mitra Binaan Pupuk Kaltim',
+                                                'Inkubasi Bisnis Pesantren (30 Pesantren)'
+                                            ];
+                                        @endphp
+                                        @foreach($inkubasi as $item)
+                                            <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                                <i data-lucide="check-circle-2" class="h-4 w-4 text-emerald-500"></i>
+                                                <span class="text-[11px] font-semibold text-slate-700">{{ $item }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                {{-- Regional UMKM List --}}
+                                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                                    <div class="mb-4 flex items-center justify-between">
+                                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">UMKM Halal per Wilayah</h3>
+                                        <span class="text-[10px] font-bold text-slate-400">Januari 2026</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        @php
+                                            $regional = [
+                                                'Samarinda' => '3.319',
+                                                'Balikpapan' => '4.104',
+                                                'Kukar' => '3.415',
+                                                'PPU' => '882',
+                                                'Bontang' => '756',
+                                                'Kutim' => '726',
+                                                'Berau' => '450',
+                                                'Paser' => '401',
+                                                'Kubar' => '176',
+                                                'Mahulu' => '2',
+                                            ];
+                                        @endphp
+                                        @foreach($regional as $name => $count)
+                                            <div class="flex items-center justify-between py-1.5 border-b border-slate-50 last:border-0">
+                                                <span class="text-xs font-semibold text-slate-600">{{ $name }}</span>
+                                                <span class="text-xs font-black text-slate-900">{{ $count }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- View: Infrastruktur Ekosistem Syariah --}}
+                    <div id="kdeks-infrastruktur-ekosistem-syariah" class="kdeks-view-content hidden">
+                        <div class="mb-8">
+                            <div class="mb-6 flex items-center gap-4">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-100 text-teal-600">
+                                    <i data-lucide="layers" class="h-6 w-6"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-heading text-xl font-bold text-slate-900">Infrastruktur Ekosistem Syariah</h2>
+                                    <p class="text-sm text-slate-500">Regulasi, SDM, dan tata kelola ekonomi syariah.</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 p-12 text-center">
+                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm text-slate-400 mb-4">
+                                    <i data-lucide="timer" class="h-8 w-8"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900">Data Sedang Diperbarui</h3>
+                                <p class="mt-2 text-sm text-slate-500 max-w-sm mx-auto">Informasi infrastruktur sedang dalam proses verifikasi akhir.</p>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div> {{-- /.flex-1 min-w-0 main KDEKS content --}}
             </div> {{-- /.flex flex-col gap-6 KDEKS flex row --}}
@@ -4548,24 +4878,42 @@
     @vite(['resources/js/data_statistik.js'])
 
     <script>
-        // ===== KDEKS SIDEBAR =====
-        (function () {
-            const kdeksDashBtn = document.querySelector('[data-kdeks-view="dashboard"]');
-
-            if (kdeksDashBtn) {
-                kdeksDashBtn.addEventListener('click', function () {
-                    document.querySelectorAll('.kdeks-sub-btn').forEach(b => b.classList.remove('is-active'));
-                    document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.add('is-active'));
+        // KDEKS View Switching
+        document.querySelectorAll('.kdeks-nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const view = btn.getAttribute('data-kdeks-view');
+                
+                // Update active button
+                document.querySelectorAll('.kdeks-nav-btn').forEach(b => {
+                    b.classList.remove('is-active', 'bg-slate-50', 'text-emerald-700');
+                    b.classList.add('text-slate-700');
+                    const iconWrap = b.querySelector('div');
+                    if (iconWrap) {
+                        iconWrap.classList.remove('bg-emerald-100/80', 'text-emerald-700');
+                        // Restore original colors based on view type if needed, but keeping it simple for now
+                    }
                 });
-            }
-        })();
 
-        // ===== DEV IN PROGRESS MODAL =====
-        function openDevModal(triggerEl) {
+                btn.classList.add('is-active', 'bg-slate-50');
+                
+                // Update content visibility
+                document.querySelectorAll('.kdeks-view-content').forEach(c => c.classList.add('hidden'));
+                const target = document.getElementById(`kdeks-${view}`);
+                if (target) {
+                    target.classList.remove('hidden');
+                    // Scroll to top of content area
+                    const contentArea = document.querySelector('#contentDaerah .flex-1');
+                    if (contentArea) {
+                        contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // ===== DEV IN PROGRESS MODAL (Only for missing data) =====
+        function openDevModal() {
             const overlay = document.getElementById('devModalOverlay');
             if (!overlay) return;
-            document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.remove('is-active'));
-            overlay.style.removeProperty('display');
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             if (window.lucide) window.lucide.createIcons();
@@ -4577,21 +4925,7 @@
                 overlay.style.display = 'none';
                 document.body.style.overflow = '';
             }
-            document.querySelectorAll('.kdeks-nav-btn').forEach(b => b.classList.add('is-active'));
         }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeDevModal();
-        });
-
-        // ===== JS STICKY SIDEBAR (Reverted to CSS) =====
-        // CSS Sticky is used for better performance and reliability
-
-
-        // ===== MOBILE KNEKS NAV (Legacy/Reverted) =====
-        (function() {
-            // Reverted to standard accordion behavior
-        })();
     </script>
 
 @endsection

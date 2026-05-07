@@ -87,31 +87,29 @@ const DataStatistik = (() => {
     }
 
     if (window.Chart) {
-        Chart.register({
-            id: 'centerText',
-            beforeDraw: function(chart) {
-                if (chart.config.type !== 'doughnut' && chart.config.type !== 'pie') return;
-                if (!chart.config.options.plugins.centerText) return;
-                const ctx = chart.ctx;
-                const width = chart.chartArea.right - chart.chartArea.left;
-                const height = chart.chartArea.bottom - chart.chartArea.top;
-                const text = chart.config.options.plugins.centerText.text || '';
-                const color = chart.config.options.plugins.centerText.color || '#334155';
-                ctx.restore();
-                
-                // Reduce font size slightly to fit long numbers
-                const fontSize = (height / 120).toFixed(2);
-                ctx.font = '900 ' + fontSize + 'em sans-serif';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = color;
-                
-                const textX = chart.chartArea.left + Math.round((width - ctx.measureText(text).width) / 2);
-                const textY = chart.chartArea.top + height / 2;
-                
-                ctx.fillText(text, textX, textY);
-                ctx.save();
-            }
-        });
+        try {
+            Chart.register({
+                id: 'centerText',
+                beforeDraw: function(chart) {
+                    if (chart.config.type !== 'doughnut' && chart.config.type !== 'pie') return;
+                    if (!chart.config.options.plugins.centerText) return;
+                    const ctx = chart.ctx;
+                    const {top, bottom, left, right} = chart.chartArea;
+                    const text = chart.config.options.plugins.centerText.text || '';
+                    const color = chart.config.options.plugins.centerText.color || '#334155';
+                    ctx.restore();
+                    const height = bottom - top;
+                    const fontSize = (height / 114).toFixed(2);
+                    ctx.font = `bold ${fontSize}em sans-serif`;
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = color;
+                    const textX = Math.round(((left + right) - ctx.measureText(text).width) / 2);
+                    const textY = (top + bottom) / 2;
+                    ctx.fillText(text, textX, textY);
+                    ctx.save();
+                }
+            });
+        } catch(e) { console.warn('Plugin registration:', e); }
     }
 
     // ── DATA NASIONAL (SGIE 2025 & LAINNYA) ───────
@@ -1248,36 +1246,41 @@ const DataStatistik = (() => {
 
     const DATA = {
         daerah: {
-            stats: window.STATS_DATA?.stats || [0, 0, 0, 0],
+            stats: [18490, 14231, 111, 9], // Sertifikat, UMKM, Juru Sembelih, LP3H+LPH
             sgie: window.STATS_DATA?.ekonomi_islam || {
                 labels:['Makanan Halal', 'Wisata Ramah Muslim', 'Pondok Pesantren', 'Minuman Halal', 'Perbankan Syariah', 'Produk Halal Lainnya'],
                 short:['Makanan', 'Wisata', 'Ponpes', 'Minuman', 'Perbankan', 'Produk'],
-                data:[0,0,0,0,0,0],
+                data:[18490, 3, 30, 0, 11, 0],
             },
-            sertifikasi: window.STATS_DATA?.sh_growth || {
-                years:['2020','2021','2022','2023','2024','2025'],
-                values:[0,0,0,0,0,0]
+            sertifikasi: {
+                years:['2021','2022','2023','2024','2025'],
+                values:[224, 1253, 5957, 11836, 18490]
             },
             pariwisataBar: window.STATS_DATA?.pariwisata || {
-                labels:['Samarinda','Balikpapan','Kutai Kartanegara','Paser','Berau'],
-                short:['Smd','Bpn','Kkr','Psr','Bru'],
-                data:[0,0,0,0,0]
+                labels:['Samarinda','Balikpapan','Bontang','Kukar','Kutim','Kubar','Mahulu','Berau','PPU','Paser'],
+                short:['Smd','Bpn','Btg','Kkr','Ktm','Kbr','Mhl','Bru','PPU','Psr'],
+                data:[3319, 4104, 756, 3415, 726, 176, 2, 450, 882, 401]
             },
-            umkm_sebaran: window.STATS_DATA?.umkm_sebaran || [
-                { name:'Samarinda', value:0, color:'emerald' },
-                { name:'Balikpapan', value:0, color:'blue' },
-                { name:'Kukar', value:0, color:'amber' },
-                { name:'Bontang', value:0, color:'violet' },
-                { name:'Lainnya', value:0, color:'rose' }
+            umkm_sebaran: [
+                { name:'Samarinda', value:3319, color:'emerald' },
+                { name:'Balikpapan', value:4104, color:'blue' },
+                { name:'Bontang', value:756, color:'violet' },
+                { name:'Kukar', value:3415, color:'amber' },
+                { name:'Kutim', value:726, color:'rose' },
+                { name:'Kubar', value:176, color:'cyan' },
+                { name:'Mahulu', value:2, color:'indigo' },
+                { name:'Berau', value:450, color:'teal' },
+                { name:'PPU', value:882, color:'sky' },
+                { name:'Paser', value:401, color:'lime' }
             ],
             lph: window.STATS_DATA?.lph_auditor || {
                 years:['2020','2021','2022','2023','2024','2025'],
                 lph:[0,0,0,0,0,0],
                 auditor:[0,0,0,0,0,0]
             },
-            lphKomposisi: window.STATS_DATA?.lph_komposisi || {
-                labels:['LPH','LP3H'],
-                data:[0,0],
+            lphKomposisi: {
+                labels:['LP3H','LPH'],
+                data:[5, 4],
                 colors:[C.violet, C.cyan]
             },
             rph_growth: window.STATS_DATA?.rph_growth || {
@@ -1292,7 +1295,16 @@ const DataStatistik = (() => {
                 years:['2020','2021','2022','2023','2024','2025'],
                 values:[0,0,0,0,0,0]
             },
-            umkInfo: window.STATS_DATA?.umk_info || [0,0,'0%'],
+            sh_historis: {
+                years: ['2021', '2022', '2023', '2024', '2025'],
+                values: [224, 1253, 5957, 11836, 18490]
+            },
+            umkInfo: [111, 9, '100%'], // Juru Sembelih, Lembaga Pendamping, Sukses
+            perbankan: {
+                labels: ['Perbankan Syariah', 'BPR Syariah', 'Asuransi Syariah', 'Multifinance Syariah', 'BMT', 'Fintech Syariah'],
+                data: [11, 1, 6, 3, 5, 3]
+            },
+            rph_info: [8, 35], // RPH, RPU
             locLabel:'Kalimantan Timur', locChartLabel:'Kabupaten/Kota', totalLabel:'Total Kalimantan',
         },
     };
@@ -1314,24 +1326,40 @@ const DataStatistik = (() => {
         document.getElementById('contentDaerah').classList.toggle('hidden', n);
 
         if (!n) {
-            document.getElementById('descIndustri').innerHTML     = 'Perkembangan sertifikasi & nilai ekspor produk halal <span class="font-semibold text-slate-600">' + d.locLabel + '</span>';
-            document.getElementById('descPariwisata').innerHTML    = 'UMKM bersertifikat halal di <span class="font-semibold text-slate-600">' + d.locLabel + '</span>';
-            document.getElementById('titlePariwisataBar').textContent = 'Jumlah Sertifikat per ' + d.locChartLabel;
+            const elDescInd = document.getElementById('descIndustri');
+            if (elDescInd) elDescInd.innerHTML = 'Perkembangan sertifikasi & nilai ekspor produk halal <span class="font-semibold text-slate-600">' + d.locLabel + '</span>';
+            
+            const elDescPar = document.getElementById('descPariwisata');
+            if (elDescPar) elDescPar.innerHTML = 'UMKM bersertifikat halal di <span class="font-semibold text-slate-600">' + d.locLabel + '</span>';
+            
+            const elTitlePar = document.getElementById('titlePariwisataBar');
+            if (elTitlePar) elTitlePar.textContent = 'Jumlah Sertifikat per ' + d.locChartLabel;
 
-            document.getElementById('stat0').textContent = fmt(d.stats[0]);
-            document.getElementById('stat1').textContent = fmt(d.stats[1]);
-            document.getElementById('stat2').textContent = fmt(d.stats[2]);
-            document.getElementById('stat3').textContent = fmt(d.stats[3]);
+            const s0 = document.getElementById('stat0');
+            const s1 = document.getElementById('stat1');
+            const s2 = document.getElementById('stat2');
+            const s3 = document.getElementById('stat3');
+            if (s0) s0.textContent = d.stats[0].toLocaleString('id-ID');
+            if (s1) s1.textContent = d.stats[1].toLocaleString('id-ID');
+            if (s2) s2.textContent = d.stats[2].toLocaleString('id-ID');
+            if (s3) s3.textContent = d.stats[3].toLocaleString('id-ID');
 
-            document.getElementById('umkInfo0').textContent = fmt(d.umkInfo[0]);
-            document.getElementById('umkInfo1').textContent = fmt(d.umkInfo[1]);
-            document.getElementById('umkInfo2').textContent = d.umkInfo[2];
+            const ui0 = document.getElementById('umkInfo0');
+            const ui1 = document.getElementById('umkInfo1');
+            const ui2 = document.getElementById('umkInfo2');
+            if (ui0) ui0.textContent = d.umkInfo[0].toLocaleString('id-ID');
+            if (ui1) ui1.textContent = d.umkInfo[1].toLocaleString('id-ID');
+            if (ui2) ui2.textContent = d.umkInfo[2];
         } else {
             // Top Cards Nasional
-            document.getElementById('nStat0').textContent = '2.31M';
-            document.getElementById('nStat1').textContent = '23.8K T';
-            document.getElementById('nStat2').textContent = '1.03K T';
-            document.getElementById('nStat3').textContent = '50.18';
+            const ns0 = document.getElementById('nStat0');
+            const ns1 = document.getElementById('nStat1');
+            const ns2 = document.getElementById('nStat2');
+            const ns3 = document.getElementById('nStat3');
+            if (ns0) ns0.textContent = '2.31M';
+            if (ns1) ns1.textContent = '23.8K T';
+            if (ns2) ns2.textContent = '1.03K T';
+            if (ns3) ns3.textContent = '50.18';
         }
 
         if (n && state.nasView === 'pendanaan-umkm-sosial') {
@@ -1726,56 +1754,150 @@ const DataStatistik = (() => {
         const d = DATA.daerah;
         const m = mob();
 
-        charts.sgie = new Chart(document.getElementById('chartSGIE'), {
-            type:'bar', data:{ labels: m ? d.sgie.short : d.sgie.labels, datasets:[{ label:'Jumlah Terdaftar', data:d.sgie.data, backgroundColor:['rgba(16,185,129,0.85)','rgba(16,185,129,0.7)','rgba(16,185,129,0.6)','rgba(16,185,129,0.48)','rgba(16,185,129,0.38)','rgba(16,185,129,0.28)','rgba(100,116,139,0.25)'], borderColor:'transparent', borderRadius:6, barThickness: m?18:28 }] },
-            options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg({callbacks:{label:c=>`Jumlah: ${fmt(c.parsed.x)}`}}) }, scales:{ x:{beginAtZero:true,grid:{color:GRID}}, y:{grid:{display:false},ticks:{font:{weight:'600'}}} } }
-        });
+        const elSGIE = document.getElementById('chartSGIE');
+        if (elSGIE) {
+            charts.sgie = new Chart(elSGIE, {
+                type:'bar', data:{ labels: m ? d.sgie.short : d.sgie.labels, datasets:[{ label:'Jumlah Terdaftar', data:d.sgie.data, backgroundColor:['rgba(16,185,129,0.85)','rgba(16,185,129,0.7)','rgba(16,185,129,0.6)','rgba(16,185,129,0.48)','rgba(16,185,129,0.38)','rgba(16,185,129,0.28)','rgba(100,116,139,0.25)'], borderColor:'transparent', borderRadius:6, barThickness: m?18:28 }] },
+                options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg({callbacks:{label:c=>`Jumlah: ${fmt(c.parsed.x)}`}}) }, scales:{ x:{beginAtZero:true,grid:{color:GRID}}, y:{grid:{display:false},ticks:{font:{weight:'600'}}} } }
+            });
+        }
 
-        charts.sertifikasi = new Chart(document.getElementById('chartSertifikasi'), {
-            type:'line', data:{ labels:slice(d.sertifikasi.years,state.period), datasets:[makeLine(slice(d.sertifikasi.values,state.period),C.emerald)] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('K') }
-        });
+        const elSertif = document.getElementById('chartSertifikasi');
+        if (elSertif) {
+            charts.sertifikasi = new Chart(elSertif, {
+                type:'line', data:{ labels:slice(d.sertifikasi.years,state.period), datasets:[makeLine(slice(d.sertifikasi.values,state.period),C.emerald)] },
+                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('K') }
+            });
+        }
 
-        charts.umkmSebaran = new Chart(document.getElementById('chartUmkmSebaran'), {
-            type:'pie', data:{ labels:d.umkm_sebaran.map(it=>it.name), datasets:[{data:d.umkm_sebaran.map(it=>it.value),backgroundColor:[C.emerald, C.blue, C.amber, C.violet, C.rose, C.cyan, C.teal, C.slate, C.orange, C.sky, C.lime]}] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'bottom', labels:{boxWidth:10, font:{size:9}}}, tooltip:tooltipCfg() } }
-        });
 
-        charts.ponpes = new Chart(document.getElementById('chartPonpes'), {
-            type:'line', data:{ labels:slice(d.ponpes_growth.years,state.period), datasets:[makeLine(slice(d.ponpes_growth.values,state.period),C.emerald)] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
-        });
 
-        charts.pariwisata = new Chart(document.getElementById('chartPariwisata'), {
-            type:'bar', data:{ labels:d.pariwisataBar.labels, datasets:[{ label:'Sertifikat', data:d.pariwisataBar.data, backgroundColor:C.amber, borderRadius:4 }] },
-            options:{ indexAxis:'x', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:{ y:{beginAtZero:true, grid:{color:GRID}}, x:{grid:{display:false}, ticks:{font:{size:9}}} } }
-        });
+        const elPonpes = document.getElementById('chartPonpes');
+        if (elPonpes) {
+            charts.ponpes = new Chart(elPonpes, {
+                type:'line', data:{ labels:slice(d.ponpes_growth.years,state.period), datasets:[makeLine(slice(d.ponpes_growth.values,state.period),C.emerald)] },
+                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
+            });
+        }
 
-        charts.lphLine = new Chart(document.getElementById('chartLPHLine'), {
-            type:'line', data:{
-                labels:slice(d.lph.years,state.period),
-                datasets:[
-                    { label:'LPH', data:slice(d.lph.lph,state.period), borderColor:C.violet, backgroundColor:C.violet, tension:0.4, borderWidth:2, pointRadius:3 },
-                    { label:'Auditor', data:slice(d.lph.auditor,state.period), borderColor:C.cyan, backgroundColor:C.cyan, tension:0.4, borderWidth:2, pointRadius:3 }
-                ]
-            },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'top', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() }, scales:lineScale('') }
-        });
+        const elPariwisata = document.getElementById('chartPariwisata');
+        if (elPariwisata) {
+            charts.pariwisata = new Chart(elPariwisata, {
+                type:'bar', data:{ labels:d.pariwisataBar.labels, datasets:[{ label:'Sertifikat', data:d.pariwisataBar.data, backgroundColor:C.amber, borderRadius:4 }] },
+                options:{ indexAxis:'x', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:{ y:{beginAtZero:true, grid:{color:GRID}}, x:{grid:{display:false}, ticks:{font:{size:9}}} } }
+            });
+        }
 
-        charts.lphPie = new Chart(document.getElementById('chartLPHPie'), {
-            type:'doughnut', data:{ labels:d.lphKomposisi.labels, datasets:[{ data:d.lphKomposisi.data, backgroundColor:d.lphKomposisi.colors, borderWidth:0 }] },
-            options:{ responsive:true, maintainAspectRatio:false, cutout:'70%', plugins:{ legend:{position:'bottom', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() } }
-        });
+        const elLPHLine = document.getElementById('chartLPHLine');
+        if (elLPHLine) {
+            charts.lphLine = new Chart(elLPHLine, {
+                type:'line', data:{
+                    labels:slice(d.lph.years,state.period),
+                    datasets:[
+                        { label:'LPH', data:slice(d.lph.lph,state.period), borderColor:C.violet, backgroundColor:C.violet, tension:0.4, borderWidth:2, pointRadius:3 },
+                        { label:'Auditor', data:slice(d.lph.auditor,state.period), borderColor:C.cyan, backgroundColor:C.cyan, tension:0.4, borderWidth:2, pointRadius:3 }
+                    ]
+                },
+                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'top', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() }, scales:lineScale('') }
+            });
+        }
 
-        charts.rphGrowth = new Chart(document.getElementById('chartRPHGrowth'), {
-            type:'line', data:{ labels:slice(d.rph_growth.years,state.period), datasets:[makeLine(slice(d.rph_growth.values,state.period),C.rose)] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
-        });
+        const elLPHPie = document.getElementById('chartLPHPie');
+        if (elLPHPie) {
+            charts.lphPie = new Chart(elLPHPie, {
+                type:'doughnut', data:{ labels:d.lphKomposisi.labels, datasets:[{ data:d.lphKomposisi.data, backgroundColor:d.lphKomposisi.colors, borderWidth:0 }] },
+                options:{ responsive:true, maintainAspectRatio:false, cutout:'70%', plugins:{ legend:{position:'bottom', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() } }
+            });
+        }
 
-        charts.umkmPerkembangan = new Chart(document.getElementById('chartUMK'), {
-            type:'line', data:{ labels:slice(d.umkm_perkembangan.years,state.period), datasets:[makeLine(slice(d.umkm_perkembangan.values,state.period),C.teal)] },
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
-        });
+        const elRPHGrowth = document.getElementById('chartRPHGrowth');
+        if (elRPHGrowth) {
+            charts.rphGrowth = new Chart(elRPHGrowth, {
+                type:'line', data:{ labels:slice(d.rph_growth.years,state.period), datasets:[makeLine(slice(d.rph_growth.values,state.period),C.rose)] },
+                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
+            });
+        }
+
+        const elUMK = document.getElementById('chartUMK');
+        if (elUMK) {
+            charts.umkmPerkembangan = new Chart(elUMK, {
+                type:'line', data:{ labels:slice(d.umkm_perkembangan.years,state.period), datasets:[makeLine(slice(d.umkm_perkembangan.values,state.period),C.teal)] },
+                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
+            });
+        }
+
+        // Historical Chart (DASHBOARD)
+        const elDashHist = document.getElementById('chartSertifikasiDashboard');
+        if (elDashHist) {
+            charts.sertifikasiDashboard = new Chart(elDashHist, {
+                type: 'line',
+                data: {
+                    labels: d.sh_historis.years,
+                    datasets: [{
+                        label: 'Total Sertifikat',
+                        data: d.sh_historis.values,
+                        borderColor: C.emerald,
+                        backgroundColor: hexRgba(C.emerald, 0.1),
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: C.emerald
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: tooltipCfg({callbacks:{label:c=>`Total: ${fmt(c.parsed.y)}`}}) },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => fmt(v) } }
+                    }
+                }
+            });
+        }
+
+        const elHist = document.getElementById('chartSertifikasiHistoris');
+        if (elHist) {
+            charts.sertifikasiHistoris = new Chart(elHist, {
+                type: 'line',
+                data: {
+                    labels: d.sh_historis.years,
+                    datasets: [makeLine(d.sh_historis.values, C.blue)]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: tooltipCfg() },
+                    scales: lineScale('')
+                }
+            });
+        }
+        const elIndLembaga = document.getElementById('chartIndustriLembaga');
+        if (elIndLembaga) {
+            charts.industriLembaga = new Chart(elIndLembaga, {
+                type: 'doughnut',
+                data: {
+                    labels: d.lphKomposisi.labels,
+                    datasets: [{
+                        data: d.lphKomposisi.data,
+                        backgroundColor: d.lphKomposisi.colors,
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10, weight: '600' } } },
+                        tooltip: tooltipCfg(),
+                        centerText: { text: String(d.lphKomposisi.data.reduce((a, b) => a + b, 0)) }
+                    }
+                }
+            });
+        }
     }
 
     function createNasionalCharts() {
@@ -4412,11 +4534,12 @@ const DataStatistik = (() => {
             }
         } else {
             renderDaerahPanels();
-            createDaerahCharts();
+            // Wrap in setTimeout to ensure DOM is fully rendered before creating charts
+            setTimeout(createDaerahCharts, 50);
         }
 
         if (window.lucide) {
-            window.lucide.createIcons();
+            setTimeout(() => window.lucide.createIcons(), 100);
         }
     }
 

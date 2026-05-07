@@ -147,45 +147,44 @@
 
             <div class="relative z-10 mx-auto max-w-7xl px-6">
                 {{-- ===== UMKM HALAL KALTIM STAT CARDS ===== --}}
-                <div class="mt-4 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4 md:gap-5">
-                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                            <i data-lucide="award" class="h-5 w-5"></i>
+                <div class="mt-4 grid grid-cols-1 gap-4 md:mt-8 md:grid-cols-3 md:gap-5">
+                    {{-- 1. Sertifikat Halal Terbit --}}
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 flex flex-col justify-between h-full">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                            <i data-lucide="award" class="h-6 w-6"></i>
                         </div>
-                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                            <span class="counter" data-target="{{ $statistics['certificates_total'] }}">0</span>
-                        </h3>
-                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">UMKM Halal Kaltim</p>
+                        <div>
+                            <h3 class="font-heading text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+                                <span class="counter" data-target="{{ $dashboard_data['halal_industry']['certificates'] }}">0</span>
+                            </h3>
+                            <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-400">Sertifikat Halal Terbit</p>
+                        </div>
                     </div>
 
-                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
-                            <i data-lucide="package" class="h-5 w-5"></i>
+                    {{-- 2. UMKM Sertifikat Halal --}}
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 flex flex-col justify-between h-full">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
+                            <i data-lucide="store" class="h-6 w-6"></i>
                         </div>
-                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                            <span class="counter" data-target="{{ $statistics['products_total'] }}">0</span>
-                        </h3>
-                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Produk Halal Terdaftar</p>
+                        <div>
+                            <h3 class="font-heading text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+                                <span class="counter" data-target="{{ $dashboard_data['umkm_ih_total'] }}">0</span>
+                            </h3>
+                            <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-400">UMKM Sertifikat Halal</p>
+                        </div>
                     </div>
 
-                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                            <i data-lucide="badge-check" class="h-5 w-5"></i>
+                    {{-- 3. Lembaga Pendamping Aktif --}}
+                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 flex flex-col justify-between h-full">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
+                            <i data-lucide="users" class="h-6 w-6"></i>
                         </div>
-                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                            <span class="counter" data-target="{{ $totalSertifikatTerbit }}">0</span>
-                        </h3>
-                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Sertifikat Halal Terbit</p>
-                    </div>
-
-                    <div class="group rounded-[1.75rem] border border-emerald-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:shadow-lg hover:border-emerald-300 md:p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-cyan-500 transition-colors group-hover:bg-cyan-500 group-hover:text-white">
-                            <i data-lucide="users" class="h-5 w-5"></i>
+                        <div>
+                            <h3 class="font-heading text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+                                <span class="counter" data-target="{{ $dashboard_data['halal_industry']['p3h'] + $dashboard_data['halal_industry']['lph_kaltim'] }}">0</span>
+                            </h3>
+                            <p class="mt-2 text-xs font-bold uppercase tracking-wider text-slate-400">Lembaga Pendamping Aktif</p>
                         </div>
-                        <h3 class="font-heading text-2xl font-extrabold tracking-tight text-cyan-500 md:text-3xl">
-                            <span class="counter" data-target="{{ $statistics['assistants_total'] }}">0</span>
-                        </h3>
-                        <p class="mt-1 text-[11px] font-semibold leading-tight text-slate-500 md:text-xs">Lembaga Pendamping Aktif</p>
                     </div>
                 </div>
 
