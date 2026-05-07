@@ -258,7 +258,7 @@
                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 sm:h-9 sm:w-9 sm:rounded-xl">
                     <i data-lucide="file-check" class="h-4 w-4"></i>
                 </div>
-                <p id="nStat0" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">2.31M</p>
+                <p id="nStat0" class="mt-2.5 text-xl font-extrabold text-slate-900 sm:mt-3 sm:text-2xl">2.31JT</p>
                 <p class="mt-0.5 text-[10px] font-medium leading-snug text-slate-400 sm:text-xs">Total Sertifikasi Halal</p>
             </div>
             <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
