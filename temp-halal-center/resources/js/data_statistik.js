@@ -1356,7 +1356,7 @@ const DataStatistik = (() => {
             const ns1 = document.getElementById('nStat1');
             const ns2 = document.getElementById('nStat2');
             const ns3 = document.getElementById('nStat3');
-            if (ns0) ns0.textContent = '2.31M';
+            if (ns0) ns0.textContent = '2.31JT';
             if (ns1) ns1.textContent = '23.8K T';
             if (ns2) ns2.textContent = '1.03K T';
             if (ns3) ns3.textContent = '50.18';
