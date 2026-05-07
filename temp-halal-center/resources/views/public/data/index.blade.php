@@ -435,7 +435,7 @@
                             <div class="mb-6 flex items-center justify-between">
                                 <div>
                                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Perkembangan Sertifikasi Halal</h3>
-                                    <p class="text-[10px] text-slate-400 mt-0.5 uppercase tracking-tight">Historis Terbit (2021-2025)</p>
+                                    <p class="text-[10px] text-slate-400 mt-0.5 uppercase tracking-tight">Historis (2021-2025)</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <div class="flex items-center gap-1.5">

@@ -109,6 +109,33 @@ const DataStatistik = (() => {
                     ctx.save();
                 }
             });
+
+            Chart.register({
+                id: 'dataLabels',
+                afterDatasetsDraw: function(chart) {
+                    const cfg = chart.options.plugins.datalabels;
+                    if (!cfg || !cfg.display) return;
+                    const { ctx } = chart;
+                    ctx.save();
+                    chart.data.datasets.forEach((dataset, i) => {
+                        const meta = chart.getDatasetMeta(i);
+                        if (meta.hidden) return;
+                        meta.data.forEach((element, index) => {
+                            const value = dataset.data[index];
+                            if (value === null || value === undefined) return;
+                            ctx.fillStyle = cfg.color || '#334155';
+                            ctx.font = cfg.font || 'bold 10px Inter';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            const { x, y } = element.tooltipPosition();
+                            let label = fmt(value);
+                            if (cfg.formatter) label = cfg.formatter(value, chart, index);
+                            ctx.fillText(label, x, y - (chart.config.type === 'bar' ? 5 : 8));
+                        });
+                    });
+                    ctx.restore();
+                }
+            });
         } catch(e) { console.warn('Plugin registration:', e); }
     }
 
@@ -1766,7 +1793,16 @@ const DataStatistik = (() => {
         if (elSertif) {
             charts.sertifikasi = new Chart(elSertif, {
                 type:'line', data:{ labels:slice(d.sertifikasi.years,state.period), datasets:[makeLine(slice(d.sertifikasi.values,state.period),C.emerald)] },
-                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('K') }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: tooltipCfg(),
+                        datalabels: { display: true, color: C.emerald }
+                    },
+                    scales: lineScale('K')
+                }
             });
         }
 
@@ -1798,7 +1834,16 @@ const DataStatistik = (() => {
                         { label:'Auditor', data:slice(d.lph.auditor,state.period), borderColor:C.cyan, backgroundColor:C.cyan, tension:0.4, borderWidth:2, pointRadius:3 }
                     ]
                 },
-                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'top', labels:{boxWidth:12, font:{size:10}}}, tooltip:tooltipCfg() }, scales:lineScale('') }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } }, 
+                        tooltip: tooltipCfg(),
+                        datalabels: { display: true, color: '#475569', font: 'bold 9px Inter' }
+                    },
+                    scales: lineScale('')
+                }
             });
         }
 
@@ -1814,7 +1859,16 @@ const DataStatistik = (() => {
         if (elRPHGrowth) {
             charts.rphGrowth = new Chart(elRPHGrowth, {
                 type:'line', data:{ labels:slice(d.rph_growth.years,state.period), datasets:[makeLine(slice(d.rph_growth.values,state.period),C.rose)] },
-                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: tooltipCfg(),
+                        datalabels: { display: true, color: C.rose }
+                    },
+                    scales: lineScale('')
+                }
             });
         }
 
@@ -1822,7 +1876,16 @@ const DataStatistik = (() => {
         if (elUMK) {
             charts.umkmPerkembangan = new Chart(elUMK, {
                 type:'line', data:{ labels:slice(d.umkm_perkembangan.years,state.period), datasets:[makeLine(slice(d.umkm_perkembangan.values,state.period),C.teal)] },
-                options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:lineScale('') }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: tooltipCfg(),
+                        datalabels: { display: true, color: C.teal }
+                    },
+                    scales: lineScale('')
+                }
             });
         }
 
@@ -1848,7 +1911,11 @@ const DataStatistik = (() => {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: tooltipCfg({callbacks:{label:c=>`Total: ${fmt(c.parsed.y)}`}}) },
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: tooltipCfg({callbacks:{label:c=>`Total: ${fmt(c.parsed.y)}`}}),
+                        datalabels: { display: true, color: C.emerald }
+                    },
                     scales: {
                         x: { grid: { display: false } },
                         y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => fmt(v) } }
@@ -1868,7 +1935,11 @@ const DataStatistik = (() => {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: tooltipCfg() },
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: tooltipCfg(),
+                        datalabels: { display: true, color: C.blue }
+                    },
                     scales: lineScale('')
                 }
             });
@@ -1893,7 +1964,8 @@ const DataStatistik = (() => {
                     plugins: {
                         legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10, weight: '600' } } },
                         tooltip: tooltipCfg(),
-                        centerText: { text: String(d.lphKomposisi.data.reduce((a, b) => a + b, 0)) }
+                        centerText: { text: String(d.lphKomposisi.data.reduce((a, b) => a + b, 0)) },
+                        datalabels: { display: true, color: '#475569', font: 'bold 9px Inter' }
                     }
                 }
             });
@@ -1907,7 +1979,20 @@ const DataStatistik = (() => {
         const sData = N_DATA.sgie[state.sgieSector];
         charts.nasSgie = new Chart(document.getElementById('chartNasSGIE'), {
             type:'bar', data:{ labels:sData.labels, datasets:[{ label:'Skor SGIE 2025', data:sData.data, backgroundColor:hexRgba(C.emerald, 0.7), borderRadius:4, barThickness: m?12:20 }] },
-            options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipCfg() }, scales:{ x:{beginAtZero:true}, y:{grid:{display:false}, ticks:{font:{size:m?9:11}}} } }
+            options: { 
+                indexAxis: 'y', 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false }, 
+                    tooltip: tooltipCfg(),
+                    datalabels: { display: true, color: '#fff', font: 'bold 9px Inter', align: 'end', anchor: 'end', offset: -15 }
+                }, 
+                scales: { 
+                    x: { beginAtZero: true }, 
+                    y: { grid: { display: false }, ticks: { font: { size: m ? 9 : 11 } } } 
+                } 
+            }
         });
 
         // PDB Line
@@ -1926,7 +2011,16 @@ const DataStatistik = (() => {
         const nSert = N_DATA.sertifikasi;
         charts.nasSert = new Chart(document.getElementById('chartNasSertifikasi'), {
             type:'line', data:{ labels:slice(nSert.labels, state.period), datasets:[ { label:'Reguler', ...makeLine(slice(nSert.reguler, state.period), C.emerald) }, { label:'Self-Declare', ...makeLine(slice(nSert.self, state.period), C.orange) } ]},
-            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:legendCfg(), tooltip:tooltipCfg() }, scales:lineScale('K') }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: legendCfg(), 
+                    tooltip: tooltipCfg(),
+                    datalabels: { display: true, color: '#475569', font: 'bold 9px Inter' }
+                },
+                scales: lineScale('K')
+            }
         });
 
         // Ekspor Line
