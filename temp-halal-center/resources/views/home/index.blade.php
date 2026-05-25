@@ -108,7 +108,7 @@
                             </a>
                             <button id="btnPenyebaranData" type="button" class="flex w-full md:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50">
                                 <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
-                                Penyebaran Data KDEKS KalTim
+                                Penyebaran Data KDEKS Kaltim
                             </button>
                         </div>
                     </div>
@@ -1221,7 +1221,7 @@
     </script>
 
     {{-- ===== WELCOME POPUP MODAL ===== --}}
-    <div id="welcomePopup" class="fixed inset-0 z-[99999] hidden items-center justify-center p-4">
+    {{-- <div id="welcomePopup" class="fixed inset-0 z-[99999] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeWelcomePopup()"></div>
         <div class="relative w-full max-w-lg transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all modal-animate-in">
             <button onclick="closeWelcomePopup()" class="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-md hover:bg-black/40 transition-all">
@@ -1231,7 +1231,7 @@
                 <img src="{{ asset('assets/img/popup/kalafest.jpeg') }}" alt="Kalafest" class="w-full h-auto block">
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <style>
         @keyframes modalIn {

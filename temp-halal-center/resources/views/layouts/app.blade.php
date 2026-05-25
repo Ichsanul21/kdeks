@@ -3,13 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- SEO Dasar -->
     <title>@yield('title', data_get($setting, 'meta_title', 'Halal Center Kaltim'))</title>
     <meta name="description" content="{{ strip_tags((string) data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.')) }}">
     <meta name="keywords" content="{{ data_get($setting, 'meta_keywords', 'halal kaltim, sertifikasi halal, umkm halal, ekonomi syariah') }}">
+    
+    <!-- Canonical URL (Penting untuk SEO menghindari duplikat konten) -->
+    <link rel="canonical" href="{{ url()->current() }}" />
+
+    <!-- Open Graph / WhatsApp / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('title', data_get($setting, 'meta_title', 'Halal Center Kaltim'))">
     <meta property="og:description" content="{{ strip_tags((string) data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.')) }}">
+    <!-- Logika Gambar: Jika ada setting og_image, pakai itu. Jika tidak, pakai logo default -->
     <meta property="og:image" content="{{ data_get($setting, 'og_image_path') ? asset('storage/'.data_get($setting, 'og_image_path')) : asset('storage/branding/logo.png') }}">
-    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('title', data_get($setting, 'meta_title', 'Halal Center Kaltim'))">
+    <meta name="twitter:description" content="{{ strip_tags((string) data_get($setting, 'meta_description', 'Digital hub regional ekonomi halal dan sertifikasi terpadu Kalimantan Timur.')) }}">
+    <meta name="twitter:image" content="{{ data_get($setting, 'og_image_path') ? asset('storage/'.data_get($setting, 'og_image_path')) : asset('storage/branding/logo.png') }}">
+
+    <!-- Favicon & Icons (Path: public/assets/img/favicon_io/) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon_io/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/img/favicon_io/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('assets/img/favicon_io/android-chrome-512x512.png') }}">
+    
+    <!-- Jika Anda memiliki file site.webmanifest, bisa tambahkan baris ini (opsional) -->
+    <!-- <link rel="manifest" href="{{ asset('assets/img/favicon_io/site.webmanifest') }}"> -->
+
     @yield('meta')
     <script src="https://unpkg.com/lucide@latest"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
