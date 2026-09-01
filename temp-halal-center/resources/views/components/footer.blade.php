@@ -31,7 +31,7 @@
                     <ul class="space-y-2 text-xs font-medium text-slate-500">
                         <li class="flex items-center gap-2">
                             <i data-lucide="mail" class="h-3.5 w-3.5 text-slate-400"></i>
-                            <span>{{ data_get($setting, 'email', 'diskominfo@kaltimprov.go.id') }}</span>
+                            <span>{{ data_get($setting, 'email', 'kdekskaltim@gmail.com') }}</span>
                         </li>
                         <li class="flex items-center gap-2">
                             <i data-lucide="phone" class="h-3.5 w-3.5 text-slate-400"></i>

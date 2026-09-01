@@ -45,7 +45,7 @@
                                 <div>
                                     <p class="text-sm font-bold text-slate-900">Email</p>
                                     <p class="mt-1 text-sm font-medium text-slate-500">
-                                        {{ data_get($setting, 'email', 'diskominfo@kaltimprov.go.id') }}
+                                        {{ data_get($setting, 'email', 'kdekskaltim.gmail.com') }}
                                     </p>
                                 </div>
                             </div>

@@ -248,8 +248,10 @@ const initMap = () => {
 
     const map = L.map(mapElement, { zoomControl: false }).setView([-0.502, 117.153], 6);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2fs0_1_c7d528bc69e7d64be2fb36ec', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
     }).addTo(map);
 
     const aggregateIcon = L.divIcon({

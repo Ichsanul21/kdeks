@@ -952,8 +952,10 @@
 
                 const map = L.map(mapElement, { zoomControl: false }).setView([0.706, 116.426], 7);
 
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2fs0_1_c7d528bc69e7d64be2fb36ec', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 20
                 }).addTo(map);
 
                 const highlightKaltim = async () => {
