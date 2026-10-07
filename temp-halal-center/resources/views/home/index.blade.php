@@ -437,7 +437,7 @@
         </section>
 
         {{-- ===== LEMBAGA WAKAF ===== --}}
-        <section id="wakaf" class="bg-white py-24 border-t border-slate-100">
+        {{-- <section id="wakaf" class="bg-white py-24 border-t border-slate-100">
             <div class="mx-auto max-w-7xl px-6">
                 <div class="mb-10 text-center">
                     <h2 class="font-heading text-3xl font-extrabold tracking-tight text-slate-900">Lembaga Wakaf</h2>
@@ -445,7 +445,6 @@
                 </div>
                 
                 <div class="grid gap-6 md:grid-cols-3">
-                    {{-- Card 1 --}}
                     <a href="https://mitra.satuwakaf.id/dombaistiqomah" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
                         <div class="overflow-hidden h-56 w-full shrink-0">
                             <img src="{{ asset('assets/img/wakaf/wakaf1.jpeg') }}" alt="TERNAK DOMBA PROGRAM KEMANDIRIAN PONDOK PESANTREN ISTIQOMAH SAMARINDA" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -464,7 +463,6 @@
                         </div>
                     </a>
 
-                    {{-- Card 2 --}}
                     <a href="https://mitra.satuwakaf.id/minimarketBwi" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
                         <div class="overflow-hidden h-56 w-full shrink-0">
                             <img src="{{ asset('assets/img/wakaf/wakaf2.jpeg') }}" alt="WAKAF PRODUKTIF BANGUNAN MINIMARKET PRODUK HALAL DAN HOTEL SYARIAH" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -483,7 +481,6 @@
                         </div>
                     </a>
 
-                    {{-- Card 3 --}}
                     <a href="https://mitra.satuwakaf.id/ayampetelurDPU" target="_blank" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-emerald-300 flex flex-col">
                         <div class="overflow-hidden h-56 w-full shrink-0">
                             <img src="{{ asset('assets/img/wakaf/wakaf3.jpeg') }}" alt="Wakaf Produktif Peternakan Ayam Petelur di Pondok Pesantren Al Qur'an DPU Kaltim" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -503,7 +500,7 @@
                     </a>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         {{-- ===== KDEKS MEMBERS ===== --}}
         <section id="members" class="bg-white py-20 border-t border-slate-100 overflow-hidden">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutUsController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CertificationPathController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\HalalProductController;
 use App\Http\Controllers\Admin\KnowledgeResourceController;
 use App\Http\Controllers\Admin\LphPartnerController;
 use App\Http\Controllers\Admin\MentorController;
+use App\Http\Controllers\Admin\MilestoneController;
 use App\Http\Controllers\Admin\OrganizationMemberController;
 use App\Http\Controllers\Admin\PotentialItemController;
 use App\Http\Controllers\Admin\ProgramSlideController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\Admin\UmkmProdukController;
 use App\Http\Controllers\Admin\PressReleaseController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WatermarkSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
@@ -93,15 +96,15 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): v
 
     // Super Admin & Developer Access (Everything except Watermark for Super Admin)
     Route::middleware(['role:developer|superadmin'])->group(function () {
-        Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show']);
         Route::resource('program-slides', ProgramSlideController::class)->except(['show']);
         Route::resource('banners', BannerController::class)->except(['show']);
         Route::resource('organization-members', OrganizationMemberController::class)->except(['show']);
         Route::resource('frequently-asked-questions', FrequentlyAskedQuestionController::class)->except(['show']);
         Route::resource('consultation-requests', AdminConsultationRequestController::class)->except(['show']);
-        Route::get('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'edit'])->name('about-us.index');
-        Route::put('about-us', [\App\Http\Controllers\Admin\AboutUsController::class, 'update'])->name('about-us.update');
-        Route::resource('milestones', \App\Http\Controllers\Admin\MilestoneController::class)->except(['show']);
+        Route::get('about-us', [AboutUsController::class, 'edit'])->name('about-us.index');
+        Route::put('about-us', [AboutUsController::class, 'update'])->name('about-us.update');
+        Route::resource('milestones', MilestoneController::class)->except(['show']);
         Route::resource('press-releases', PressReleaseController::class)->except(['show']);
         Route::post('press-releases/{press_release}/finish-stream', [PressReleaseController::class, 'finishStream'])->name('press-releases.finish-stream');
         Route::resource('site-settings', SiteSettingController::class)->except(['show']);
