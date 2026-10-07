@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CertificationPathController;
 use App\Http\Controllers\Admin\ConsultationRequestController as AdminConsultationRequestController;
+use App\Http\Controllers\Admin\DataDirektoratController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\FrequentlyAskedQuestionController;
@@ -92,6 +93,17 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): v
         Route::resource('knowledge-resources', KnowledgeResourceController::class)->except(['show']);
         Route::resource('regulations', RegulationController::class)->except(['show']);
         Route::resource('gallery-items', GalleryItemController::class)->except(['show']);
+
+        // Data Direktorat Module (Generic Config Driven)
+        Route::get('data-direktorat/{item_key}', [DataDirektoratController::class, 'show'])->name('data-direktorat.show');
+        Route::post('data-direktorat/{item_key}/store-row', [DataDirektoratController::class, 'storeRow'])->name('data-direktorat.store-row');
+        Route::put('data-direktorat/{item_key}/update-row/{id}', [DataDirektoratController::class, 'updateRow'])->name('data-direktorat.update-row');
+        Route::delete('data-direktorat/{item_key}/destroy-row/{id}', [DataDirektoratController::class, 'destroyRow'])->name('data-direktorat.destroy-row');
+        Route::post('data-direktorat/{item_key}/clear-rows', [DataDirektoratController::class, 'clearRows'])->name('data-direktorat.clear-rows');
+        Route::get('data-direktorat/{item_key}/download-template', [DataDirektoratController::class, 'downloadTemplate'])->name('data-direktorat.download-template');
+        Route::post('data-direktorat/{item_key}/change-template', [DataDirektoratController::class, 'changeTemplate'])->name('data-direktorat.change-template');
+        Route::get('data-direktorat/{item_key}/backup-data', [DataDirektoratController::class, 'backupData'])->name('data-direktorat.backup-data');
+        Route::post('data-direktorat/{item_key}/import-excel', [DataDirektoratController::class, 'importExcel'])->name('data-direktorat.import-excel');
     });
 
     // Super Admin & Developer Access (Everything except Watermark for Super Admin)

@@ -45,6 +45,35 @@
         $isEditor = $user?->hasRole('editor');
         $isAdminDirektorat = $user?->hasRole('AdminDirektorat');
 
+        // Data Direktorat 5 Sub-Modules Configuration
+        $dataDirektoratSubModules = config('data_direktorat.sub_modules', []);
+        $direktoratIcons = [
+            'Industri Produk Halal' => 'shopping-bag',
+            'Jasa Keuangan Syariah' => 'landmark',
+            'Keuangan Sosial Syariah' => 'heart-handshake',
+            'Bisnis & Kewirausahaan Syariah' => 'trending-up',
+            'Infrastruktur Ekosistem Syariah' => 'network',
+        ];
+
+        $dataDirektoratMenu = [];
+        foreach ($dataDirektoratSubModules as $subName => $items) {
+            $formattedItems = [];
+            foreach ($items as $itemKey => $meta) {
+                $label = str_replace(['—', '→'], '-', $meta['title']);
+                $formattedItems['data-direktorat.' . $itemKey] = [
+                    'label' => $label,
+                    'url' => route('admin.data-direktorat.show', $itemKey),
+                    'active' => request()->routeIs('admin.data-direktorat.show') && request()->route('item_key') === $itemKey,
+                    'roles' => ['developer', 'superadmin', 'AdminDirektorat']
+                ];
+            }
+            $dataDirektoratMenu[] = [
+                'label' => $subName,
+                'icon' => $direktoratIcons[$subName] ?? 'database',
+                'items' => $formattedItems,
+            ];
+        }
+
         // Define all possible navigation items
         $navigationMenu = [
             [
@@ -130,6 +159,17 @@
                 }
             }
         }
+
+        $filteredDirektoratMenu = [];
+        foreach ($dataDirektoratMenu as $menuItem) {
+            $filteredItems = array_filter($menuItem['items'], function($item) use ($user) {
+                return $user?->hasAnyRole($item['roles']);
+            });
+            if (!empty($filteredItems)) {
+                $menuItem['items'] = $filteredItems;
+                $filteredDirektoratMenu[] = $menuItem;
+            }
+        }
     @endphp
 
     @if(!request()->has('is_iframe'))
@@ -159,6 +199,10 @@
                             @php
                                 $isGroupActive = false;
                                 foreach($menuItem['items'] as $route => $item) {
+                                    if (isset($item['active']) && $item['active']) {
+                                        $isGroupActive = true;
+                                        break;
+                                    }
                                     if (request()->routeIs($route) || str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route))) {
                                         $isGroupActive = true;
                                         break;
@@ -178,14 +222,12 @@
                                 <div x-show="open" x-cloak x-transition.opacity.duration.200ms class="mt-1 space-y-1 px-3 lg:[.sidebar-mini_&]:hidden">
                                     @foreach($menuItem['items'] as $route => $item)
                                         @php
-                                            $active = request()->routeIs($route) || str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route));
+                                            $active = $item['active'] ?? (request()->routeIs($route) || str_starts_with(optional(request()->route())->getName(), str_replace('.index', '', $route)));
+                                            $url = $item['url'] ?? route($route);
                                         @endphp
-                                        <a href="{{ route($route) }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors {{ $active ? 'bg-emerald-50 text-emerald-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                                        <a href="{{ $url }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors {{ $active ? 'bg-emerald-50 text-emerald-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                                             <div class="h-1.5 w-1.5 rounded-full {{ $active ? 'bg-emerald-500' : 'bg-slate-300' }}"></div>
-                                            <span>{{ $item['label'] }}</span>
-                                            @if($route === 'admin.sehati-registrations.index' && ($adminNewSertifikasiCount ?? 0) > 0)
-                                                <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{{ $adminNewSertifikasiCount }}</span>
-                                            @endif
+                                            <span class="truncate" title="{{ $item['label'] }}">{{ $item['label'] }}</span>
                                         </a>
                                     @endforeach
                                 </div>
@@ -199,14 +241,53 @@
                                 <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
                                     <i data-lucide="{{ $menuItem['icon'] }}" data-sidebar-tooltip="{{ $menuItem['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block"></i>
                                     <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $menuItem['label'] }}</span>
-                                    @if($route === 'admin.sehati-registrations.index' && ($adminNewSertifikasiCount ?? 0) > 0)
-                                        <span class="ml-auto rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600 lg:[.sidebar-mini_&]:hidden">{{ $adminNewSertifikasiCount }}</span>
-                                    @endif
                                 </span>
                             </a>
                         @endif
                     @endforeach
                 </div>
+
+                @if(!empty($filteredDirektoratMenu))
+                    <div class="mt-6 border-t border-slate-100 pt-4">
+                        <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400 lg:[.sidebar-mini_&]:hidden">Data Direktorat</p>
+                        <div class="space-y-1">
+                            @foreach($filteredDirektoratMenu as $menuItem)
+                                @php
+                                    $isGroupActive = false;
+                                    foreach($menuItem['items'] as $route => $item) {
+                                        if (isset($item['active']) && $item['active']) {
+                                            $isGroupActive = true;
+                                            break;
+                                        }
+                                    }
+                                @endphp
+                                <div x-data="{ open: {{ $isGroupActive ? 'true' : 'false' }} }" class="mb-1">
+                                    <button @click="open = !open" class="admin-nav-link relative w-full flex items-center justify-between lg:[.sidebar-mini_&]:justify-center lg:[.sidebar-mini_&]:px-0 {{ $isGroupActive ? 'bg-slate-100 text-emerald-600 font-bold' : '' }}">
+                                        <span class="flex items-center gap-3 lg:[.sidebar-mini_&]:gap-0">
+                                            <i data-lucide="{{ $menuItem['icon'] }}" data-sidebar-tooltip="{{ $menuItem['label'] }}" class="h-5 w-5 lg:[.sidebar-mini_&]:mx-auto inline-block {{ $isGroupActive ? 'text-emerald-600' : '' }}"></i>
+                                            <span class="text-sm lg:[.sidebar-mini_&]:hidden">{{ $menuItem['label'] }}</span>
+                                        </span>
+                                        <span class="transition-transform duration-200 lg:[.sidebar-mini_&]:hidden" :class="open ? 'rotate-180' : ''">
+                                            <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400"></i>
+                                        </span>
+                                    </button>
+                                    <div x-show="open" x-cloak x-transition.opacity.duration.200ms class="mt-1 space-y-1 px-3 lg:[.sidebar-mini_&]:hidden">
+                                        @foreach($menuItem['items'] as $route => $item)
+                                            @php
+                                                $active = $item['active'] ?? false;
+                                                $url = $item['url'] ?? '#';
+                                            @endphp
+                                            <a href="{{ $url }}" class="flex items-start gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors {{ $active ? 'bg-emerald-50 text-emerald-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                                                <div class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full self-center {{ $active ? 'bg-emerald-500' : 'bg-slate-300' }}" style="flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%;"></div>
+                                                <span class="flex-1 leading-snug" title="{{ $item['label'] }}">{{ $item['label'] }}</span>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="shrink-0 border-t border-slate-100 p-4 lg:[.sidebar-mini_&]:p-2">
@@ -256,8 +337,8 @@
                     </div>
 
                     <div class="hidden text-right sm:block">
-                        <p class="text-xs font-bold text-slate-900">{{ now()->translatedFormat('d F Y') }}</p>
-                        <p class="text-[10px] font-semibold text-slate-500">{{ now()->timezone(config('app.timezone'))->format('H:i') }} WITA</p>
+                        <p id="topbar-device-date" class="text-xs font-bold text-slate-900"></p>
+                        <p id="topbar-device-time" class="text-[10px] font-semibold text-slate-500"></p>
                     </div>
                 </div>
             </header>
@@ -380,6 +461,29 @@
         });
     </script>
     @endif
+    <script>
+        (function() {
+            function updateTopbarClock() {
+                const dateEl = document.getElementById('topbar-device-date');
+                const timeEl = document.getElementById('topbar-device-time');
+                if (!dateEl || !timeEl) return;
+
+                const now = new Date();
+                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = months[now.getMonth()];
+                const year = now.getFullYear();
+                dateEl.innerText = `${day} ${month} ${year}`;
+
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                timeEl.innerText = `${hours}:${minutes}:${seconds} WITA`;
+            }
+            updateTopbarClock();
+            setInterval(updateTopbarClock, 1000);
+        })();
+    </script>
     @stack('scripts')
 </body>
 </html>
