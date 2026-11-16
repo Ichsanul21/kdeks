@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ConsultationRequest;
 use App\Models\Event;
+use App\Models\GuestMessage;
 use App\Models\KnowledgeResource;
 use App\Models\LphPartner;
 use App\Models\Mentor;
@@ -34,10 +35,17 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $latestConsultations = ConsultationRequest::query()
+        $latestConsultations = GuestMessage::query()
             ->latest()
             ->limit(5)
             ->get();
+
+        if ($latestConsultations->isEmpty()) {
+            $latestConsultations = ConsultationRequest::query()
+                ->latest()
+                ->limit(5)
+                ->get();
+        }
 
         $topRegions = $isEditor ? collect() : Region::query()
             ->orderByDesc('halal_msmes_count')
@@ -50,7 +58,7 @@ class DashboardController extends Controller
             'resources' => KnowledgeResource::count(),
             'regulations' => Regulation::count(),
             'events' => Event::count(),
-            'consultations' => ConsultationRequest::count(),
+            'consultations' => GuestMessage::count() ?: ConsultationRequest::count(),
             'banners' => \App\Models\Banner::count(),
             'faqs' => \App\Models\FrequentlyAskedQuestion::count(),
             'press_releases' => PressRelease::count(),

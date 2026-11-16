@@ -186,28 +186,76 @@
         </div>
         @endif
 
-        {{-- Table Buku Tamu --}}
-        <div class="admin-card animate-fade-in-up stagger-4 overflow-hidden rounded-[1.75rem]">
+        {{-- Table Buku Tamu with Detail Modal --}}
+        <div x-data="{
+            showDetailModal: false,
+            activeItem: {},
+            openDetail(data) {
+                this.activeItem = data;
+                this.showDetailModal = true;
+                this.$nextTick(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                });
+            },
+            getWhatsappUrl(phone) {
+                if (!phone) return '#';
+                let clean = phone.replace(/[^0-9]/g, '');
+                if (clean.startsWith('0')) {
+                    clean = '62' + clean.slice(1);
+                }
+                return 'https://wa.me/' + clean;
+            }
+        }" class="admin-card animate-fade-in-up stagger-4 overflow-hidden rounded-[1.75rem]">
             <div class="flex items-center justify-between border-b border-slate-100 p-6">
-                <h3 class="font-heading text-lg font-bold text-slate-900">Buku Tamu Terbaru</h3>
-                <a href="{{ route('admin.consultation-requests.index') }}" class="text-xs font-bold text-cyan-600">Lihat Semua</a>
+                <div class="flex items-center gap-3">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
+                        <i data-lucide="messages-square" class="h-4 w-4"></i>
+                    </div>
+                    <h3 class="font-heading text-lg font-bold text-slate-900">Buku Tamu Terbaru</h3>
+                </div>
+                <a href="{{ route('admin.consultation-requests.index') }}" class="text-xs font-bold text-cyan-600 hover:text-cyan-700 transition">Lihat Semua &rarr;</a>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <tbody class="text-xs">
                         @forelse($latestConsultations as $msg)
+                            @php
+                                $detailPayload = [
+                                    'id' => $msg->id,
+                                    'name' => $msg->name,
+                                    'email' => $msg->email,
+                                    'phone' => $msg->phone,
+                                    'organization' => $msg->organization_name ?: '-',
+                                    'subject' => $msg->subject,
+                                    'message' => $msg->message,
+                                    'status' => $msg->status ?: 'Baru',
+                                    'date' => optional($msg->created_at)->translatedFormat('d F Y, H:i') . ' (' . optional($msg->created_at)->diffForHumans() . ')',
+                                    'edit_url' => auth()->user()->hasAnyRole(['developer', 'superadmin']) ? route('admin.consultation-requests.edit', $msg->id) : null,
+                                ];
+                            @endphp
                             <tr class="group border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4">
                                     <p class="font-bold text-slate-900">{{ $msg->name }}</p>
-                                    <p class="text-[10px] text-slate-500">{{ $msg->subject }}</p>
+                                    <p class="text-[10px] text-slate-500 truncate max-w-xs">{{ $msg->subject }}</p>
                                 </td>
-                                <td class="px-6 py-4 text-slate-500">
+                                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">
                                     {{ $msg->created_at->diffForHumans() }}
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('admin.consultation-requests.edit', $msg->id) }}" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-all group-hover:bg-cyan-500 group-hover:text-white">
-                                        <i data-lucide="chevron-right" class="h-4 w-4"></i>
-                                    </a>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-1.5">
+                                        <!-- Tombol Detail (Memicu Modal Pop-up) -->
+                                        <button type="button" @click="openDetail({{ json_encode($detailPayload) }})" class="inline-flex items-center gap-1.5 rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-bold text-cyan-700 transition hover:bg-cyan-100 hover:border-cyan-300 shadow-sm" title="Lihat Detail Pesan">
+                                            <i data-lucide="eye" class="h-3.5 w-3.5 text-cyan-600"></i>
+                                            <span>Detail</span>
+                                        </button>
+                                        @if(auth()->user()->hasAnyRole(['developer', 'superadmin']))
+                                            <a href="{{ route('admin.consultation-requests.edit', $msg->id) }}" class="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:bg-cyan-500 hover:border-cyan-500 hover:text-white" title="Kelola / Edit Pesan">
+                                                <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                                            </a>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -215,6 +263,115 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- MODAL DETAIL BUKU TAMU -->
+            <div x-show="showDetailModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+                <div @click.away="showDetailModal = false" class="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl transition-all max-h-[90vh] flex flex-col">
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 shadow-inner">
+                                <i data-lucide="messages-square" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">Detail Pesan Buku Tamu</h3>
+                                <p class="text-xs text-slate-500" x-text="activeItem.date"></p>
+                            </div>
+                        </div>
+                        <button type="button" @click="showDetailModal = false" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+                            <i data-lucide="x" class="h-5 w-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body (Scrollable) -->
+                    <div class="mt-4 flex-1 overflow-y-auto space-y-4 pr-1">
+                        <!-- Sender & Contact Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Nama Pengirim</span>
+                                <p class="mt-1 text-xs font-bold text-slate-900" x-text="activeItem.name"></p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Instansi / Lembaga</span>
+                                <p class="mt-1 text-xs font-semibold text-slate-800" x-text="activeItem.organization || '-'"></p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Email</span>
+                                <p class="mt-1 text-xs font-medium text-slate-800">
+                                    <template x-if="activeItem.email">
+                                        <a :href="'mailto:' + activeItem.email" class="text-cyan-600 hover:underline inline-flex items-center gap-1 font-semibold">
+                                            <span x-text="activeItem.email"></span>
+                                            <i data-lucide="mail" class="h-3 w-3"></i>
+                                        </a>
+                                    </template>
+                                    <template x-if="!activeItem.email">
+                                        <span>-</span>
+                                    </template>
+                                </p>
+                            </div>
+                            <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">No. Telepon / WhatsApp</span>
+                                <p class="mt-1 text-xs font-medium text-slate-800">
+                                    <template x-if="activeItem.phone">
+                                        <a :href="getWhatsappUrl(activeItem.phone)" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline inline-flex items-center gap-1 font-bold">
+                                            <span x-text="activeItem.phone"></span>
+                                            <i data-lucide="message-square" class="h-3 w-3"></i>
+                                        </a>
+                                    </template>
+                                    <template x-if="!activeItem.phone">
+                                        <span>-</span>
+                                    </template>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Subjek & Status -->
+                        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Perihal / Subjek</span>
+                                <span class="rounded-full bg-cyan-100 px-2.5 py-0.5 text-[10px] font-bold text-cyan-800 uppercase tracking-wider" x-text="activeItem.status || 'Baru'"></span>
+                            </div>
+                            <p class="mt-1.5 text-xs font-bold text-slate-900" x-text="activeItem.subject"></p>
+                        </div>
+
+                        <!-- Pesan / Isi Buku Tamu -->
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Isi Pesan</span>
+                            <div class="mt-2 text-xs leading-relaxed text-slate-700 whitespace-pre-line bg-slate-50 rounded-xl p-3 border border-slate-100 font-medium" x-text="activeItem.message || 'Tidak ada pesan tertulis.'"></div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-4">
+                        <div class="flex items-center gap-2">
+                            <template x-if="activeItem.phone">
+                                <a :href="getWhatsappUrl(activeItem.phone)" target="_blank" rel="noopener noreferrer" class="h-9 px-3.5 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1.5 transition">
+                                    <i data-lucide="message-square" class="h-3.5 w-3.5"></i>
+                                    <span>Chat WhatsApp</span>
+                                </a>
+                            </template>
+                            <template x-if="activeItem.email">
+                                <a :href="'mailto:' + activeItem.email" class="h-9 px-3.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-sm inline-flex items-center gap-1.5 transition">
+                                    <i data-lucide="mail" class="h-3.5 w-3.5 text-cyan-600"></i>
+                                    <span>Balas Email</span>
+                                </a>
+                            </template>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <template x-if="activeItem.edit_url">
+                                <a :href="activeItem.edit_url" class="h-9 px-3.5 text-xs font-bold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+                                    <i data-lucide="pencil" class="h-3.5 w-3.5 text-slate-500"></i>
+                                    <span>Kelola Status</span>
+                                </a>
+                            </template>
+                            <button type="button" @click="showDetailModal = false" class="h-9 px-4 text-xs font-bold rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
