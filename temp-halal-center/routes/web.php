@@ -86,13 +86,33 @@ Route::get('/halaman/{slug}', function ($slug) {
 Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Admin Direktorat Access (Gallery, Article, Document, Regulation, Sector/Directorate)
-    Route::middleware(['role:developer|superadmin|AdminDirektorat'])->group(function () {
+    // Admin Direktorat Access (Users, Gallery, Article, Document, Regulation, Sector/Directorate, Data Direktorat)
+    Route::middleware(['role:developer|superadmin|AdminDirektorat', 'directorate.access'])->group(function () {
+        Route::resource('users', UserController::class)->except(['show']);
         Route::resource('articles', AdminArticleController::class)->except(['show']);
         Route::resource('sector-items', SectorItemController::class)->except(['show']);
         Route::resource('knowledge-resources', KnowledgeResourceController::class)->except(['show']);
         Route::resource('regulations', RegulationController::class)->except(['show']);
         Route::resource('gallery-items', GalleryItemController::class)->except(['show']);
+
+        // Dynamic Sub-Modules (Form Builder & Dynamic Data Management)
+        Route::get('dynamic-sub-modules', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'index'])->name('dynamic-sub-modules.index');
+        Route::get('dynamic-sub-modules/create', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'create'])->name('dynamic-sub-modules.create');
+        Route::post('dynamic-sub-modules', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'store'])->name('dynamic-sub-modules.store');
+        Route::get('dynamic-sub-modules/{dynamic_sub_module}', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'show'])->name('dynamic-sub-modules.show');
+        Route::get('dynamic-sub-modules/{dynamic_sub_module}/edit', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'edit'])->name('dynamic-sub-modules.edit');
+        Route::put('dynamic-sub-modules/{dynamic_sub_module}', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'update'])->name('dynamic-sub-modules.update');
+        Route::delete('dynamic-sub-modules/{dynamic_sub_module}', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'destroy'])->name('dynamic-sub-modules.destroy');
+
+        // Dynamic Sub-Module Data Operations
+        Route::post('dynamic-sub-modules/{dynamic_sub_module}/store-row', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'storeRow'])->name('dynamic-sub-modules.store-row');
+        Route::put('dynamic-sub-modules/{dynamic_sub_module}/update-row/{rowId}', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'updateRow'])->name('dynamic-sub-modules.update-row');
+        Route::delete('dynamic-sub-modules/{dynamic_sub_module}/destroy-row/{rowId}', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'destroyRow'])->name('dynamic-sub-modules.destroy-row');
+        Route::post('dynamic-sub-modules/{dynamic_sub_module}/clear-rows', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'clearRows'])->name('dynamic-sub-modules.clear-rows');
+        Route::get('dynamic-sub-modules/{dynamic_sub_module}/download-template', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'downloadTemplate'])->name('dynamic-sub-modules.download-template');
+        Route::post('dynamic-sub-modules/{dynamic_sub_module}/change-template', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'changeTemplate'])->name('dynamic-sub-modules.change-template');
+        Route::get('dynamic-sub-modules/{dynamic_sub_module}/backup-data', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'backupData'])->name('dynamic-sub-modules.backup-data');
+        Route::post('dynamic-sub-modules/{dynamic_sub_module}/import-excel', [\App\Http\Controllers\Admin\DynamicSubModuleController::class, 'importExcel'])->name('dynamic-sub-modules.import-excel');
 
         // Data Direktorat Module (Generic Config Driven)
         Route::get('data-direktorat/{item_key}', [DataDirektoratController::class, 'show'])->name('data-direktorat.show');
@@ -108,7 +128,6 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): v
 
     // Super Admin & Developer Access (Everything except Watermark for Super Admin)
     Route::middleware(['role:developer|superadmin'])->group(function () {
-        Route::resource('users', UserController::class)->except(['show']);
         Route::resource('program-slides', ProgramSlideController::class)->except(['show']);
         Route::resource('banners', BannerController::class)->except(['show']);
         Route::resource('organization-members', OrganizationMemberController::class)->except(['show']);

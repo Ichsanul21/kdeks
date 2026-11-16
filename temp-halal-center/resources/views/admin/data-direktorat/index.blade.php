@@ -9,6 +9,8 @@
     showImportWarningModal: false,
     showImportFileModal: false,
     showClearConfirmModal: false,
+    showDeleteRowModal: false,
+    deleteRowUrl: '',
     randomCode: '',
     userInputCode: '',
     editRowId: null,
@@ -17,6 +19,10 @@
     hasTemplate: {{ !empty($config->columns) ? 'true' : 'false' }},
     hasRows: {{ count($rows) > 0 ? 'true' : 'false' }},
 
+    openDeleteRowModal(url) {
+        this.deleteRowUrl = url;
+        this.showDeleteRowModal = true;
+    },
     generateCode() {
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         let res = '';
@@ -171,14 +177,10 @@
                                     <button type="button" @click="editRowId = {{ $row->id }}; editData = {{ $rowJson }}; showEditModal = true;" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit">
                                         <i data-lucide="pencil" class="h-4 w-4"></i>
                                     </button>
-                                    <!-- Delete Button (display: contents pada form agar transparan terhadap flexbox) -->
-                                    <form action="{{ route('admin.data-direktorat.destroy-row', ['item_key' => $item_key, 'id' => $row->id]) }}" method="POST" style="display: contents;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus">
-                                            <i data-lucide="trash-2" class="h-4 w-4"></i>
-                                        </button>
-                                    </form>
+                                    <!-- Delete Button -->
+                                    <button type="button" @click="openDeleteRowModal('{{ route('admin.data-direktorat.destroy-row', ['item_key' => $item_key, 'id' => $row->id]) }}')" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus">
+                                        <i data-lucide="trash-2" class="h-4 w-4"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -440,6 +442,38 @@
                     <button type="button" @click="showEditModal = false" class="h-10 px-4 text-xs font-bold rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50">Batal</button>
                     <button type="submit" class="h-10 px-5 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Simpan Perubahan</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI HAPUS BARIS DATA -->
+    <div x-show="showDeleteRowModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div @click.away="showDeleteRowModal = false" class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl transition-all">
+            <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-100 text-rose-600">
+                    <i data-lucide="trash-2" class="h-6 w-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Konfirmasi Hapus Baris Data</h3>
+                    <p class="text-xs text-slate-500">Tindakan ini tidak dapat dibatalkan</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Apakah Anda yakin ingin menghapus baris data ini dari tabel?
+                </p>
+            </div>
+
+            <form :action="deleteRowUrl" method="POST" class="mt-6 flex justify-end gap-2.5 border-t border-slate-100 pt-4">
+                @csrf
+                @method('DELETE')
+                <button type="button" @click="showDeleteRowModal = false" class="h-10 px-4 text-xs font-bold rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="h-10 px-5 text-xs font-bold rounded-xl bg-rose-600 text-white shadow-md shadow-rose-600/20 hover:bg-rose-700 transition">
+                    Ya, Hapus Baris
+                </button>
             </form>
         </div>
     </div>

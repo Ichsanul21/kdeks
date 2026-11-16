@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 
 @section('content')
+<div x-data="{
+    showDeleteModal: false,
+    deleteActionUrl: '',
+    deleteItemLabel: '',
+    openDeleteModal(url, label) {
+        this.deleteActionUrl = url;
+        this.deleteItemLabel = label;
+        this.showDeleteModal = true;
+    }
+}">
     @php $isAdminDirektorat = $isAdminDirektorat ?? false; @endphp
     <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
@@ -142,13 +152,9 @@
                                     <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit">
                                         <i data-lucide="pencil" class="h-4 w-4"></i>
                                     </a>
-                                    <form method="POST" action="{{ route($routePrefix.'.destroy', $item->id) }}" onsubmit="return confirm('Hapus data ini?')" style="display: contents;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus">
-                                            <i data-lucide="trash-2" class="h-4 w-4"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" @click="openDeleteModal('{{ route($routePrefix.'.destroy', $item->id) }}', '{{ addslashes($item->title ?? $item->name ?? 'data ini') }}')" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus">
+                                        <i data-lucide="trash-2" class="h-4 w-4"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -161,4 +167,37 @@
 
         <div class="mt-6">{{ $items->links() }}</div>
     </div>
+
+    <!-- MODAL KONFIRMASI HAPUS CRUD -->
+    <div x-show="showDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div @click.away="showDeleteModal = false" class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl transition-all">
+            <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-100 text-rose-600">
+                    <i data-lucide="trash-2" class="h-6 w-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Konfirmasi Hapus Data</h3>
+                    <p class="text-xs text-slate-500">Tindakan ini tidak dapat dibatalkan</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Apakah Anda yakin ingin menghapus <strong class="text-slate-900" x-text="deleteItemLabel"></strong>? Data yang telah dihapus tidak dapat dipulihkan kembali.
+                </p>
+            </div>
+
+            <form :action="deleteActionUrl" method="POST" class="mt-6 flex justify-end gap-2.5 border-t border-slate-100 pt-4">
+                @csrf
+                @method('DELETE')
+                <button type="button" @click="showDeleteModal = false" class="h-10 px-4 text-xs font-bold rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="h-10 px-5 text-xs font-bold rounded-xl bg-rose-600 text-white shadow-md shadow-rose-600/20 hover:bg-rose-700 transition">
+                    Ya, Hapus Data
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

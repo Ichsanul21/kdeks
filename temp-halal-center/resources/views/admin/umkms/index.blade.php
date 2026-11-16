@@ -342,7 +342,7 @@
                                     <a href="{{ route($routePrefix.'.edit', $item->id) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600" title="Edit UMKM">
                                         <i data-lucide="pencil" class="h-4 w-4"></i>
                                     </a>
-                                    <button type="button" onclick="confirmDeleteAlert({{ $item->id }})" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus UMKM">
+                                    <button type="button" onclick="confirmDeleteModal({{ $item->id }})" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-500 transition hover:bg-rose-600 hover:text-white" title="Hapus UMKM">
                                         <i data-lucide="trash-2" class="h-4 w-4"></i>
                                     </button>
                                     <form id="delete-form-{{ $item->id }}" action="{{ route($routePrefix.'.destroy', $item->id) }}" method="POST" style="display: contents;">
@@ -659,7 +659,7 @@
         });
 
         let currentDeleteId = null;
-        function confirmDeleteAlert(id) {
+        function confirmDeleteModal(id) {
             currentDeleteId = id;
             if (typeof openModal === 'function') openModal('umkmDeleteModal');
             else if (window.openModal) window.openModal('umkmDeleteModal');

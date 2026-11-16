@@ -43,10 +43,9 @@
         $isDeveloper = $user?->hasRole('developer');
         $isSuperAdmin = $user?->hasRole('superadmin');
         $isEditor = $user?->hasRole('editor');
-        $isAdminDirektorat = $user?->hasRole('AdminDirektorat');
+        $isAdminDirektorat = $user?->isAdminDirektorat();
 
-        // Data Direktorat 5 Sub-Modules Configuration
-        $dataDirektoratSubModules = config('data_direktorat.sub_modules', []);
+        // Data Direktorat Configuration (Hanya Sub-Modul Dinamis)
         $direktoratIcons = [
             'Industri Produk Halal' => 'shopping-bag',
             'Jasa Keuangan Syariah' => 'landmark',
@@ -55,21 +54,48 @@
             'Infrastruktur Ekosistem Syariah' => 'network',
         ];
 
+        // Fetch all 5 directorates
+        $allDirectorateSectors = \App\Models\SectorItem::orderBy('sort_order')->orderBy('id')->get();
+
+        // Fetch dynamic sub-modules grouped by sector_item_id
+        $dynamicSubModules = \App\Models\DynamicSubModule::with('sectorItem')->orderBy('name')->get();
+        $dynGrouped = $dynamicSubModules->groupBy('sector_item_id');
+
         $dataDirektoratMenu = [];
-        foreach ($dataDirektoratSubModules as $subName => $items) {
+        foreach ($allDirectorateSectors as $sector) {
             $formattedItems = [];
-            foreach ($items as $itemKey => $meta) {
-                $label = str_replace(['—', '→'], '-', $meta['title']);
-                $formattedItems['data-direktorat.' . $itemKey] = [
-                    'label' => $label,
-                    'url' => route('admin.data-direktorat.show', $itemKey),
-                    'active' => request()->routeIs('admin.data-direktorat.show') && request()->route('item_key') === $itemKey,
-                    'roles' => ['developer', 'superadmin', 'AdminDirektorat']
-                ];
+
+            // 1. Link to Kelola / Buat Sub-Modul Dinamis
+            $isManageActive = (request()->routeIs('admin.dynamic-sub-modules.index') || request()->routeIs('admin.dynamic-sub-modules.create'))
+                && (request()->query('sector_id') == $sector->id || $user?->assigned_directorate?->id == $sector->id);
+
+            $formattedItems['dynamic-sub-modules.manage.' . $sector->slug] = [
+                'label' => '+ Kelola / Buat Sub-Modul',
+                'url' => route('admin.dynamic-sub-modules.index', ['sector_id' => $sector->id]),
+                'active' => $isManageActive,
+                'roles' => ['developer', 'superadmin', 'AdminDirektorat'],
+            ];
+
+            // 2. Sub-Modul Dinamis yang telah dibuat pada direktorat ini
+            if (isset($dynGrouped[$sector->id])) {
+                foreach ($dynGrouped[$sector->id] as $dynItem) {
+                    $isDynActive = request()->routeIs('admin.dynamic-sub-modules.show') && (
+                        (string)request()->route('dynamic_sub_module') === (string)$dynItem->id ||
+                        optional(request()->route('dynamic_sub_module'))->id === $dynItem->id
+                    );
+                    $formattedItems['dynamic-sub-modules.' . $dynItem->id] = [
+                        'label' => $dynItem->name,
+                        'url' => route('admin.dynamic-sub-modules.show', $dynItem->id),
+                        'active' => $isDynActive,
+                        'roles' => ['developer', 'superadmin', 'AdminDirektorat'],
+                    ];
+                }
             }
+
             $dataDirektoratMenu[] = [
-                'label' => $subName,
-                'icon' => $direktoratIcons[$subName] ?? 'database',
+                'label' => $sector->title,
+                'slug' => $sector->slug,
+                'icon' => $direktoratIcons[$sector->title] ?? 'database',
                 'items' => $formattedItems,
             ];
         }
@@ -132,7 +158,7 @@
                 'route' => 'admin.users.index',
                 'label' => 'Manajemen Pengguna',
                 'icon' => 'user-cog',
-                'roles' => ['developer', 'superadmin']
+                'roles' => ['developer', 'superadmin', 'AdminDirektorat']
             ],
             [
                 'route' => 'admin.watermark-settings.edit',
@@ -161,7 +187,17 @@
         }
 
         $filteredDirektoratMenu = [];
+        $userDirectorateSlug = $user?->assigned_directorate?->slug;
+
         foreach ($dataDirektoratMenu as $menuItem) {
+            // Isolasi data: Admin direktorat hanya melihat menu direktoratnya sendiri
+            if ($isAdminDirektorat && !$isSuperAdmin && !$isDeveloper) {
+                $subModuleSlug = \Illuminate\Support\Str::slug($menuItem['label']);
+                if ($subModuleSlug !== $userDirectorateSlug) {
+                    continue;
+                }
+            }
+
             $filteredItems = array_filter($menuItem['items'], function($item) use ($user) {
                 return $user?->hasAnyRole($item['roles']);
             });

@@ -94,6 +94,111 @@
                         <input type="checkbox" name="{{ $name }}" value="1" @checked((bool) $value) class="h-5 w-5 rounded border-white/20 bg-transparent text-emerald-400">
                         <span class="text-sm font-medium text-slate-700">{{ $field['label'] }}</span>
                     </label>
+                @elseif($type === 'gallery-photos')
+                    <div 
+                        x-data="{
+                            photos: [ { id: 1, preview: null } ],
+                            maxPhotos: 5,
+                            addPhoto() {
+                                if (this.photos.length < this.maxPhotos) {
+                                    this.photos.push({ id: Date.now() + Math.random(), preview: null });
+                                }
+                            },
+                            removePhoto(index) {
+                                this.photos.splice(index, 1);
+                            },
+                            previewImage(event, photo) {
+                                const file = event.target.files[0];
+                                if (file && file.type.startsWith('image/')) {
+                                    photo.preview = URL.createObjectURL(file);
+                                } else {
+                                    photo.preview = null;
+                                }
+                            }
+                        }" 
+                        class="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-5"
+                    >
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200/80 pb-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Daftar Foto Dokumentasi</span>
+                                <p class="text-xs text-slate-500">Unggah 1 hingga maksimal 5 foto (Format: JPG, PNG, WEBP. Maksimal: 20MB per file).</p>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center rounded-lg bg-white px-3 py-1 text-xs font-bold text-slate-600 shadow-sm border border-slate-200" x-text="photos.length + ' / ' + maxPhotos + ' foto'"></span>
+                            </div>
+                        </div>
+
+                        @if($mode === 'edit' && count($item->all_media_paths ?? []) > 0)
+                            <div class="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
+                                <p class="text-xs font-bold text-slate-700">Foto Saat Ini ({{ count($item->all_media_paths) }} Foto)</p>
+                                <div class="flex flex-wrap gap-2.5">
+                                    @foreach($item->all_media_paths as $idx => $p)
+                                        <div class="relative group">
+                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($p) }}" alt="Foto {{ $idx + 1 }}" class="h-20 w-20 object-cover rounded-xl border border-slate-200 shadow-sm">
+                                            <span class="absolute bottom-1 right-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-bold text-white">{{ $idx + 1 }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="text-[11px] text-slate-500 pt-1">Biarkan input di bawah kosong jika tidak ingin mengubah foto-foto di atas. Mengunggah foto baru akan memperbarui foto galeri ini.</p>
+                            </div>
+                        @endif
+
+                        <div class="space-y-3" id="gallery-photo-inputs">
+                            <template x-for="(photo, index) in photos" :key="photo.id">
+                                <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:border-emerald-200">
+                                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-xs font-bold text-emerald-700 border border-emerald-200/60" x-text="index + 1"></div>
+                                    
+                                    <template x-if="photo.preview">
+                                        <img :src="photo.preview" alt="Pratinjau" class="h-10 w-10 shrink-0 object-cover rounded-lg border border-emerald-300 shadow-sm">
+                                    </template>
+
+                                    <div class="flex-1">
+                                        <input 
+                                            type="file" 
+                                            name="photos[]" 
+                                            accept="image/jpeg,image/png,image/jpg,image/webp,video/mp4,video/quicktime"
+                                            @change="previewImage($event, photo)"
+                                            class="admin-input file:mr-4 file:rounded-full file:border-0 file:bg-emerald-50 file:px-4 file:py-1.5 file:text-xs file:font-semibold file:text-emerald-700 hover:file:bg-emerald-100"
+                                        >
+                                    </div>
+
+                                    <button 
+                                        type="button" 
+                                        @click="removePhoto(index)"
+                                        x-show="photos.length > 1 || ('{{ $mode }}' === 'edit')"
+                                        class="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 text-xs font-bold text-rose-600 transition hover:bg-rose-100"
+                                        title="Hapus foto ini"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        <span>Hapus</span>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Tombol Tambah Foto -->
+                        <div class="pt-1 flex items-center gap-3">
+                            <button 
+                                type="button" 
+                                @click="addPhoto()" 
+                                x-show="photos.length < maxPhotos"
+                                :disabled="photos.length >= maxPhotos"
+                                class="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-white px-4 py-2.5 text-xs font-bold text-emerald-700 shadow-sm transition hover:bg-emerald-50 active:scale-95"
+                                id="btn-tambah-foto"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>Tambah Foto</span>
+                            </button>
+                            <span x-show="photos.length >= maxPhotos" class="text-xs font-semibold text-amber-600 italic">Maksimal 5 foto telah tercapai.</span>
+                        </div>
+
+                        @error('photos')
+                            <p class="text-xs font-bold text-rose-500 mt-1">{{ $message }}</p>
+                        @enderror
+                        @error('photos.*')
+                            <p class="text-xs font-bold text-rose-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 @elseif(in_array($type, ['image', 'file'], true))
                     <input type="file" name="{{ $name }}" class="admin-input file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950">
                     @if($value)

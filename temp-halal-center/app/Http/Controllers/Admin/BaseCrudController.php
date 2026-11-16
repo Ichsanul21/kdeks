@@ -226,6 +226,24 @@ abstract class BaseCrudController extends Controller
 
     protected function findModel(string $id): Model
     {
-        return $this->modelClass::query()->findOrFail($id);
+        $model = $this->modelClass::query()->findOrFail($id);
+
+        $user = auth()->user();
+        if ($user && $user->isAdminDirektorat() && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+            if ($this->modelClass === \App\Models\SectorItem::class) {
+                if ((int) $model->id !== (int) $user->sector_item_id) {
+                    abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses data direktorat lain.');
+                }
+            } else {
+                $tableName = $model->getTable();
+                if (\Illuminate\Support\Facades\Schema::hasColumn($tableName, 'sector_item_id')) {
+                    if ((int) $model->sector_item_id !== (int) $user->sector_item_id) {
+                        abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses data direktorat lain.');
+                    }
+                }
+            }
+        }
+
+        return $model;
     }
 }

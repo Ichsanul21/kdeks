@@ -33,10 +33,10 @@
                             <i data-lucide="mail" class="h-3.5 w-3.5 text-slate-400"></i>
                             <span>{{ data_get($setting, 'email', 'kdekskaltim@gmail.com') }}</span>
                         </li>
-                        <li class="flex items-center gap-2">
+                        <!-- <li class="flex items-center gap-2">
                             <i data-lucide="phone" class="h-3.5 w-3.5 text-slate-400"></i>
                             <span>{{ data_get($setting, 'phone', '+62 8XX-XXXX-XXXX') }}</span>
-                        </li>
+                        </li> -->
                     </ul>
                     <a href="{{ route('contact') }}" class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3.5 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700">
                         <i data-lucide="message-square" class="h-4 w-4"></i>

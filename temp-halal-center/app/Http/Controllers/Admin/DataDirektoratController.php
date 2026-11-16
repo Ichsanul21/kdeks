@@ -39,7 +39,58 @@ class DataDirektoratController extends Controller
                 return $meta;
             }
         }
+
+        $dyn = \App\Models\DynamicSubModule::with('sectorItem')->where('slug', $itemKey)->first();
+        if ($dyn) {
+            return [
+                'title' => $dyn->name,
+                'sub_module' => $dyn->sectorItem?->title ?? 'Direktorat',
+                'columns' => $dyn->columns,
+                'item_key' => $dyn->slug,
+                'is_dynamic' => true,
+                'dynamic_id' => $dyn->id,
+            ];
+        }
+
         return null;
+    }
+
+    /**
+     * Authorize that the current user has access to this Data Direktorat item.
+     * Super Admin and Developer have access to all items.
+     * Admin Direktorat can only access items belonging to their directorate.
+     */
+    public function authorizeAccess(string $itemKey): void
+    {
+        $user = auth()->user();
+        if (!$user) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        if ($user->hasAnyRole(['developer', 'superadmin'])) {
+            return;
+        }
+
+        if ($user->isAdminDirektorat()) {
+            $meta = self::findItemMeta($itemKey);
+            if (!$meta) {
+                abort(404, "Modul data direktorat '{$itemKey}' tidak ditemukan.");
+            }
+
+            $userDirectorate = $user->assigned_directorate;
+            if (!$userDirectorate) {
+                abort(403, 'Akses ditolak. Pengguna tidak terasosiasi dengan direktorat manapun.');
+            }
+
+            $itemSubModuleSlug = \Illuminate\Support\Str::slug($meta['sub_module']);
+            if ($itemSubModuleSlug !== $userDirectorate->slug) {
+                abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses data direktorat lain.');
+            }
+
+            return;
+        }
+
+        abort(403, 'Akses ditolak.');
     }
 
     /**
@@ -47,6 +98,8 @@ class DataDirektoratController extends Controller
      */
     private function getConfig(string $itemKey): DirectorateConfig
     {
+        $this->authorizeAccess($itemKey);
+
         $meta = self::findItemMeta($itemKey);
         if (!$meta) {
             abort(404, "Modul data direktorat '{$itemKey}' tidak ditemukan.");
@@ -80,6 +133,14 @@ class DataDirektoratController extends Controller
      */
     public function show(string $item_key)
     {
+        $meta = self::findItemMeta($item_key);
+        if ($meta && !empty($meta['is_dynamic'])) {
+            $dyn = \App\Models\DynamicSubModule::find($meta['dynamic_id']);
+            if ($dyn) {
+                return redirect()->route('admin.dynamic-sub-modules.show', $dyn->id);
+            }
+        }
+
         $config = $this->getConfig($item_key);
         $meta = self::findItemMeta($item_key);
         $rows = DirectorateRow::where('item_key', $item_key)->orderBy('row_order')->orderBy('id')->get();
@@ -138,6 +199,8 @@ class DataDirektoratController extends Controller
      */
     public function destroyRow(string $item_key, $id)
     {
+        $this->authorizeAccess($item_key);
+
         $row = DirectorateRow::where('item_key', $item_key)->findOrFail($id);
         $row->delete();
 
@@ -150,6 +213,8 @@ class DataDirektoratController extends Controller
      */
     public function clearRows(string $item_key)
     {
+        $this->authorizeAccess($item_key);
+
         DirectorateRow::where('item_key', $item_key)->delete();
 
         return redirect()->route('admin.data-direktorat.show', $item_key)

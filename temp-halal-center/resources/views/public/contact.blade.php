@@ -49,7 +49,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-4">
+                            <!-- <div class="flex items-start gap-4">
                                 <div
                                     class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                                     <i data-lucide="phone" class="h-6 w-6"></i>
@@ -60,7 +60,7 @@
                                         {{ data_get($setting, 'phone', '+62 8XX-XXXX-XXXX') }}
                                     </p>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 

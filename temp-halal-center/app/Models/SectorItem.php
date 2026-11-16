@@ -38,4 +38,14 @@ class SectorItem extends Model
     {
         return $this->hasMany(GalleryItem::class, 'sector_item_id');
     }
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class, 'sector_item_id');
+    }
+
+    public function dynamicSubModules(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DynamicSubModule::class, 'sector_item_id');
+    }
 }
