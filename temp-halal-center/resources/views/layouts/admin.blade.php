@@ -51,6 +51,7 @@
             'Jasa Keuangan Syariah' => 'landmark',
             'Keuangan Sosial Syariah' => 'heart-handshake',
             'Bisnis & Kewirausahaan Syariah' => 'trending-up',
+            'Bisnis dan Kewirausahaan Syariah' => 'trending-up',
             'Infrastruktur Ekosistem Syariah' => 'network',
         ];
 
@@ -192,7 +193,7 @@
         foreach ($dataDirektoratMenu as $menuItem) {
             // Isolasi data: Admin direktorat hanya melihat menu direktoratnya sendiri
             if ($isAdminDirektorat && !$isSuperAdmin && !$isDeveloper) {
-                $subModuleSlug = \Illuminate\Support\Str::slug($menuItem['label']);
+                $subModuleSlug = $menuItem['slug'] ?? \Illuminate\Support\Str::slug($menuItem['label']);
                 if ($subModuleSlug !== $userDirectorateSlug) {
                     continue;
                 }

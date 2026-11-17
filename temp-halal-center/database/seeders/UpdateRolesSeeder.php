@@ -53,27 +53,27 @@ class UpdateRolesSeeder extends Seeder
             [
                 'slug' => 'industri-produk-halal',
                 'name' => 'Admin Industri Produk Halal',
-                'email' => 'adminiph@halalcenter.test',
+                'emails' => ['adminiph@kdeks.kaltimprov.go.id', 'adminiph@halalcenter.test'],
             ],
             [
                 'slug' => 'jasa-keuangan-syariah',
                 'name' => 'Admin Jasa Keuangan Syariah',
-                'email' => 'adminjks@halalcenter.test',
+                'emails' => ['adminjks@kdeks.kaltimprov.go.id', 'adminjks@halalcenter.test'],
             ],
             [
                 'slug' => 'keuangan-sosial-syariah',
                 'name' => 'Admin Keuangan Sosial Syariah',
-                'email' => 'adminkss@halalcenter.test',
+                'emails' => ['adminkss@kdeks.kaltimprov.go.id', 'adminkss@halalcenter.test'],
             ],
             [
                 'slug' => 'bisnis-kewirausahaan-syariah',
                 'name' => 'Admin Bisnis dan Kewirausahaan Syariah',
-                'email' => 'adminbks@halalcenter.test',
+                'emails' => ['adminbks@kdeks.kaltimprov.go.id', 'adminbks@halalcenter.test'],
             ],
             [
                 'slug' => 'infrastruktur-ekosistem-syariah',
                 'name' => 'Admin Infrastruktur Ekosistem Syariah',
-                'email' => 'adminies@halalcenter.test',
+                'emails' => ['adminies@kdeks.kaltimprov.go.id', 'adminies@halalcenter.test'],
             ],
         ];
 
@@ -81,15 +81,17 @@ class UpdateRolesSeeder extends Seeder
             $sector = SectorItem::where('slug', $dir['slug'])->first();
             $sectorId = $sector?->id;
 
-            $adminUser = User::updateOrCreate(
-                ['email' => $dir['email']],
-                [
-                    'name' => $dir['name'],
-                    'password' => Hash::make('password'),
-                    'sector_item_id' => $sectorId,
-                ]
-            );
-            $adminUser->syncRoles(['AdminDirektorat', $dir['slug']]);
+            foreach ($dir['emails'] as $email) {
+                $adminUser = User::updateOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $dir['name'],
+                        'password' => Hash::make('password'),
+                        'sector_item_id' => $sectorId,
+                    ]
+                );
+                $adminUser->syncRoles(['AdminDirektorat', $dir['slug']]);
+            }
         }
     }
 }

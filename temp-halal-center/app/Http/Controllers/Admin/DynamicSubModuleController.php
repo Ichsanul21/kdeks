@@ -84,7 +84,8 @@ class DynamicSubModuleController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $this->authorizeAccess();
+        $requestedSectorId = request()->query('sector_id');
+        $this->authorizeAccess(null, $requestedSectorId ? (int)$requestedSectorId : null);
 
         $currentDirectorate = $this->getCurrentDirectorate();
         $allDirectorates = $user->hasAnyRole(['developer', 'superadmin'])
@@ -112,7 +113,8 @@ class DynamicSubModuleController extends Controller
      */
     public function create()
     {
-        $this->authorizeAccess();
+        $requestedSectorId = request()->query('sector_id');
+        $this->authorizeAccess(null, $requestedSectorId ? (int)$requestedSectorId : null);
         $currentDirectorate = $this->getCurrentDirectorate();
 
         if (!$currentDirectorate) {
@@ -131,7 +133,8 @@ class DynamicSubModuleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorizeAccess();
+        $requestedSectorId = $request->input('sector_item_id') ?? $request->query('sector_id');
+        $this->authorizeAccess(null, $requestedSectorId ? (int)$requestedSectorId : null);
         $currentDirectorate = $this->getCurrentDirectorate();
 
         if (!$currentDirectorate) {

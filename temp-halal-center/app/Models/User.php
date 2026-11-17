@@ -46,6 +46,9 @@ class User extends Authenticatable
         foreach ($this->roles as $role) {
             $slug = \Illuminate\Support\Str::slug($role->name);
             $slug = preg_replace('/^admin[-_]?/', '', $slug);
+            if ($slug === 'bisnis-dan-kewirausahaan-syariah') {
+                $slug = 'bisnis-kewirausahaan-syariah';
+            }
             if (in_array($slug, $directorateSlugs)) {
                 return true;
             }
@@ -67,6 +70,9 @@ class User extends Authenticatable
         foreach ($this->roles as $role) {
             $slug = \Illuminate\Support\Str::slug($role->name);
             $slug = preg_replace('/^admin[-_]?/', '', $slug);
+            if ($slug === 'bisnis-dan-kewirausahaan-syariah') {
+                $slug = 'bisnis-kewirausahaan-syariah';
+            }
             $sector = SectorItem::where('slug', $slug)->first();
             if ($sector) {
                 return $sector;
@@ -101,6 +107,9 @@ class User extends Authenticatable
 
         if (is_string($directorate)) {
             $slug = \Illuminate\Support\Str::slug($directorate);
+            if ($slug === 'bisnis-dan-kewirausahaan-syariah') {
+                $slug = 'bisnis-kewirausahaan-syariah';
+            }
             return $myDirectorate->slug === $slug;
         }
 
