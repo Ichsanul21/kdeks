@@ -148,7 +148,7 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): v
         Route::resource('certification-paths', CertificationPathController::class)->except(['show']);
         Route::resource('halal-products', HalalProductController::class)->except(['show']);
         Route::resource('mentors', MentorController::class)->except(['show']);
-        // Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
+        Route::resource('sehati-registrations', SehatiRegistrationController::class)->except(['show']);
         Route::post('sehati-registrations/{sehati_registration}/approve', [SehatiRegistrationController::class, 'approve'])->name('sehati-registrations.approve');
         
         Route::post('umkms/import', [UmkmController::class, 'import'])->name('umkms.import');
