@@ -22,8 +22,8 @@ class EnsureDirectorateAccess
             abort(401);
         }
 
-        // Superadmin and Developer have unrestricted access across all directorates
-        if ($user->hasAnyRole(['developer', 'superadmin'])) {
+        // Superadmin, Developer, and Admin have unrestricted access across all directorates
+        if ($user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             return $next($request);
         }
 

@@ -67,7 +67,7 @@ class DataDirektoratController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        if ($user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             return;
         }
 

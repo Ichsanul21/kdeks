@@ -12,16 +12,9 @@ class UpdateRolesSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Rename 'admin' role to 'superadmin' if it exists
-        $adminRole = Role::where('name', 'admin')->first();
-        if ($adminRole) {
-            $adminRole->name = 'superadmin';
-            $adminRole->save();
-        } else {
-            Role::firstOrCreate(['name' => 'superadmin']);
-        }
-
-        // 2. Ensure standard roles exist
+        // 1. Ensure standard roles exist
+        Role::firstOrCreate(['name' => 'superadmin']);
+        Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'developer']);
         Role::firstOrCreate(['name' => 'editor']);
         Role::firstOrCreate(['name' => 'AdminDirektorat']);
@@ -47,6 +40,17 @@ class UpdateRolesSeeder extends Seeder
             ]
         );
         $superAdmin->syncRoles(['superadmin']);
+
+        // 4b. Create Admin KDEKS account (access to all modules except user management)
+        $adminKdeks = User::updateOrCreate(
+            ['email' => 'adminkdeks@kdeks.kaltimprov.go.id'],
+            [
+                'name' => 'Admin KDEKS',
+                'password' => Hash::make('KDEKS@2026'),
+                'sector_item_id' => null,
+            ]
+        );
+        $adminKdeks->syncRoles(['admin']);
 
         // 5. Ensure admin accounts for all 5 directorates exist
         $directorates = [

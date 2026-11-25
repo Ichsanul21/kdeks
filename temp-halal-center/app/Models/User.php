@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function canAccessDirectorate(SectorItem|string|int|null $directorate): bool
     {
-        if ($this->hasAnyRole(['developer', 'superadmin'])) {
+        if ($this->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             return true;
         }
 

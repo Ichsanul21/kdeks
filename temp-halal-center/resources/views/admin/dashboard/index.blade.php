@@ -232,7 +232,7 @@
                                     'message' => $msg->message,
                                     'status' => $msg->status ?: 'Baru',
                                     'date' => optional($msg->created_at)->translatedFormat('d F Y, H:i') . ' (' . optional($msg->created_at)->diffForHumans() . ')',
-                                    'edit_url' => auth()->user()->hasAnyRole(['developer', 'superadmin']) ? route('admin.consultation-requests.edit', $msg->id) : null,
+                                    'edit_url' => auth()->user()->hasAnyRole(['developer', 'superadmin', 'admin']) ? route('admin.consultation-requests.edit', $msg->id) : null,
                                 ];
                             @endphp
                             <tr class="group border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
@@ -250,7 +250,7 @@
                                             <i data-lucide="eye" class="h-3.5 w-3.5 text-cyan-600"></i>
                                             <span>Detail</span>
                                         </button>
-                                        @if(auth()->user()->hasAnyRole(['developer', 'superadmin']))
+                                        @if(auth()->user()->hasAnyRole(['developer', 'superadmin', 'admin']))
                                             <a href="{{ route('admin.consultation-requests.edit', $msg->id) }}" class="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:bg-cyan-500 hover:border-cyan-500 hover:text-white" title="Kelola / Edit Pesan">
                                                 <i data-lucide="chevron-right" class="h-4 w-4"></i>
                                             </a>

@@ -29,7 +29,7 @@ class DynamicSubModuleController extends Controller
             abort(401);
         }
 
-        if ($user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             return;
         }
 
@@ -65,14 +65,17 @@ class DynamicSubModuleController extends Controller
             return null;
         }
 
-        if ($user->isAdminDirektorat()) {
-            return $user->assigned_directorate;
+        if ($user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
+            $sectorId = request()->query('sector_id');
+            if ($sectorId) {
+                return SectorItem::find($sectorId);
+            }
+
+            return SectorItem::orderBy('sort_order')->orderBy('id')->first();
         }
 
-        // For Superadmin/Developer, check if sector_id is requested, else first sector
-        $sectorId = request()->query('sector_id');
-        if ($sectorId) {
-            return SectorItem::find($sectorId);
+        if ($user->isAdminDirektorat()) {
+            return $user->assigned_directorate;
         }
 
         return SectorItem::orderBy('sort_order')->orderBy('id')->first();
@@ -88,13 +91,13 @@ class DynamicSubModuleController extends Controller
         $this->authorizeAccess(null, $requestedSectorId ? (int)$requestedSectorId : null);
 
         $currentDirectorate = $this->getCurrentDirectorate();
-        $allDirectorates = $user->hasAnyRole(['developer', 'superadmin'])
+        $allDirectorates = $user->hasAnyRole(['developer', 'superadmin', 'admin'])
             ? SectorItem::orderBy('sort_order')->get()
             : collect([$currentDirectorate])->filter();
 
         $query = DynamicSubModule::withCount('rows')->with('sectorItem');
 
-        if (!$user->hasAnyRole(['developer', 'superadmin'])) {
+        if (!$user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             $directorateId = $currentDirectorate ? $currentDirectorate->id : 0;
             $query->where('sector_item_id', $directorateId);
         } else {

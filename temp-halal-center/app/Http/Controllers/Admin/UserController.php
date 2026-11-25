@@ -7,10 +7,25 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 
-class UserController extends BaseCrudController
+class UserController extends BaseCrudController implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            function ($request, $next) {
+                $user = auth()->user();
+                if ($user && ($user->hasRole('admin') || $user->email === 'adminkdeks@kdeks.kaltimprov.go.id')) {
+                    abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengelola pengguna.');
+                }
+                return $next($request);
+            },
+        ];
+    }
+
     protected string $modelClass = User::class;
     protected string $pageTitle = 'Manajemen Pengguna';
     protected string $routePrefix = 'admin.users';

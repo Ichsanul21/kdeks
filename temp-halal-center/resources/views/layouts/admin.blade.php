@@ -42,6 +42,7 @@
         $user = auth()->user();
         $isDeveloper = $user?->hasRole('developer');
         $isSuperAdmin = $user?->hasRole('superadmin');
+        $isAdmin = $user?->hasRole('admin');
         $isEditor = $user?->hasRole('editor');
         $isAdminDirektorat = $user?->isAdminDirektorat();
 
@@ -74,7 +75,7 @@
                 'label' => '+ Kelola / Buat Sub-Modul',
                 'url' => route('admin.dynamic-sub-modules.index', ['sector_id' => $sector->id]),
                 'active' => $isManageActive,
-                'roles' => ['developer', 'superadmin', 'AdminDirektorat'],
+                'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin'],
             ];
 
             // 2. Sub-Modul Dinamis yang telah dibuat pada direktorat ini
@@ -88,7 +89,7 @@
                         'label' => $dynItem->name,
                         'url' => route('admin.dynamic-sub-modules.show', $dynItem->id),
                         'active' => $isDynActive,
-                        'roles' => ['developer', 'superadmin', 'AdminDirektorat'],
+                        'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin'],
                     ];
                 }
             }
@@ -107,53 +108,53 @@
                 'route' => 'admin.dashboard',
                 'label' => 'Dashboard',
                 'icon' => 'layout-dashboard',
-                'roles' => ['developer', 'superadmin', 'AdminDirektorat']
+                'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']
             ],
             [
                 'label' => 'Statistik',
                 'icon' => 'bar-chart-2',
                 'items' => [
-                    'admin.sehati-registrations.index' => ['label' => 'Sertifikasi', 'icon' => 'file-check-2', 'roles' => ['developer', 'superadmin']],
-                    'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin', 'roles' => ['developer', 'superadmin']],
-                    'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package', 'roles' => ['developer', 'superadmin']],
-                    'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned', 'roles' => ['developer', 'superadmin']],
-                    'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2', 'roles' => ['developer', 'superadmin']],
-                    'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users', 'roles' => ['developer', 'superadmin']],
-                    'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map', 'roles' => ['developer', 'superadmin']],
-                    'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles', 'roles' => ['developer', 'superadmin']],
-                    'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone', 'roles' => ['developer', 'superadmin']],
+                    'admin.sehati-registrations.index' => ['label' => 'Sertifikasi', 'icon' => 'file-check-2', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.umkms.index' => ['label' => 'Manajemen UMKM', 'icon' => 'map-pin', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.halal-products.index' => ['label' => 'Produk Halal', 'icon' => 'package', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.halal-locations.index' => ['label' => 'Titik Lokasi Halal', 'icon' => 'map-pinned', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.lph-partners.index' => ['label' => 'LPH / LP3H', 'icon' => 'building-2', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.mentors.index' => ['label' => 'Pendamping', 'icon' => 'users', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.regions.index' => ['label' => 'Wilayah', 'icon' => 'map', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.potential-items.index' => ['label' => 'Potensi', 'icon' => 'sparkles', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.certification-paths.index' => ['label' => 'Alur Sertifikasi', 'icon' => 'milestone', 'roles' => ['developer', 'superadmin', 'admin']],
                 ]
             ],
             [
                 'label' => 'Modul CMS',
                 'icon' => 'layout-template',
                 'items' => [
-                    'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
-                    'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
-                    'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
-                    'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
-                    'admin.gallery-items.index' => ['label' => 'Galeri', 'icon' => 'image', 'roles' => ['developer', 'superadmin', 'AdminDirektorat']],
+                    'admin.articles.index' => ['label' => 'Berita & Publikasi', 'icon' => 'newspaper', 'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']],
+                    'admin.sector-items.index' => ['label' => 'Direktorat', 'icon' => 'briefcase-business', 'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']],
+                    'admin.knowledge-resources.index' => ['label' => 'Pustaka Dokumen', 'icon' => 'folder-open', 'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']],
+                    'admin.regulations.index' => ['label' => 'Regulasi', 'icon' => 'scale', 'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']],
+                    'admin.gallery-items.index' => ['label' => 'Galeri', 'icon' => 'image', 'roles' => ['developer', 'superadmin', 'AdminDirektorat', 'admin']],
                 ]
             ],
             [
                 'label' => 'Pengaturan Web',
                 'icon' => 'settings-2',
                 'items' => [
-                    'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation', 'roles' => ['developer', 'superadmin']],
-                    'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor', 'roles' => ['developer', 'superadmin']],
-                    'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network', 'roles' => ['developer', 'superadmin']],
-                    'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle', 'roles' => ['developer', 'superadmin']],
-                    'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info', 'roles' => ['developer', 'superadmin']],
-                    'admin.milestones.index' => ['label' => 'Timeline', 'icon' => 'history', 'roles' => ['developer', 'superadmin']],
-                    'admin.press-releases.index' => ['label' => 'Siaran Pers', 'icon' => 'video', 'roles' => ['developer', 'superadmin']],
-                    'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings', 'roles' => ['developer', 'superadmin']],
+                    'admin.program-slides.index' => ['label' => 'Program Unggulan', 'icon' => 'presentation', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.banners.index' => ['label' => 'Banner Beranda', 'icon' => 'monitor', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.organization-members.index' => ['label' => 'Struktur Organisasi', 'icon' => 'network', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.frequently-asked-questions.index' => ['label' => 'FAQ', 'icon' => 'help-circle', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.about-us.index' => ['label' => 'Tentang Kami', 'icon' => 'info', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.milestones.index' => ['label' => 'Timeline', 'icon' => 'history', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.press-releases.index' => ['label' => 'Siaran Pers', 'icon' => 'video', 'roles' => ['developer', 'superadmin', 'admin']],
+                    'admin.site-settings.index' => ['label' => 'Pengaturan Web', 'icon' => 'settings', 'roles' => ['developer', 'superadmin', 'admin']],
                 ]
             ],
             [
                 'route' => 'admin.consultation-requests.index',
                 'label' => 'Buku Tamu',
                 'icon' => 'messages-square',
-                'roles' => ['developer', 'superadmin']
+                'roles' => ['developer', 'superadmin', 'admin']
             ],
             [
                 'route' => 'admin.users.index',
@@ -192,7 +193,7 @@
 
         foreach ($dataDirektoratMenu as $menuItem) {
             // Isolasi data: Admin direktorat hanya melihat menu direktoratnya sendiri
-            if ($isAdminDirektorat && !$isSuperAdmin && !$isDeveloper) {
+            if ($isAdminDirektorat && !$isSuperAdmin && !$isDeveloper && !$isAdmin) {
                 $subModuleSlug = $menuItem['slug'] ?? \Illuminate\Support\Str::slug($menuItem['label']);
                 if ($subModuleSlug !== $userDirectorateSlug) {
                     continue;

@@ -36,7 +36,7 @@ class GalleryItemController extends BaseCrudController
     {
         $fields = $this->formFields;
         $user = auth()->user();
-        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin']);
+        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin', 'admin']);
         $isAdminDirektorat = $user->isAdminDirektorat();
 
         $directorates = \App\Models\SectorItem::orderBy('title')->pluck('title', 'id')->toArray();
@@ -58,7 +58,7 @@ class GalleryItemController extends BaseCrudController
         $item = new $this->modelClass();
         $item->media_type = 'image';
         $user = auth()->user();
-        if ($user->isAdminDirektorat() && !$user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user->isAdminDirektorat() && !$user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             $item->sector_item_id = $user->sector_item_id;
         }
         return $this->formView($item, 'create');

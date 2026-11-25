@@ -86,9 +86,13 @@ Route::get('/halaman/{slug}', function ($slug) {
 Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Admin Direktorat Access (Users, Gallery, Article, Document, Regulation, Sector/Directorate, Data Direktorat)
+    // User Management (Only developer, superadmin, AdminDirektorat - admin KDEKS has NO access)
     Route::middleware(['role:developer|superadmin|AdminDirektorat', 'directorate.access'])->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
+    });
+
+    // Admin Direktorat & Admin KDEKS Access (Gallery, Article, Document, Regulation, Sector/Directorate, Data Direktorat)
+    Route::middleware(['role:developer|superadmin|AdminDirektorat|admin', 'directorate.access'])->group(function () {
         Route::resource('articles', AdminArticleController::class)->except(['show']);
         Route::resource('sector-items', SectorItemController::class)->except(['show']);
         Route::resource('knowledge-resources', KnowledgeResourceController::class)->except(['show']);
@@ -126,8 +130,8 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function (): v
         Route::post('data-direktorat/{item_key}/import-excel', [DataDirektoratController::class, 'importExcel'])->name('data-direktorat.import-excel');
     });
 
-    // Super Admin & Developer Access (Everything except Watermark for Super Admin)
-    Route::middleware(['role:developer|superadmin'])->group(function () {
+    // Super Admin, Developer & Admin Access (Pengaturan Web, Statistik, Buku Tamu)
+    Route::middleware(['role:developer|superadmin|admin'])->group(function () {
         Route::resource('program-slides', ProgramSlideController::class)->except(['show']);
         Route::resource('banners', BannerController::class)->except(['show']);
         Route::resource('organization-members', OrganizationMemberController::class)->except(['show']);

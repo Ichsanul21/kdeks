@@ -38,7 +38,7 @@ class KnowledgeResourceController extends BaseCrudController
     {
         $fields = $this->formFields;
         $user = auth()->user();
-        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin']);
+        $isSuperAdmin = $user->hasAnyRole(['developer', 'superadmin', 'admin']);
         $isAdminDirektorat = $user->hasRole('AdminDirektorat');
 
         $directorates = \App\Models\SectorItem::orderBy('title')->pluck('title', 'id')->toArray();
@@ -60,7 +60,7 @@ class KnowledgeResourceController extends BaseCrudController
     {
         $item = new $this->modelClass();
         $user = auth()->user();
-        if ($user->hasRole('AdminDirektorat') && !$user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user->hasRole('AdminDirektorat') && !$user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             $item->sector_item_id = $user->sector_item_id;
         }
         return $this->formView($item, 'create');

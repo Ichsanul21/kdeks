@@ -46,7 +46,7 @@ abstract class BaseCrudController extends Controller
         $items = $query->latest()->paginate(12)->withQueryString();
 
         $user = auth()->user();
-        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin']);
+        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin', 'admin']);
 
         return view('admin.crud.index', [
             'pageTitle'          => $this->pageTitle,
@@ -110,7 +110,7 @@ abstract class BaseCrudController extends Controller
     protected function formView(Model $item, string $mode): View
     {
         $user = auth()->user();
-        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin']);
+        $isAdminDirektorat = $user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin', 'admin']);
 
         return view('admin.crud.form', [
             'pageTitle' => $this->pageTitle,
@@ -132,7 +132,7 @@ abstract class BaseCrudController extends Controller
         $user = auth()->user();
 
         // Data filtering for AdminDirektorat
-        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             $tableName = (new $this->modelClass())->getTable();
             
             // Special case for SectorItem model (Direktorat management)
@@ -184,7 +184,7 @@ abstract class BaseCrudController extends Controller
 
         // Force sector_item_id for AdminDirektorat
         $user = auth()->user();
-        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user && $user->hasRole('AdminDirektorat') && ! $user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             $tableName = (new $this->modelClass())->getTable();
             if (\Illuminate\Support\Facades\Schema::hasColumn($tableName, 'sector_item_id')) {
                 $validated['sector_item_id'] = $user->sector_item_id;
@@ -229,7 +229,7 @@ abstract class BaseCrudController extends Controller
         $model = $this->modelClass::query()->findOrFail($id);
 
         $user = auth()->user();
-        if ($user && $user->isAdminDirektorat() && ! $user->hasAnyRole(['developer', 'superadmin'])) {
+        if ($user && $user->isAdminDirektorat() && ! $user->hasAnyRole(['developer', 'superadmin', 'admin'])) {
             if ($this->modelClass === \App\Models\SectorItem::class) {
                 if ((int) $model->id !== (int) $user->sector_item_id) {
                     abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses data direktorat lain.');
